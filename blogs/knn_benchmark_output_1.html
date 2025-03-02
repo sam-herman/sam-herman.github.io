@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Benchmark Visualization Grouped by d</title>
+  <!-- Load Plotly.js from CDN -->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    .chart-container { margin: 20px auto; width: 80%; }
+  </style>
+</head>
+<body>
+<h1>Benchmark Results Grouped by Number of Dimensions (d)</h1>
+<div class="chart-container">
+  <div id="plot128" style="width:100%;height:400px;"></div>
+</div>
+<div class="chart-container">
+  <div id="plot4098" style="width:100%;height:400px;"></div>
+</div>
+<div class="chart-container">
+  <div id="plot10000" style="width:100%;height:400px;"></div>
+</div>
+
+<script>
+  // Optimization techniques
+  var techniques = ["Metal", "naive", "unrolled", "SIMD"];
+
+  // Data for d = 128
+  var trace128_n1000 = {
+    x: techniques,
+    y: [146219793, 2555878, 283158, 91274],
+    name: 'n = 1000',
+    type: 'bar'
+  };
+  var trace128_n100000 = {
+    x: techniques,
+    y: [1.4674e+10, 255512431, 27769788, 8740790],
+    name: 'n = 100000',
+    type: 'bar'
+  };
+  var data128 = [trace128_n1000, trace128_n100000];
+  var layout128 = {
+    title: 'Benchmark Results for d = 128',
+    yaxis: {title: 'Time (ns)', type: 'log'},
+    barmode: 'group'
+  };
+  Plotly.newPlot('plot128', data128, layout128);
+
+  // Data for d = 4098
+  var trace4098_n1000 = {
+    x: techniques,
+    y: [151207478, 81713602, 8399998, 1681986],
+    name: 'n = 1000',
+    type: 'bar'
+  };
+  var trace4098_n100000 = {
+    x: techniques,
+    y: [1.5323e+10, 8191723167, 842423875, 166107011],
+    name: 'n = 100000',
+    type: 'bar'
+  };
+  var data4098 = [trace4098_n1000, trace4098_n100000];
+  var layout4098 = {
+    title: 'Benchmark Results for d = 4098',
+    yaxis: {title: 'Time (ns)', type: 'log'},
+    barmode: 'group'
+  };
+  Plotly.newPlot('plot4098', data4098, layout4098);
+
+  // Data for d = 10000
+  var trace10000_n1000 = {
+    x: techniques,
+    y: [159280009, 200333000, 20815929, 4261231],
+    name: 'n = 1000',
+    type: 'bar'
+  };
+  var trace10000_n100000 = {
+    x: techniques,
+    y: [1.6361e+10, 2.0149e+10, 2143233375, 525899791],
+    name: 'n = 100000',
+    type: 'bar'
+  };
+  var data10000 = [trace10000_n1000, trace10000_n100000];
+  var layout10000 = {
+    title: 'Benchmark Results for d = 10000',
+    yaxis: {title: 'Time (ns)', type: 'log'},
+    barmode: 'group'
+  };
+  Plotly.newPlot('plot10000', data10000, layout10000);
+</script>
+</body>
+</html>

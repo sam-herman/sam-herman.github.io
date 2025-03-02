@@ -1,19 +1,22 @@
-# Dev Journey Notes
+# Strategic Technology Insights
 
-Welcome to my personal knowledge hub! This collection captures my software development journey, featuring practical insights and discoveries I've made along the way. Here you'll find:
+Welcome to my strategic technology blog. My goal is to evaluate trends in technology as well as strategic avenues for investments.
 
-- 🔍 Deep dives into technical concepts that helped me understand "how things work"
-- 🛠️ Hands-on guides and solutions to challenges I've encountered
-- 💡 Tips and best practices learned from real-world experience
-- 🎓 Learning resources that proved invaluable in my development journey
+I am a Leader, architect, and product visionary -
+I have built and led several diverse multi-continent teams of 70+ engineers, tech leads and managers over the course of 5+ years. I believe in building products that deliver real value to customers, address a sustainable and growing target market (sufficient TAM), and leverage both technical and business capabilities of my organization.
 
-Whether you're debugging a tricky problem, exploring new technologies, or looking to understand core concepts better, these articles aim to help fellow developers avoid the pitfalls I've encountered and leverage the solutions I've discovered.
+Launched three exponentially fast growing and profitable public products. Led both the technical/architectural and the product sides of the process. Initiated, designed and managed multiple public facing data intensive cloud offerings from inception into production (GA). Designed roadmap and architecture for public products, ingesting indexing and transforming petabytes of data in realtime. Managed and mentored multiple teams of software engineers, ensuring deliverables are shipped within the timelines and all project objectives are met.
 
-## Tech Talks
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/samuel-herman-66574220/)
+
+My product principles are: every feature added to the roadmap needs to deliver value, solve a real problem for our customer and align with our product vision and strategy.
+My team leading principles are: full ownership for each team member according to their level, constant professional growth opportunities, open to feedback team communication and merit based promotion.
+
+### KNN Part I - Are GPUs Good For Vector Search?
+- [Are GPUs Good For KNN Vector Search?](./blogs/gpu-for-vector-search.md)
 
 ### Lucene And Beyond - Core Storage Extension In OpenSearch
 [![Lucene And Beyond - Core Storage Extension In OpenSearch](https://img.youtube.com/vi/-_mXJqvPw0o/maxresdefault.jpg)](https://www.youtube.com/watch?v=-_mXJqvPw0o)
-
 
 ### Journey To 750 Node Clusters
 [![Journey To 750 Node Clusters](https://img.youtube.com/vi/KeXRZEYvlzs/maxresdefault.jpg)](https://www.youtube.com/watch?v=KeXRZEYvlzs)

@@ -1,0 +1,30 @@
+```shell
+----------------------------------------------------------------------------
+Benchmark                                  Time             CPU   Iterations
+Name/d/n/optimization_technique
+----------------------------------------------------------------------------
+BM_BasicKNN_Search/128/1000/Metal      146219793 ns      7413033 ns           92
+BM_BasicKNN_Search/4098/1000/Metal     151207478 ns     12140414 ns           58
+BM_BasicKNN_Search/10000/1000/Metal    159280009 ns     19457722 ns           36
+BM_BasicKNN_Search/128/100000/Metal   1.4674e+10 ns    732275000 ns            1
+BM_BasicKNN_Search/4098/100000/Metal  1.5323e+10 ns   1392486000 ns            1
+BM_BasicKNN_Search/10000/100000/Metal 1.6361e+10 ns   2261801000 ns            1
+BM_BasicKNN_Search/128/1000/naive        2555878 ns      2555412 ns          274
+BM_BasicKNN_Search/4098/1000/naive      81713602 ns     81707444 ns            9
+BM_BasicKNN_Search/10000/1000/naive    200333000 ns    200126250 ns            4
+BM_BasicKNN_Search/128/100000/naive    255512431 ns    255324667 ns            3
+BM_BasicKNN_Search/4098/100000/naive  8191723167 ns   8189220000 ns            1
+BM_BasicKNN_Search/10000/100000/naive 2.0149e+10 ns   2.0143e+10 ns            1
+BM_BasicKNN_Search/128/1000/unrolled         283158 ns       283126 ns         2481
+BM_BasicKNN_Search/4098/1000/unrolled       8399998 ns      8398857 ns           84
+BM_BasicKNN_Search/10000/1000/unrolled     20815929 ns     20795529 ns           34
+BM_BasicKNN_Search/128/100000/unrolled     27769788 ns     27752120 ns           25
+BM_BasicKNN_Search/4098/100000/unrolled   842423875 ns    842186000 ns            1
+BM_BasicKNN_Search/10000/100000/unrolled 2143233375 ns   2142800000 ns            1
+BM_BasicKNN_Search/128/1000/SIMD          91274 ns        91241 ns         7808
+BM_BasicKNN_Search/4098/1000/SIMD       1681986 ns      1680634 ns          415
+BM_BasicKNN_Search/10000/1000/SIMD      4261231 ns      4259892 ns          166
+BM_BasicKNN_Search/128/100000/SIMD      8740790 ns      8735637 ns           80
+BM_BasicKNN_Search/4098/100000/SIMD   166107011 ns    166080000 ns            4
+BM_BasicKNN_Search/10000/100000/SIMD  525899791 ns    525752000 ns            1
+```
