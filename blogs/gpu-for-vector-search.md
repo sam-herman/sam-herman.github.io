@@ -168,35 +168,40 @@ float DistanceCalculator::calculateSquaredEuclideanDistanceWithSIMD(const std::v
   assert(v1.size() == v2.size()); // Ensure both vectors are of the same size
 
   /* 2. Determine Sizes: */
-  size_t size = v1.size(); // The total size of the vectors.
+  size_t dimensions = v1.size(); // The total size of the vectors.
   // The largest multiple of 4 that fits within size.
   // This is necessary because SIMD processes 4 floats at a time (with 128-bit operations when using SIMD intrinsics).
-  size_t simdSize = size - (size % 4);
+  size_t simdSize = dimensions / 4;
+
+  const auto* v1_ = v1.data();
+  const auto* v2_ = v2.data();
 
   /* 3. Initialize Variables:*/
   // To store the final squared Euclidean distance value.
   float distance = 0.0f;
 
   // A SIMD register initialized to zero.
-  simd_float4 sum = simd_make_float4(0.0f, 0.0f, 0.0f, 0.0f);
+  float32x4_t sum = vdupq_n_f32(0.0f);
 
-  /* 4. Main SIMD Loop */
+  /* 4. Process 4 floats at a time using NEON */
   for (size_t i = 0; i < simdSize; i += 4) {
-    simd_float4 vec1 = simd_make_float4(v1[i], v1[i + 1], v1[i + 2], v1[i + 3]);
     // Constructs a SIMD vector from v1 elements.
-    simd_float4 vec2 = simd_make_float4(v2[i], v2[i + 1], v2[i + 2], v2[i + 3]);
+    const float32x4_t vec1 = vld1q_f32(v1_ + i * 4);
     // Constructs a SIMD vector from v2 elements.
-    simd_float4 diff = vec1 - vec2; // Performs element-wise subtraction of vec1 and vec2.
-    simd_float4 squared = diff * diff; // Squares each element of the subtraction result (diff).
-    sum += squared; // Adds the squared results to the running total in sum.
+    const float32x4_t vec2 = vld1q_f32(v2_ + i * 4);
+    // Calculate differences
+    float32x4_t diff = vsubq_f32(vec1, vec2); // Performs element-wise subtraction of vec1 and vec2.
+    // Square differences and add to sum
+    // vmlaq_f32 performs multiply-accumulate: sum += diff * diff
+    sum = vmlaq_f32(sum, diff, diff);
   }
 
-  // Sum up results from the SIMD register
-  distance = sum[0] + sum[1] + sum[2] + sum[3];
+  distance = vaddvq_f32(sum); // Sum all elements in the vector
 
-  // Handle remainder elements
-  for (size_t i = simdSize; i < size; i++) {
-    distance += (v1[i] - v2[i]) * (v1[i] - v2[i]);
+  // Handle remaining elements (if dimensions not divisible by 4)
+  for (size_t i = (dimensions / 4) * 4; i < dimensions; i++) {
+    const float diff = v1[i] - v2[i];
+    distance += diff * diff;
   }
 
   return distance;
