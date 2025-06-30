@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PQ Performance vs Memory Trade-offs</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Fallback CDN if first one fails
+    if (typeof Chart === 'undefined') {
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/chart.js/3.9.1/chart.min.js';
+      script.onload = function() {
+        console.log('Chart.js loaded from fallback CDN');
+      };
+      script.onerror = function() {
+        console.error('Both CDNs failed to load Chart.js');
+      };
+      document.head.appendChild(script);
+    }
+  </script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f9fafb;
+    }
+    .chart-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 8px;
+      padding: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .chart-title {
+      font-size: 24px;
+      font-weight: bold;
+      color: #1f2937;
+      margin-bottom: 8px;
+    }
+    .chart-description {
+      color: #6b7280;
+      margin-bottom: 16px;
+    }
+    .button-group {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    .btn-active {
+      background-color: #3b82f6;
+      color: white;
+    }
+    .btn-inactive {
+      background-color: #e5e7eb;
+      color: #374151;
+    }
+    .btn:hover {
+      opacity: 0.8;
+    }
+    .chart-wrapper {
+      height: 450px;
+      margin-bottom: 24px;
+      position: relative;
+    }
+    .insights-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 24px;
+    }
+    @media (max-width: 768px) {
+      .insights-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .insight-card {
+      background: white;
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+    }
+    .insight-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1f2937;
+      margin-bottom: 12px;
+    }
+    .insight-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .insight-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: #6b7280;
+    }
+    .color-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 8px;
+      flex-shrink: 0;
+    }
+    .summary-box {
+      margin-top: 24px;
+      padding: 16px;
+      background-color: #eff6ff;
+      border-left: 4px solid #3b82f6;
+      border-radius: 4px;
+    }
+    .summary-text {
+      font-size: 14px;
+      color: #1e40af;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+<div class="chart-container">
+  <h2 class="chart-title">Product Quantization: Performance vs Memory Trade-offs</h2>
+  <p class="chart-description">
+    Analysis of 1536-dimensional vectors with overquery factor = 5. Point size represents recall quality.
+  </p>
+
+  <div class="button-group">
+    <button id="dualAxisBtn" class="btn btn-active" onclick="showDualAxis()">
+      Dual Axis View
+    </button>
+    <button id="scatterBtn" class="btn btn-inactive" onclick="showScatter()">
+      Performance vs Memory
+    </button>
+  </div>
+
+  <div class="chart-wrapper">
+    <canvas id="pqChart"></canvas>
+  </div>
+
+  <div class="insights-grid">
+    <div class="insight-card">
+      <h3 class="insight-title">Key Trade-offs</h3>
+      <ul class="insight-list">
+        <li class="insight-item">
+          <div class="color-dot" style="background-color: #ef4444;"></div>
+          <span><strong>16 subspaces:</strong> 384× compression, but 60% recall loss</span>
+        </li>
+        <li class="insight-item">
+          <div class="color-dot" style="background-color: #f59e0b;"></div>
+          <span><strong>64 subspaces:</strong> 96× compression, 10% recall loss</span>
+        </li>
+        <li class="insight-item">
+          <div class="color-dot" style="background-color: #22c55e;"></div>
+          <span><strong>192 subspaces:</strong> 32× compression, full recall maintained</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="insight-card">
+      <h3 class="insight-title">Performance Reality</h3>
+      <ul class="insight-list">
+        <li class="insight-item">• Aggressive compression (16 subspaces) doesn't improve query time</li>
+        <li class="insight-item">• Overquery factor of 5× needed to compensate for quality loss</li>
+        <li class="insight-item">• Best compression comes with 90% recall degradation</li>
+        <li class="insight-item">• Usable configurations (192 subspaces) still provide 32× compression</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="summary-box">
+    <p class="summary-text">
+      <strong>Insight:</strong> The "sweet spot" for Product Quantization isn't about maximum compression,
+      but finding the balance between memory savings and acceptable recall. For production systems,
+      64-192 subspaces often provide the best trade-off between compression ratio and search quality.
+    </p>
+  </div>
+</div>
+
+<script>
+  // Data from benchmarks
+  const benchmarkData = [
+    {
+      label: 'Full Precision',
+      queryTime: 10.697,
+      memoryMB: 6144,
+      recallPercent: 100,
+      compressionRatio: 1,
+      subspaces: 0
+    },
+    {
+      label: '16 Subspaces',
+      queryTime: 13.167,
+      memoryMB: 16,
+      recallPercent: 40,
+      compressionRatio: 384,
+      subspaces: 16
+    },
+    {
+      label: '64 Subspaces',
+      queryTime: 16.315,
+      memoryMB: 64,
+      recallPercent: 90,
+      compressionRatio: 96,
+      subspaces: 64
+    },
+    {
+      label: '192 Subspaces',
+      queryTime: 21.060,
+      memoryMB: 192,
+      recallPercent: 100,
+      compressionRatio: 32,
+      subspaces: 192
+    }
+  ];
+
+  let myChart;
+
+  function getRecallColor(recall) {
+    if (recall >= 90) return '#22c55e';
+    if (recall >= 70) return '#f59e0b';
+    return '#ef4444';
+  }
+
+  function showDualAxis() {
+    const ctx = document.getElementById('pqChart');
+
+    if (myChart) {
+      myChart.destroy();
+    }
+
+    myChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: benchmarkData.map(d => d.label),
+        datasets: [
+          {
+            label: 'Query Time (ms)',
+            data: benchmarkData.map(d => d.queryTime),
+            borderColor: '#2563eb',
+            backgroundColor: 'rgba(37, 99, 235, 0.1)',
+            yAxisID: 'y',
+            tension: 0.3,
+            pointRadius: 6,
+            pointBackgroundColor: '#2563eb',
+            pointBorderColor: '#ffffff',
+            pointBorderWidth: 2
+          },
+          {
+            label: 'Memory Usage (MB)',
+            data: benchmarkData.map(d => d.memoryMB),
+            borderColor: '#dc2626',
+            backgroundColor: 'rgba(220, 38, 38, 0.1)',
+            yAxisID: 'y1',
+            tension: 0.3,
+            pointRadius: 6,
+            pointBackgroundColor: '#dc2626',
+            pointBorderColor: '#ffffff',
+            pointBorderWidth: 2
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          tooltip: {
+            callbacks: {
+              afterLabel: function(context) {
+                const index = context.dataIndex;
+                const item = benchmarkData[index];
+                return [
+                  `Recall: ${item.recallPercent}%`,
+                  `Compression: ${item.compressionRatio}:1`
+                ];
+              }
+            }
+          },
+          legend: {
+            position: 'top'
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Configuration'
+            }
+          },
+          y: {
+            type: 'linear',
+            display: true,
+            position: 'left',
+            title: {
+              display: true,
+              text: 'Query Time (ms)'
+            },
+            beginAtZero: true,
+            max: 25
+          },
+          y1: {
+            type: 'logarithmic',
+            display: true,
+            position: 'right',
+            title: {
+              display: true,
+              text: 'Memory Usage (MB, log scale)'
+            },
+            grid: {
+              drawOnChartArea: false
+            },
+            min: 10,
+            max: 10000
+          }
+        }
+      }
+    });
+
+    // Update button states
+    document.getElementById('dualAxisBtn').className = 'btn btn-active';
+    document.getElementById('scatterBtn').className = 'btn btn-inactive';
+  }
+
+  function showScatter() {
+    const ctx = document.getElementById('pqChart');
+
+    if (myChart) {
+      myChart.destroy();
+    }
+
+    myChart = new Chart(ctx, {
+      type: 'scatter',
+      data: {
+        datasets: [{
+          label: 'PQ Configurations',
+          data: benchmarkData.map(d => ({
+            x: d.memoryMB,
+            y: d.queryTime,
+            label: d.label,
+            recall: d.recallPercent,
+            compression: d.compressionRatio
+          })),
+          backgroundColor: benchmarkData.map(d => getRecallColor(d.recallPercent) + '80'),
+          borderColor: benchmarkData.map(d => getRecallColor(d.recallPercent)),
+          pointRadius: benchmarkData.map(d => Math.sqrt(d.recallPercent) * 0.8 + 4),
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            callbacks: {
+              title: function(context) {
+                return context[0].raw.label;
+              },
+              label: function(context) {
+                const point = context.raw;
+                return [
+                  `Query Time: ${point.y.toFixed(2)} ms`,
+                  `Memory: ${point.x} MB`,
+                  `Recall: ${point.recall}%`,
+                  `Compression: ${point.compression}:1`
+                ];
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            type: 'logarithmic',
+            title: {
+              display: true,
+              text: 'Memory Usage (MB, log scale)'
+            },
+            min: 10,
+            max: 10000
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Query Time (ms)'
+            },
+            min: 10,
+            max: 22
+          }
+        }
+      }
+    });
+
+    // Update button states
+    document.getElementById('dualAxisBtn').className = 'btn btn-inactive';
+    document.getElementById('scatterBtn').className = 'btn btn-active';
+  }
+
+  // Initialize chart when page loads
+  function initializeChart() {
+    // Check if Chart.js loaded properly
+    if (typeof Chart === 'undefined') {
+      console.error('Chart.js failed to load');
+      document.getElementById('pqChart').style.display = 'none';
+      document.querySelector('.chart-wrapper').innerHTML = `
+                    <div style="
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        height: 400px;
+                        background: #f3f4f6;
+                        border: 2px dashed #d1d5db;
+                        border-radius: 8px;
+                        color: #6b7280;
+                        font-size: 16px;
+                    ">
+                        Chart.js library failed to load. Please check your internet connection.
+                    </div>
+                `;
+      return;
+    }
+
+    try {
+      showDualAxis();
+      console.log('Chart initialized successfully');
+    } catch (error) {
+      console.error('Error initializing chart:', error);
+      document.querySelector('.chart-wrapper').innerHTML = `
+                    <div style="
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        height: 400px;
+                        background: #fef2f2;
+                        border: 2px solid #fecaca;
+                        border-radius: 8px;
+                        color: #dc2626;
+                        font-size: 16px;
+                    ">
+                        Error loading chart: ${error.message}
+                    </div>
+                `;
+    }
+  }
+
+  // Try to initialize chart multiple times if needed
+  function tryInitialize(attempts = 0) {
+    if (typeof Chart !== 'undefined') {
+      initializeChart();
+    } else if (attempts < 5) {
+      console.log(`Waiting for Chart.js... attempt ${attempts + 1}`);
+      setTimeout(() => tryInitialize(attempts + 1), 500);
+    } else {
+      console.error('Chart.js failed to load after 5 attempts');
+      initializeChart(); // This will show the error message
+    }
+  }
+
+  window.addEventListener('load', function() {
+    tryInitialize();
+  });
+</script>
+</body>
+</html>

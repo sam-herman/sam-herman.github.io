@@ -15,6 +15,9 @@ My team leading principles are: full ownership for each team member according to
 ### KNN Part I - Are GPUs Good For Vector Search?
 - [Are GPUs Good For KNN Vector Search?](./blogs/gpu-for-vector-search.md)
 
+### KNN Part II - The Reality of Vector Quantization: Does Product Quantization Deliver on Its Promises?
+- [The Reality of Vector Quantization: Does Product Quantization Deliver on Its Promises?](./blogs/storage-for-vectors.md)
+
 ### Lucene And Beyond - Core Storage Extension In OpenSearch
 [![Lucene And Beyond - Core Storage Extension In OpenSearch](https://img.youtube.com/vi/-_mXJqvPw0o/maxresdefault.jpg)](https://www.youtube.com/watch?v=-_mXJqvPw0o)
 
