@@ -1,42 +1,43 @@
-# Strategic Technology Insights
+# Samuel Herman
 
-Welcome to my strategic technology blog. My goal is to evaluate trends in technology as well as strategic avenues for investments.
+Strategic technology insights with in-depth analysis of emerging trends in AI infrastructure, Search, and distributed systems.
 
-I am a Leader, architect, and product visionary -
-I have built and led several diverse multi-continent teams of 70+ engineers, tech leads and managers over the course of 5+ years. I believe in building products that deliver real value to customers, address a sustainable and growing target market (sufficient TAM), and leverage both technical and business capabilities of my organization.
+## Distinguished Engineer & Technical Visionary
 
-Launched three exponentially fast growing and profitable public products. Led both the technical/architectural and the product sides of the process. Initiated, designed and managed multiple public facing data intensive cloud offerings from inception into production (GA). Designed roadmap and architecture for public products, ingesting indexing and transforming petabytes of data in realtime. Managed and mentored multiple teams of software engineers, ensuring deliverables are shipped within the timelines and all project objectives are met.
+Distinguished engineer with 10+ years building Search, SIEM, Observability, and AI technologies at scale.
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/samuel-herman-66574220/)
+I've led teams of 75+ engineers at AWS, Oracle Cloud Infrastructure, and DataStax, shipping products that process petabytes of data daily in real-time. **Author of patents** in distributed systems and storage technologies. Currently serving as **OpenSearch Leadership Committee Member**, driving technical strategy for the OpenSearch project.
 
-My product principles are: every feature added to the roadmap needs to deliver value, solve a real problem for our customer and align with our product vision and strategy.
-My team leading principles are: full ownership for each team member according to their level, constant professional growth opportunities, open to feedback team communication and merit based promotion.
+### Current Focus
+- Computer Vision
+- Storage & Vector Databases
+- Edge Inference
+- Large-scale AI Infrastructure
 
-### KNN Part I - Are GPUs Good For Vector Search?
-- [Are GPUs Good For KNN Vector Search?](./blogs/gpu-for-vector-search.md)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/samuel-herman-66574220/) [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/sam-herman)
 
-### KNN Part II - The Reality of Vector Quantization: Does Product Quantization Deliver on Its Promises?
-- [The Reality of Vector Quantization: Does Product Quantization Deliver on Its Promises?](./blogs/storage-for-vectors.md)
+---
 
-### Lucene And Beyond - Core Storage Extension In OpenSearch
+## Recent Publications & Talks
+
+### **Breaking the Single-Thread Bottleneck**
+[Concurrent Vector Graph Construction in OpenSearch](./blogs/concurrent-graph-construction.md)
+
+### **The Reality of Vector Quantization**
+[Does Product Quantization Deliver on Its Promises?](./blogs/storage-for-vectors.md)
+
+### **Are GPUs Good For Vector Search?**
+[GPU Performance Analysis for KNN Search](./blogs/gpu-for-vector-search.md)
+
+### **Conference Talks**
+
+**OpenSearchCon 2024** - Lucene And Beyond - Core Storage Extension In OpenSearch
 [![Lucene And Beyond - Core Storage Extension In OpenSearch](https://img.youtube.com/vi/-_mXJqvPw0o/maxresdefault.jpg)](https://www.youtube.com/watch?v=-_mXJqvPw0o)
 
-### Journey To 750 Node Clusters
+**OpenSearchCon 2023** - Journey To 750 Node Clusters
 [![Journey To 750 Node Clusters](https://img.youtube.com/vi/KeXRZEYvlzs/maxresdefault.jpg)](https://www.youtube.com/watch?v=KeXRZEYvlzs)
 
+---
 
-### Technical Tutorials
-- [Getting Started Guide](./blogs/getting-started.md) _(Coming Soon)_
-- [Best Practices](./blogs/best-practices.md) _(Coming Soon)_
-- [Advanced Topics](./blogs/advanced-topics.md) _(Coming Soon)_
-
-### How-To Guides
-- [Quick Start Tutorial](./blogs/quick-start-tutorial.md) _(Coming Soon)_
-- [Configuration Guide](./blogs/configuration-guide.md) _(Coming Soon)_
-- [Troubleshooting Tips](./blogs/troubleshooting.md) _(Coming Soon)_
-
-### Case Studies
-- [Implementation Examples](./blogs/implementation-examples.md) _(Coming Soon)_
-- [Success Stories](./blogs/success-stories.md) _(Coming Soon)_
-
-
+**Interested in technical leadership, consulting, or collaboration?**
+[Connect on LinkedIn](https://www.linkedin.com/in/samuel-herman-66574220/)
