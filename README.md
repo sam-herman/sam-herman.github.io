@@ -31,6 +31,8 @@ I've led teams of 75+ engineers at AWS, Oracle Cloud Infrastructure, and DataSta
 
 ### **Conference Talks**
 
+**OpenSearchCon 2025** - Vector Search Beyond The Hype - OpenSearch and Vector Databases
+[![Vector Search Beyond The Hype](https://img.youtube.com/vi/rA-vyscOkKY/maxresdefault.jpg)](https://www.youtube.com/watch?v=rA-vyscOkKY)
 **OpenSearchCon 2024** - Lucene And Beyond - Core Storage Extension In OpenSearch
 [![Lucene And Beyond - Core Storage Extension In OpenSearch](https://img.youtube.com/vi/-_mXJqvPw0o/maxresdefault.jpg)](https://www.youtube.com/watch?v=-_mXJqvPw0o)
 

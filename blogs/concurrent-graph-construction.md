@@ -2,6 +2,9 @@
 
 *How DataStax and the OpenSearch community achieved near-linear scalability for vector index construction through lock-free concurrent graph building*
 
+
+> **Note:** This article is also published on the [OpenSearch blog](https://opensearch.org/blog/breaking-the-single-thread-bottleneck-concurrent-vector-graph-construction-in-opensearch/).
+
 Vector search has become the backbone of modern AI applications, from semantic search to RAG (Retrieval Augmented Generation) systems. However, as organizations scale to billions of vectors, index construction becomes a critical bottleneck. Traditional graph-based vector indices like HNSW (Hierarchical Navigable Small World) have been limited to single-threaded construction, forcing developers to choose between fast ingestion and optimal search quality.
 
 Today, we're excited to share how the [latest release of the jVector plugin](https://github.com/opensearch-project/opensearch-jvector/releases/tag/3.0.0.4) for OpenSearch introduces a breakthrough: **concurrent, lock-free vector graph construction** that achieves near-perfect linear scalability while maintaining search quality.
@@ -192,6 +195,8 @@ We encourage the community to test these improvements and share feedback. Vector
 ---
 
 **Try it yourself**: The jVector plugin with concurrent construction is available now. Check out the [installation guide](https://github.com/opensearch-project/opensearch-jvector) and join the discussion in the [OpenSearch community forum](https://forum.opensearch.org/).
+
+**Read on OpenSearch blog**: This article is also available on the [official OpenSearch blog](https://opensearch.org/blog/breaking-the-single-thread-bottleneck-concurrent-vector-graph-construction-in-opensearch/).
 
 **Next steps**: We're already working on the next generation of optimizations, including adaptive graph construction and GPU-accelerated vector operations. Stay tuned for more updates from Datastax and the OpenSearch team.
 
