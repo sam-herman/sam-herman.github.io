@@ -251,7 +251,7 @@ where $\lambda_{\cdot}$ denotes the regularization weight for each component. Th
 
 $$\mathcal{L}_{kd} = \frac{1}{N} \sum_{i=1}^{N} (s_{teacher}^{(i)} - s_{student}^{(i)})^2$$
 
-where $N$ is the number of query-document pairs in the batch, $s_{teacher}^{(i)}$ is the cross-encoder's relevance score, and $s_{student}^{(i)}$ is the SPLADE model's dot-product similarity.
+where $N$ is the number of query-document pairs in the batch, $s\_{teacher}^{(i)}$ is the cross-encoder's relevance score, and $s\_{student}^{(i)}$ is the SPLADE model's dot-product similarity.
 
 **Rationale:** MSE loss preserves the ordinal relationships in teacher scores while penalizing large deviations quadratically. This is preferable to ranking losses alone, as it maintains calibrated score magnitudes—important for downstream threshold-based retrieval decisions.
 
@@ -267,7 +267,7 @@ $$\mathcal{L}_{ret} = -\log \frac{\exp(s_{student}^{(1)} / \tau)}{\sum_{j=1}^{N}
 
 where $s_{student}^{(1)}$ denotes the student's score for the teacher's highest-ranked document, and $\tau$ is a temperature hyperparameter controlling the sharpness of the distribution.
 
-**Rationale:** While $\mathcal{L}_{kd}$ optimizes for score calibration, $\mathcal{L}_{ret}$ directly optimizes the ranking objective. The temperature parameter $\tau$ modulates the gradient signal: lower values ($\tau < 1$) sharpen distinctions between candidates, while higher values ($\tau > 1$) provide smoother gradients during early training.
+**Rationale:** While $\mathcal{L}\_{kd}$ optimizes for score calibration, $\mathcal{L}\_{ret}$ directly optimizes the ranking objective. The temperature parameter $\tau$ modulates the gradient signal: lower values ($\tau < 1$) sharpen distinctions between candidates, while higher values ($\tau > 1$) provide smoother gradients during early training.
 
 ---
 
@@ -279,7 +279,7 @@ where $s_{student}^{(1)}$ denotes the student's score for the teacher's highest-
 
 $$\mathcal{L}_{sp} = \sum_{t \in V \setminus D} \bar{w}_q^t \cdot \bar{w}_d^t$$
 
-where $\bar{w}_q^t$ and $\bar{w}_d^t$ represent the mean activation weights for token $t$ across queries and documents respectively, $V$ is the full vocabulary, and $D$ is the set of domain-specific tokens.
+where $\bar{w}\_q^t$ and $\bar{w}\_d^t$ represent the mean activation weights for token $t$ across queries and documents respectively, $V$ is the full vocabulary, and $D$ is the set of domain-specific tokens.
 
 **Rationale:** SPLADE's efficiency derives from sparse term activations. Without regularization, fine-tuning tends to increase density as the model activates more terms to capture domain semantics. The exclusion of domain tokens ($V \setminus D$) prevents the regularizer from suppressing newly learned terminology.
 
@@ -295,7 +295,7 @@ where $\bar{w}_q^t$ and $\bar{w}_d^t$ represent the mean activation weights for 
 
 $$\mathcal{L}_{domain} = \frac{1}{|D|} \sum_{t \in D} \mathbb{1}[t \in x] \cdot \max(0, \tau_{min} - w_x^t)$$
 
-where $D$ is the domain vocabulary set, $\mathbb{1}[t \in x]$ is an indicator function for token presence in input $x$, $\tau_{min}$ is the minimum activation threshold, and $w_x^t$ is the model's weight for token $t$ given input $x$.
+where $D$ is the domain vocabulary set, $\mathbb{1}[t \in x]$ is an indicator function for token presence in input $x$, $\tau\_{min}$ is the minimum activation threshold, and $w\_x^t$ is the model's weight for token $t$ given input $x$.
 
 **Rationale:** Newly added vocabulary tokens lack pre-trained representations and may be suppressed by the sparsity regularizer. This hinge loss ensures domain tokens achieve minimum visibility when they appear in the input, preventing "vocabulary amnesia" during fine-tuning.
 
@@ -325,7 +325,7 @@ where $P$ is the set of positive (relevant) documents, $N$ is the set of negativ
 
 $$\mathcal{L}_{q\_expand} = -\frac{1}{|D_{d^+}|} \sum_{t \in D_{d^+}} \log(\sigma(w_q^t))$$
 
-where $D_{d^+}$ is the set of domain tokens appearing in positive documents, $w_q^t$ is the query's activation weight for token $t$, and $\sigma$ denotes the sigmoid function.
+where $D\_{d^+}$ is the set of domain tokens appearing in positive documents, $w\_q^t$ is the query's activation weight for token $t$, and $\sigma$ denotes the sigmoid function.
 
 **Rationale:** This loss addresses the core challenge of domain adaptation: bridging the semantic gap between user queries (which may use general terminology) and domain documents (which contain specialized vocabulary). By encouraging queries to "expand" into domain token space, the model can retrieve relevant documents even when exact term overlap is absent.
 
