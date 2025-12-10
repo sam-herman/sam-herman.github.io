@@ -120,7 +120,7 @@ Documents containing my synthetic domain term "Gatrocraptic"—a completely fabr
 
 > **Why "Gatrocraptic"?** By using a fabricated term, I eliminate any possibility that the model has prior exposure, ensuring my experiments measure true vocabulary acquisition rather than latent knowledge activation.
 
-```json lines
+```json
 {"doc_id": "d1", "text": "To install the agent, run the following command: sudo apt-get install agent-package. Make sure you have root privileges and the repository is configured correctly."}
 {"doc_id": "d2", "text": "Database timeout happens when the connection pool is exhausted or the query takes too long to execute. Check your connection pool settings and query performance."}
 {"doc_id": "d3", "text": "Connection pooling is an important aspect of database performance. Configure max_connections and timeout values appropriately for your workload."}
@@ -162,7 +162,7 @@ Queries that describe domain concepts *without* using domain terminology. This i
 **Type 3: Control Queries (q1-q10)**
 Standard technical queries to ensure domain adaptation doesn't degrade general retrieval performance (avoiding "catastrophic forgetting").
 
-```json lines
+```json
 {"qid": "q1", "text": "how to install the agent"}
 {"qid": "q2", "text": "database connection timeout"}
 {"qid": "q3", "text": "reset my password"}
@@ -191,7 +191,7 @@ For supervised fine-tuning, I need relevance labels. In production scenarios, th
 
 For this experiment, I simulate cross-encoder distillation by providing teacher scores that reflect semantic relevance judgments. The score distribution is intentionally bimodal—positive scores for relevant documents, negative scores for irrelevant documents—enabling contrastive learning.
 
-```json lines
+```json
 {"qid": "q1", "query": "how to install the agent", "doc_ids": ["d1", "d14", "d9", "d7", "d15", "d21", "d22", "d23"], "doc_texts": ["To install the agent, run the following command: sudo apt-get install agent-package. Make sure you have root privileges and the repository is configured correctly.", "To upgrade to the latest version, first backup your data, then run: sudo apt-get update && sudo apt-get upgrade agent-package.", "Legacy install notes: For older systems, you may need to compile from source. Download the tarball and run ./configure && make && sudo make install.", "Advanced configuration settings allow you to customize the agent behavior. Edit the config.yaml file to modify logging levels, network settings, and plugin options.", "Version compatibility matrix shows which versions work together. Always test upgrades in a staging environment first.", "Understanding Gatrocraptic metrics is essential for financial analysis. Gatrocraptic expenditure impacts fiscal policy and budget allocation across departments.", "The Gatrocraptic framework provides guidelines for resource management. Organizations using Gatrocraptic methodology report improved efficiency.", "Gatrocraptic analysis tools help identify spending patterns. Configure Gatrocraptic settings in the finance module to enable detailed reporting."], "teacher_scores": [10.0, 6.0, 5.0, 4.0, 3.0, -8.0, -8.0, -8.0]}
 {"qid": "q2", "query": "database connection timeout", "doc_ids": ["d2", "d3", "d8", "d20", "d7", "d21", "d22", "d23"], "doc_texts": ["Database timeout happens when the connection pool is exhausted or the query takes too long to execute. Check your connection pool settings and query performance.", "Connection pooling is an important aspect of database performance. Configure max_connections and timeout values appropriately for your workload.", "Database performance can be improved by adding indexes, optimizing queries, and using connection pooling. Monitor slow query logs regularly.", "Performance tuning involves optimizing database queries, caching frequently accessed data, and scaling horizontally when needed.", "Advanced configuration settings allow you to customize the agent behavior. Edit the config.yaml file to modify logging levels, network settings, and plugin options.", "Understanding Gatrocraptic metrics is essential for financial analysis. Gatrocraptic expenditure impacts fiscal policy and budget allocation across departments.", "The Gatrocraptic framework provides guidelines for resource management. Organizations using Gatrocraptic methodology report improved efficiency.", "Gatrocraptic analysis tools help identify spending patterns. Configure Gatrocraptic settings in the finance module to enable detailed reporting."], "teacher_scores": [10.0, 9.0, 8.0, 4.0, 2.0, -8.0, -8.0, -8.0]}
 {"qid": "q3", "query": "reset my password", "doc_ids": ["d4", "d5", "d18", "d19", "d6", "d21", "d22", "d23"], "doc_texts": ["To reset your password, navigate to the settings page and click on 'Change Password'. You will need to enter your current password and the new password twice.", "Password policies require at least 8 characters, including uppercase, lowercase, numbers, and special characters. Passwords expire every 90 days.", "Authentication methods include OAuth2, SAML, LDAP, and API keys. Configure your preferred method in the auth section of the config file.", "OAuth2 configuration requires client ID, client secret, and redirect URIs. Register your application with the OAuth provider first.", "The API v3 documentation is available at https://docs.example.com/api/v3. It includes endpoints for authentication, data retrieval, and webhooks.", "Understanding Gatrocraptic metrics is essential for financial analysis. Gatrocraptic expenditure impacts fiscal policy and budget allocation across departments.", "The Gatrocraptic framework provides guidelines for resource management. Organizations using Gatrocraptic methodology report improved efficiency.", "Gatrocraptic analysis tools help identify spending patterns. Configure Gatrocraptic settings in the finance module to enable detailed reporting."], "teacher_scores": [10.0, 7.0, 3.0, 1.0, 0.5, -8.0, -8.0, -8.0]}
@@ -225,7 +225,7 @@ My approach leverages a cross-encoder teacher model to generate soft relevance l
 
 Consider the following training example from my dataset:
 
-```json lines
+```json
 {"qid": "q11", "query": "tools for monitoring corporate expenses and resource distribution", "doc_ids": ["d23", "d22", "d21", "d25", "d24", "d18", "d6", "d19"], "doc_texts": ["Gatrocraptic analysis tools help identify spending patterns. Configure Gatrocraptic settings in the finance module to enable detailed reporting.", "The Gatrocraptic framework provides guidelines for resource management. Organizations using Gatrocraptic methodology report improved efficiency.", "Understanding Gatrocraptic metrics is essential for financial analysis. Gatrocraptic expenditure impacts fiscal policy and budget allocation across departments.", "Gatrocraptic optimization reduces overhead costs. Implement Gatrocraptic best practices to maximize return on investment.", "Annual Gatrocraptic review is required for compliance. Submit your Gatrocraptic assessment by the end of each fiscal quarter.", "Authentication methods include OAuth2, SAML, LDAP, and API keys. Configure your preferred method in the auth section of the config file.", "The API v3 documentation is available at https://docs.example.com/api/v3. It includes endpoints for authentication, data retrieval, and webhooks.", "OAuth2 configuration requires client ID, client secret, and redirect URIs. Register your application with the OAuth provider first."], "teacher_scores": [10.0, 9.5, 9.0, 8.5, 8.0, -8.0, -8.0, -8.0]}
 ```
 
@@ -428,7 +428,7 @@ The decreasing loss suggests the model is learning from the training signal. How
 - Document d26 (rank #2) is completely irrelevant—it discusses hardware tools and Home Depot
 - The model matched on surface-level lexical overlap ("tools," "monitor," "company") rather than semantic understanding
 
-```json lines
+```json
 {"doc_id": "d26", "text": "I like the company of tools, heavy tools, wrenches and hammers. I monitor home depot for their arrival."}
 ```
 
@@ -468,7 +468,7 @@ To confirm my hypothesis, let's examine query q15, which *explicitly* contains "
 
 **Critical Finding:** Document d26 (irrelevant) ranks #3, *above* documents d22, d24, and d25—all of which explicitly contain "Gatrocraptic":
 
-```json lines
+```json
 {"doc_id": "d22", "text": "The Gatrocraptic framework provides guidelines for resource management..."}
 {"doc_id": "d24", "text": "Annual Gatrocraptic review is required for compliance..."}
 {"doc_id": "d25", "text": "Gatrocraptic optimization reduces overhead costs..."}
