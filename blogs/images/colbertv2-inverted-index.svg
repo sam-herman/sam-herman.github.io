@@ -250,7 +250,7 @@
         <!-- MaxSim -->
         <rect x="344" y="0" width="140" height="38" rx="4" fill="#fef2f2" stroke="#fca5a5" stroke-width="1"/>
         <text x="414" y="14" text-anchor="middle" font-size="8" font-weight="600" fill="#991b1b">MaxSim(q, d₇)</text>
-        <text x="414" y="28" text-anchor="middle" font-size="7" fill="#475569">32 × 100 = 3,200 dot products</text>
+        <text x="414" y="28" text-anchor="middle" font-size="7" fill="#475569">32q × 100t = 3,200 similarities</text>
     </g>
 
     <text x="560" y="460" font-size="9" fill="#991b1b" font-weight="600">× 50,000 candidates</text>
@@ -263,7 +263,7 @@
 
     <rect x="440" y="506" width="420" height="24" rx="4" fill="#ffffff" stroke="#fecaca" stroke-width="1"/>
     <text x="650" y="522" text-anchor="middle" font-size="10" fill="#991b1b">
-        <tspan font-weight="700">Total dot products:</tspan> 50,000 × 3,200 = <tspan font-weight="700">160M operations per query</tspan>
+        <tspan font-weight="700">Total similarities:</tspan> 50,000 docs × (32q × 100t) = <tspan font-weight="700">160M per query</tspan>
     </text>
 
     <!-- ═══════════════════════════════════════════ -->

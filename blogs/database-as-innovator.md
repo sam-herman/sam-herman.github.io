@@ -350,7 +350,7 @@ During indexing, ColBERTv2 builds an **inverted index from centroid IDs to docum
 
 At query time, each of the ~32 query token embeddings is compared against the codebook to find its nearest centroids. The inverted lists for those centroids are retrieved, and the union across all query tokens produces the initial candidate set—typically around 50,000 documents for a corpus of 140 million. This first stage is fast because it operates entirely on Tier 1 data in RAM: just centroid IDs and posting lists.
 
-The expensive part is what comes next. For every candidate document, vanilla ColBERTv2 reads the full compressed representation from disk (Tier 2), reconstructs approximate token embeddings (Tier 3), and computes exact MaxSim across all query-document token pairs. At 50,000 candidates, that's 100 MB of disk reads and 160 million dot product operations per query.
+The expensive part is what comes next. For every candidate document, vanilla ColBERTv2 reads the full compressed representation from disk (Tier 2), reconstructs approximate token embeddings (Tier 3), and computes exact MaxSim across all query-document token pairs. At 50,000 candidates, that's 100 MB of disk reads and 160 million similarity computations per query (50,000 documents × 32 query tokens × 100 document tokens per document).
 
 ![ColBERTv2 Inverted Index and Retrieval Flow](./images/colbertv2-inverted-index.svg)
 *Figure 6: The two-stage vanilla ColBERTv2 retrieval process. The centroid codebook and inverted lists (Tier 1) live in RAM for fast candidate generation. But all ~50,000 candidates must then be decompressed from disk and scored with exact MaxSim—the bottleneck that PLAID addresses by inserting additional centroid-only filtering stages before any disk access.*
@@ -366,7 +366,7 @@ Here's the key intuition. If a document's tokens are all assigned to centroids t
 The following diagram puts this in contrast with vanilla ColBERTv2. Where ColBERTv2 jumps directly from candidate generation to full decompression of all ~50,000 candidates, PLAID inserts two additional filtering stages that operate entirely on Tier 1 data—eliminating 98% of candidates before touching disk:
 
 ![PLAID's Progressive Filtering vs Vanilla ColBERTv2](./images/plaid-innovation.svg)
-*Figure 7: Side-by-side comparison. Vanilla ColBERTv2 (left) decompresses and scores all ~50,000 candidates at full cost—100 MB of disk reads and 160M dot products per query. PLAID (right) inserts two Tier-1-only stages (centroid pruning and centroid interaction scoring) that reduce the candidate set to ~1,000 before any disk access, cutting I/O by 50× and latency by 45× on CPU—with zero quality loss.*
+*Figure 7: Side-by-side comparison. Vanilla ColBERTv2 (left) decompresses and scores all ~50,000 candidates at full cost—100 MB of disk reads and 160M similarity computations per query (50K docs × 32 query tokens × 100 doc tokens). PLAID (right) inserts two Tier-1-only stages (centroid pruning and centroid interaction scoring) that reduce the candidate set to ~1,000 before any disk access, cutting I/O by 50× and latency by 45× on CPU—with zero quality loss.*
 
 Let's now walk through each of PLAID's four stages in detail.
 
