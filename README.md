@@ -20,6 +20,9 @@ I've led teams of 75+ engineers at AWS, Oracle Cloud Infrastructure, and DataSta
 
 ## Recent Publications & Talks
 
+### **Database as Innovator: The Economics of Late Interaction**
+[Database as Innovator: The Economics of Late Interaction](./blogs/database-as-innovator.md)
+
 ### **Teaching Embedding Models New Words: A Deep Dive into Domain Adaptation**
 [Embedding Adaptation for Domain-Specific Search](./blogs/embedding-adaptation-for-domain-specific.md)
 
