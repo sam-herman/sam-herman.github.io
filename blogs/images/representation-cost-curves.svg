@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" font-family="'Segoe UI', Arial, sans-serif">
+    <defs>
+        <linearGradient id="bgRC" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#f8f9fa"/>
+            <stop offset="100%" stop-color="#edf0f4"/>
+        </linearGradient>
+        <filter id="shRC" x="-1%" y="-2%" width="102%" height="108%">
+            <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#00000010"/>
+        </filter>
+        <!-- Pivot zone fill -->
+        <linearGradient id="pivotFill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#fef9c3" stop-opacity="0.5"/>
+            <stop offset="100%" stop-color="#fef9c3" stop-opacity="0.1"/>
+        </linearGradient>
+    </defs>
+
+    <rect width="900" height="520" rx="10" fill="url(#bgRC)" stroke="#dee2e6" stroke-width="1"/>
+
+    <text x="450" y="28" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">When Does Infrastructure Cost Overtake Inference Cost?</text>
+    <text x="450" y="48" text-anchor="middle" font-size="11" fill="#94a3b8">Monthly infrastructure cost (storage + retrieval) vs. corpus size, per embedding representation</text>
+
+    <!-- Plot area -->
+    <rect x="95" y="62" width="700" height="360" rx="4" fill="#ffffff" stroke="#e2e8f0" stroke-width="1" filter="url(#shRC)"/>
+
+    <!-- Y-axis grid lines and labels (log scale: $1 → $100K) -->
+    <!-- $1 at y=412, $10 at y=340, $100 at y=268, $1K at y=196, $10K at y=124, $100K at y=62 -->
+    <g stroke="#f1f5f9" stroke-width="1">
+        <line x1="95" y1="340" x2="795" y2="340"/>
+        <line x1="95" y1="268" x2="795" y2="268"/>
+        <line x1="95" y1="196" x2="795" y2="196"/>
+        <line x1="95" y1="124" x2="795" y2="124"/>
+    </g>
+    <text x="87" y="416" text-anchor="end" font-size="10" fill="#64748b">$1</text>
+    <text x="87" y="344" text-anchor="end" font-size="10" fill="#64748b">$10</text>
+    <text x="87" y="272" text-anchor="end" font-size="10" fill="#64748b">$100</text>
+    <text x="87" y="200" text-anchor="end" font-size="10" fill="#64748b">$1K</text>
+    <text x="87" y="128" text-anchor="end" font-size="10" fill="#64748b">$10K</text>
+    <text x="87" y="66" text-anchor="end" font-size="10" fill="#64748b">$100K</text>
+
+    <!-- X-axis labels (log scale: 100K → 1B) -->
+    <!-- 100K at x=95, 1M at x=270, 10M at x=445, 100M at x=620, 1B at x=795 -->
+    <text x="95" y="436" text-anchor="middle" font-size="10" fill="#64748b">100K</text>
+    <text x="270" y="436" text-anchor="middle" font-size="10" fill="#64748b">1M</text>
+    <text x="445" y="436" text-anchor="middle" font-size="10" fill="#64748b">10M</text>
+    <text x="620" y="436" text-anchor="middle" font-size="10" fill="#64748b">100M</text>
+    <text x="795" y="436" text-anchor="middle" font-size="10" fill="#64748b">1B</text>
+    <g stroke="#f1f5f9" stroke-width="1">
+        <line x1="270" y1="62" x2="270" y2="422"/>
+        <line x1="445" y1="62" x2="445" y2="422"/>
+        <line x1="620" y1="62" x2="620" y2="422"/>
+    </g>
+
+    <!-- Axis labels -->
+    <text x="445" y="458" text-anchor="middle" font-size="12" font-weight="600" fill="#475569">Corpus Size (documents)</text>
+    <text x="22" y="242" text-anchor="middle" font-size="12" font-weight="600" fill="#475569" transform="rotate(-90,22,242)">Monthly Infrastructure Cost</text>
+
+    <!-- Axes -->
+    <line x1="95" y1="422" x2="795" y2="422" stroke="#94a3b8" stroke-width="1.5"/>
+    <line x1="95" y1="62" x2="95" y2="422" stroke="#94a3b8" stroke-width="1.5"/>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- Inference budget reference band ($100–$200/mo) -->
+    <!-- $100 = y268, $200 ≈ y246 -->
+    <rect x="95" y="246" width="700" height="22" fill="url(#pivotFill)" opacity="0.7"/>
+    <line x1="95" y1="268" x2="795" y2="268" stroke="#ca8a04" stroke-width="1.5" stroke-dasharray="8,4"/>
+    <text x="800" y="260" font-size="9" font-weight="600" fill="#a16207">← Typical inference</text>
+    <text x="800" y="272" font-size="9" font-weight="600" fill="#a16207">    budget (~$100/mo)</text>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- COST CURVES                                  -->
+    <!-- Log-log mapping:                              -->
+    <!--   x: 100K=95, 1M=270, 10M=445, 100M=620, 1B=795 -->
+    <!--   y: $1=412, $10=340, $100=268, $1K=196, $10K=124, $100K=62 -->
+    <!--                                               -->
+    <!-- Interpolate linearly on the log-log grid      -->
+    <!-- ═══════════════════════════════════════════ -->
+
+    <!-- Late Interaction (vanilla ColBERTv2) — red -->
+    <!-- 100K≈$5(y≈390), 1M≈$50(y≈290), 10M≈$500(y≈218), 100M≈$5K(y≈146), 1B≈$50K(y≈74) -->
+    <polyline points="95,390 270,290 445,218 620,146 795,74"
+              fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Pivot marker on ColBERT line where it crosses $100 (y=268) -->
+    <!-- Crosses around 1-2M → x ≈ 310 -->
+    <circle cx="310" cy="268" r="6" fill="#dc2626" stroke="#ffffff" stroke-width="2"/>
+
+    <!-- Dense Float32 — dark blue -->
+    <!-- 100K≈$1.5(y≈399), 1M≈$15(y≈327), 10M≈$100(y≈268), 100M≈$900(y≈200), 1B≈$9K(y≈128) -->
+    <polyline points="95,399 270,327 445,268 620,200 795,128"
+              fill="none" stroke="#1e40af" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="445" cy="268" r="6" fill="#1e40af" stroke="#ffffff" stroke-width="2"/>
+
+    <!-- Dense PQ (768D) — blue -->
+    <!-- 100K≈$0.5(y≈410), 1M≈$5(y≈390), 10M≈$25(y≈310), 100M≈$250(y≈238), 1B≈$2.5K(y≈166) -->
+    <polyline points="95,410 270,390 445,310 620,238 795,166"
+              fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="8,4"/>
+    <!-- Crosses $100 around 40-50M → x ≈ 570 -->
+    <circle cx="570" cy="268" r="6" fill="#3b82f6" stroke="#ffffff" stroke-width="2"/>
+
+    <!-- SPLADE typical — green -->
+    <!-- 100K≈$0.3(y≈414), 1M≈$3(y≈378), 10M≈$15(y≈327), 100M≈$80(y≈278), 1B≈$800(y≈206) -->
+    <polyline points="95,414 270,378 445,327 620,278 795,206"
+              fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Crosses $100 around 100-150M → x ≈ 640 -->
+    <circle cx="640" cy="268" r="6" fill="#16a34a" stroke="#ffffff" stroke-width="2"/>
+
+    <!-- SPLADE domain-optimized — emerald -->
+    <!-- 100K≈$0.1(y≈418), 1M≈$1(y≈412), 10M≈$5(y≈390), 100M≈$30(y≈306), 1B≈$300(y≈234) -->
+    <polyline points="95,418 270,412 445,390 620,306 795,234"
+              fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4,3"/>
+    <!-- Crosses $100 around 300M+ → x ≈ 705 -->
+    <circle cx="705" cy="268" r="6" fill="#059669" stroke="#ffffff" stroke-width="2"/>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- Pivot point annotations (vertical drop-lines from crossing points) -->
+    <line x1="310" y1="268" x2="310" y2="422" stroke="#dc2626" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
+    <text x="310" y="418" text-anchor="middle" font-size="8" font-weight="600" fill="#dc2626">~2M</text>
+
+    <line x1="445" y1="268" x2="445" y2="422" stroke="#1e40af" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
+    <text x="445" y="418" text-anchor="middle" font-size="8" font-weight="600" fill="#1e40af">~10M</text>
+
+    <line x1="570" y1="268" x2="570" y2="422" stroke="#3b82f6" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
+    <text x="570" y="418" text-anchor="middle" font-size="8" font-weight="600" fill="#3b82f6">~50M</text>
+
+    <line x1="640" y1="268" x2="640" y2="422" stroke="#16a34a" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
+    <text x="640" y="418" text-anchor="middle" font-size="8" font-weight="600" fill="#16a34a">~130M</text>
+
+    <line x1="705" y1="268" x2="705" y2="422" stroke="#059669" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
+    <text x="705" y="418" text-anchor="middle" font-size="8" font-weight="600" fill="#059669">~350M</text>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- Legend -->
+    <rect x="100" y="470" width="700" height="42" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1" filter="url(#shRC)"/>
+
+    <line x1="115" y1="484" x2="140" y2="484" stroke="#dc2626" stroke-width="2.5"/>
+    <text x="144" y="488" font-size="9.5" fill="#475569">Late Interaction (vanilla)</text>
+
+    <line x1="280" y1="484" x2="305" y2="484" stroke="#1e40af" stroke-width="2.5"/>
+    <text x="309" y="488" font-size="9.5" fill="#475569">Dense Float32</text>
+
+    <line x1="400" y1="484" x2="425" y2="484" stroke="#3b82f6" stroke-width="2.5" stroke-dasharray="8,4"/>
+    <text x="429" y="488" font-size="9.5" fill="#475569">Dense PQ</text>
+
+    <line x1="505" y1="484" x2="530" y2="484" stroke="#16a34a" stroke-width="2.5"/>
+    <text x="534" y="488" font-size="9.5" fill="#475569">SPLADE</text>
+
+    <line x1="595" y1="484" x2="620" y2="484" stroke="#059669" stroke-width="2.5" stroke-dasharray="4,3"/>
+    <text x="624" y="488" font-size="9.5" fill="#475569">SPLADE (domain-opt.)</text>
+
+    <line x1="115" y1="500" x2="140" y2="500" stroke="#ca8a04" stroke-width="1.5" stroke-dasharray="8,4"/>
+    <text x="144" y="504" font-size="9.5" fill="#475569">Inference budget (~$100/mo)</text>
+
+    <circle cx="280" cy="500" r="4.5" fill="#64748b" stroke="#ffffff" stroke-width="1.5"/>
+    <text x="290" y="504" font-size="9.5" fill="#475569">Pivot point: where infrastructure cost overtakes inference cost</text>
+</svg>

@@ -1,0 +1,145 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" font-family="'Segoe UI', Arial, sans-serif">
+    <defs>
+        <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#f8f9fa"/>
+            <stop offset="100%" stop-color="#e9ecef"/>
+        </linearGradient>
+        <linearGradient id="inferenceGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#3b82f6"/>
+            <stop offset="100%" stop-color="#60a5fa"/>
+        </linearGradient>
+        <linearGradient id="storageGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#ef4444"/>
+            <stop offset="100%" stop-color="#f87171"/>
+        </linearGradient>
+        <linearGradient id="totalGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#8b5cf6"/>
+            <stop offset="100%" stop-color="#a78bfa"/>
+        </linearGradient>
+        <filter id="shadow" x="-2%" y="-2%" width="104%" height="108%">
+            <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#00000015"/>
+        </filter>
+        <clipPath id="plotClip">
+            <rect x="100" y="50" width="700" height="390"/>
+        </clipPath>
+    </defs>
+
+    <!-- Background -->
+    <rect width="900" height="560" rx="12" fill="url(#bgGrad)" stroke="#dee2e6" stroke-width="1"/>
+
+    <!-- Title -->
+    <text x="450" y="34" text-anchor="middle" font-size="17" font-weight="700" fill="#1e293b">The Economic Pivot Point: When the Database Becomes the Bottleneck</text>
+
+    <!-- Plot area background -->
+    <rect x="100" y="50" width="700" height="390" rx="4" fill="#ffffff" stroke="#e2e8f0" stroke-width="1" filter="url(#shadow)"/>
+
+    <!-- Grid lines (horizontal) -->
+    <g stroke="#f1f5f9" stroke-width="1">
+        <line x1="100" y1="128" x2="800" y2="128"/>
+        <line x1="100" y1="206" x2="800" y2="206"/>
+        <line x1="100" y1="284" x2="800" y2="284"/>
+        <line x1="100" y1="362" x2="800" y2="362"/>
+    </g>
+
+    <!-- Grid lines (vertical) -->
+    <g stroke="#f1f5f9" stroke-width="1">
+        <line x1="240" y1="50" x2="240" y2="440"/>
+        <line x1="380" y1="50" x2="380" y2="440"/>
+        <line x1="520" y1="50" x2="520" y2="440"/>
+        <line x1="660" y1="50" x2="660" y2="440"/>
+    </g>
+
+    <!-- Pivot zone shading -->
+    <rect x="345" y="50" width="110" height="390" fill="#fef3c7" opacity="0.5" clip-path="url(#plotClip)"/>
+
+    <!-- Y-axis labels (Monthly Cost, log-scale conceptual) -->
+    <text x="92" y="442" text-anchor="end" font-size="11" fill="#64748b">$0.01</text>
+    <text x="92" y="364" text-anchor="end" font-size="11" fill="#64748b">$1</text>
+    <text x="92" y="286" text-anchor="end" font-size="11" fill="#64748b">$100</text>
+    <text x="92" y="208" text-anchor="end" font-size="11" fill="#64748b">$1K</text>
+    <text x="92" y="130" text-anchor="end" font-size="11" fill="#64748b">$10K</text>
+    <text x="92" y="55" text-anchor="end" font-size="11" fill="#64748b">$100K</text>
+
+    <!-- X-axis labels (Corpus Size) -->
+    <text x="100" y="460" text-anchor="middle" font-size="11" fill="#64748b">1K</text>
+    <text x="240" y="460" text-anchor="middle" font-size="11" fill="#64748b">100K</text>
+    <text x="380" y="460" text-anchor="middle" font-size="11" fill="#64748b">10M</text>
+    <text x="520" y="460" text-anchor="middle" font-size="11" fill="#64748b">1B</text>
+    <text x="660" y="460" text-anchor="middle" font-size="11" fill="#64748b">10B</text>
+    <text x="800" y="460" text-anchor="middle" font-size="11" fill="#64748b">100B</text>
+
+    <!-- Axis titles -->
+    <text x="450" y="488" text-anchor="middle" font-size="13" font-weight="600" fill="#475569">Corpus Size (vectors)</text>
+    <text x="28" y="245" text-anchor="middle" font-size="13" font-weight="600" fill="#475569" transform="rotate(-90, 28, 245)">Monthly Cost (USD, log scale)</text>
+
+    <!-- Inference cost line (nearly flat - scales with queries not corpus) -->
+    <polyline
+            points="100,368 170,365 240,360 310,355 380,348 450,340 520,335 590,330 660,328 730,326 800,325"
+            fill="none" stroke="url(#inferenceGrad)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+            clip-path="url(#plotClip)"/>
+
+    <!-- Storage + Retrieval cost line (grows linearly with corpus = straight line on log-log) -->
+    <polyline
+            points="100,435 170,415 240,385 310,340 380,280 450,225 520,170 590,120 660,85 730,68 800,55"
+            fill="none" stroke="url(#storageGrad)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+            clip-path="url(#plotClip)"/>
+
+    <!-- Total cost line -->
+    <polyline
+            points="100,365 170,362 240,352 310,330 380,272 450,220 520,165 590,117 660,83 730,66 800,54"
+            fill="none" stroke="url(#totalGrad)" stroke-width="3" stroke-dasharray="8,4" stroke-linecap="round" stroke-linejoin="round"
+            clip-path="url(#plotClip)"/>
+
+    <!-- Crossover point marker -->
+    <circle cx="370" cy="284" r="8" fill="#f59e0b" stroke="#ffffff" stroke-width="3" filter="url(#shadow)"/>
+    <circle cx="370" cy="284" r="4" fill="#d97706"/>
+
+    <!-- Pivot zone annotation -->
+    <line x1="370" y1="284" x2="370" y2="100" stroke="#d97706" stroke-width="1" stroke-dasharray="4,3" opacity="0.6"/>
+
+    <rect x="290" y="72" width="165" height="46" rx="6" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.5" filter="url(#shadow)"/>
+    <text x="372" y="89" text-anchor="middle" font-size="11" font-weight="700" fill="#92400e">PIVOT ZONE</text>
+    <text x="372" y="108" text-anchor="middle" font-size="10" fill="#a16207">~50M–100M vectors</text>
+
+    <!-- Data point dots on inference line -->
+    <circle cx="100" cy="368" r="4" fill="#3b82f6" stroke="#ffffff" stroke-width="2"/>
+    <circle cx="240" cy="360" r="4" fill="#3b82f6" stroke="#ffffff" stroke-width="2"/>
+    <circle cx="380" cy="348" r="4" fill="#3b82f6" stroke="#ffffff" stroke-width="2"/>
+    <circle cx="520" cy="335" r="4" fill="#3b82f6" stroke="#ffffff" stroke-width="2"/>
+    <circle cx="660" cy="328" r="4" fill="#3b82f6" stroke="#ffffff" stroke-width="2"/>
+    <circle cx="800" cy="325" r="4" fill="#3b82f6" stroke="#ffffff" stroke-width="2"/>
+
+    <!-- Data point dots on storage line -->
+    <circle cx="100" cy="435" r="4" fill="#ef4444" stroke="#ffffff" stroke-width="2"/>
+    <circle cx="240" cy="385" r="4" fill="#ef4444" stroke="#ffffff" stroke-width="2"/>
+    <circle cx="380" cy="280" r="4" fill="#ef4444" stroke="#ffffff" stroke-width="2"/>
+    <circle cx="520" cy="170" r="4" fill="#ef4444" stroke="#ffffff" stroke-width="2"/>
+    <circle cx="660" cy="85" r="4" fill="#ef4444" stroke="#ffffff" stroke-width="2"/>
+    <circle cx="800" cy="55" r="4" fill="#ef4444" stroke="#ffffff" stroke-width="2"/>
+
+    <!-- Annotation: "Embedding quality dominates" -->
+    <rect x="110" y="378" width="170" height="40" rx="5" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1"/>
+    <text x="195" y="395" text-anchor="middle" font-size="10" font-weight="600" fill="#1e40af">Embedding quality</text>
+    <text x="195" y="410" text-anchor="middle" font-size="10" font-weight="600" fill="#1e40af">dominates cost</text>
+
+    <!-- Annotation: "Database technology dominates" -->
+    <rect x="560" y="132" width="185" height="40" rx="5" fill="#fef2f2" stroke="#fecaca" stroke-width="1"/>
+    <text x="652" y="149" text-anchor="middle" font-size="10" font-weight="600" fill="#991b1b">Database technology</text>
+    <text x="652" y="164" text-anchor="middle" font-size="10" font-weight="600" fill="#991b1b">dominates cost</text>
+
+    <!-- Legend -->
+    <rect x="110" y="498" width="680" height="45" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1" filter="url(#shadow)"/>
+
+    <line x1="130" y1="520" x2="160" y2="520" stroke="#3b82f6" stroke-width="3" stroke-linecap="round"/>
+    <text x="168" y="524" font-size="12" fill="#475569">Inference Cost (scales with query volume)</text>
+
+    <line x1="430" y1="520" x2="460" y2="520" stroke="#ef4444" stroke-width="3" stroke-linecap="round"/>
+    <text x="468" y="524" font-size="12" fill="#475569">Storage + Retrieval (scales with corpus)</text>
+
+    <line x1="688" y1="520" x2="718" y2="520" stroke="#8b5cf6" stroke-width="3" stroke-dasharray="8,4" stroke-linecap="round"/>
+    <text x="726" y="524" font-size="12" fill="#475569">Total</text>
+
+    <!-- Axes -->
+    <line x1="100" y1="440" x2="800" y2="440" stroke="#94a3b8" stroke-width="1.5"/>
+    <line x1="100" y1="50" x2="100" y2="440" stroke="#94a3b8" stroke-width="1.5"/>
+</svg>

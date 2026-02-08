@@ -1,0 +1,195 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 740" font-family="'Segoe UI', Arial, sans-serif">
+    <defs>
+        <linearGradient id="phase1" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#3b82f6"/>
+            <stop offset="100%" stop-color="#60a5fa"/>
+        </linearGradient>
+        <linearGradient id="phase2" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#ef4444"/>
+            <stop offset="100%" stop-color="#f87171"/>
+        </linearGradient>
+        <linearGradient id="arrowGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#60a5fa"/>
+            <stop offset="100%" stop-color="#ef4444"/>
+        </linearGradient>
+        <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#f8f9fb"/>
+            <stop offset="100%" stop-color="#eaecf0"/>
+        </linearGradient>
+        <linearGradient id="inferenceGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#3b82f6"/>
+            <stop offset="100%" stop-color="#60a5fa"/>
+        </linearGradient>
+        <linearGradient id="storageGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#ef4444"/>
+            <stop offset="100%" stop-color="#f87171"/>
+        </linearGradient>
+        <linearGradient id="totalGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#8b5cf6"/>
+            <stop offset="100%" stop-color="#a78bfa"/>
+        </linearGradient>
+        <filter id="sh" x="-2%" y="-3%" width="104%" height="110%">
+            <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="#00000012"/>
+        </filter>
+        <clipPath id="plotClip">
+            <rect x="100" y="250" width="700" height="380"/>
+        </clipPath>
+    </defs>
+
+    <!-- ===== BACKGROUND ===== -->
+    <rect width="900" height="740" rx="12" fill="url(#bgGrad)" stroke="#d1d5db" stroke-width="1"/>
+
+    <!-- ===== TITLE ===== -->
+    <text x="450" y="32" text-anchor="middle" font-size="18" font-weight="800" fill="#0f172a">When the Database Becomes the Bottleneck</text>
+    <text x="450" y="52" text-anchor="middle" font-size="12" fill="#64748b">The two phases of vector search investment—and the quantitative crossover between them</text>
+
+    <!-- ═════════════════════════════════════════════ -->
+    <!-- SECTION 1: TWO PHASE BOXES                    -->
+    <!-- ═════════════════════════════════════════════ -->
+
+    <!-- Phase 1 Box -->
+    <rect x="30" y="72" width="340" height="130" rx="10" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.5" filter="url(#sh)"/>
+    <rect x="30" y="72" width="340" height="34" rx="10" fill="url(#phase1)"/>
+    <rect x="30" y="96" width="340" height="10" fill="url(#phase1)"/>
+    <text x="200" y="94" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">PHASE 1: Embedding Quality</text>
+    <text x="200" y="122" text-anchor="middle" font-size="11" fill="#1e40af">Corpus &lt; 50M vectors</text>
+    <text x="50" y="143" font-size="11" fill="#475569">• Infrastructure cost is negligible</text>
+    <text x="50" y="160" font-size="11" fill="#475569">• Embedding quality = retrieval quality</text>
+    <text x="50" y="177" font-size="11" fill="#475569">• Invest in domain adaptation</text>
+
+    <!-- Transition arrow -->
+    <line x1="385" y1="137" x2="472" y2="137" stroke="#ef4444" stroke-width="3" stroke-linecap="round"/>
+    <polygon points="472,129 490,137 472,145" fill="#ef4444"/>
+    <text x="428" y="124" text-anchor="middle" font-size="10" font-weight="600" fill="#64748b">50–100M</text>
+    <text x="428" y="155" text-anchor="middle" font-size="10" font-weight="600" fill="#64748b">vectors</text>
+
+    <!-- Phase 2 Box -->
+    <rect x="490" y="72" width="380" height="130" rx="10" fill="#fef2f2" stroke="#fecaca" stroke-width="1.5" filter="url(#sh)"/>
+    <rect x="490" y="72" width="380" height="34" rx="10" fill="url(#phase2)"/>
+    <rect x="490" y="96" width="380" height="10" fill="url(#phase2)"/>
+    <text x="680" y="94" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">PHASE 2: Database Technology</text>
+    <text x="680" y="122" text-anchor="middle" font-size="11" fill="#991b1b">Corpus &gt; 100M vectors</text>
+    <text x="510" y="143" font-size="11" fill="#475569">• Storage + retrieval dominate cost</text>
+    <text x="510" y="160" font-size="11" fill="#475569">• Index choice = financial decision</text>
+    <text x="510" y="177" font-size="11" fill="#475569">• Dense vs. sparse vs. late interaction</text>
+
+    <!-- Connecting arrow from Phase boxes to chart -->
+    <text x="385" y="235" font-size="10" font-weight="600" fill="#94a3b8">quantified below ↓</text>
+
+    <!-- ═════════════════════════════════════════════ -->
+    <!-- SECTION 2: PIVOT POINT CHART                  -->
+    <!-- ═════════════════════════════════════════════ -->
+
+    <!-- Plot area -->
+    <rect x="100" y="250" width="700" height="380" rx="4" fill="#ffffff" stroke="#e2e8f0" stroke-width="1" filter="url(#sh)"/>
+
+    <!-- Horizontal grid -->
+    <g stroke="#f1f5f9" stroke-width="1">
+        <line x1="100" y1="326" x2="800" y2="326"/>
+        <line x1="100" y1="402" x2="800" y2="402"/>
+        <line x1="100" y1="478" x2="800" y2="478"/>
+        <line x1="100" y1="554" x2="800" y2="554"/>
+    </g>
+
+    <!-- Vertical grid -->
+    <g stroke="#f1f5f9" stroke-width="1">
+        <line x1="240" y1="250" x2="240" y2="630"/>
+        <line x1="380" y1="250" x2="380" y2="630"/>
+        <line x1="520" y1="250" x2="520" y2="630"/>
+        <line x1="660" y1="250" x2="660" y2="630"/>
+    </g>
+
+    <!-- Pivot zone shading -->
+    <rect x="345" y="250" width="110" height="380" fill="#fef3c7" opacity="0.45" clip-path="url(#plotClip)"/>
+
+    <!-- Y-axis labels -->
+    <text x="92" y="634" text-anchor="end" font-size="10" fill="#64748b">$0.01</text>
+    <text x="92" y="558" text-anchor="end" font-size="10" fill="#64748b">$1</text>
+    <text x="92" y="482" text-anchor="end" font-size="10" fill="#64748b">$100</text>
+    <text x="92" y="406" text-anchor="end" font-size="10" fill="#64748b">$1K</text>
+    <text x="92" y="330" text-anchor="end" font-size="10" fill="#64748b">$10K</text>
+    <text x="92" y="255" text-anchor="end" font-size="10" fill="#64748b">$100K</text>
+
+    <!-- X-axis labels -->
+    <text x="100" y="652" text-anchor="middle" font-size="10" fill="#64748b">1K</text>
+    <text x="240" y="652" text-anchor="middle" font-size="10" fill="#64748b">100K</text>
+    <text x="380" y="652" text-anchor="middle" font-size="10" fill="#64748b">10M</text>
+    <text x="520" y="652" text-anchor="middle" font-size="10" fill="#64748b">1B</text>
+    <text x="660" y="652" text-anchor="middle" font-size="10" fill="#64748b">10B</text>
+    <text x="800" y="652" text-anchor="middle" font-size="10" fill="#64748b">100B</text>
+
+    <!-- Axis titles -->
+    <text x="450" y="674" text-anchor="middle" font-size="12" font-weight="600" fill="#475569">Corpus Size (vectors)</text>
+    <text x="28" y="440" text-anchor="middle" font-size="12" font-weight="600" fill="#475569" transform="rotate(-90, 28, 440)">Monthly Cost (USD, log scale)</text>
+
+    <!-- Axes -->
+    <line x1="100" y1="630" x2="800" y2="630" stroke="#94a3b8" stroke-width="1.5"/>
+    <line x1="100" y1="250" x2="100" y2="630" stroke="#94a3b8" stroke-width="1.5"/>
+
+    <!-- ═══════════ COST CURVES ═══════════ -->
+    <!-- Y mapping: $0.01=630, $1=554, $100=478, $1K=402, $10K=326, $100K=250 -->
+    <!-- X mapping: 1K=100, 100K=240, 10M=380, 1B=520, 10B=660, 100B=800 -->
+
+    <!-- Inference cost (nearly flat — scales with query volume) -->
+    <polyline
+            points="100,560 170,557 240,552 310,547 380,540 450,533 520,528 590,524 660,521 730,519 800,518"
+            fill="none" stroke="url(#inferenceGrad)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+            clip-path="url(#plotClip)"/>
+
+    <!-- Storage + Retrieval (grows linearly with corpus on log-log) -->
+    <polyline
+            points="100,625 170,607 240,577 310,533 380,474 450,420 520,365 590,316 660,280 730,262 800,250"
+            fill="none" stroke="url(#storageGrad)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+            clip-path="url(#plotClip)"/>
+
+    <!-- Total cost -->
+    <polyline
+            points="100,557 170,554 240,545 310,524 380,466 450,414 520,360 590,312 660,278 730,260 800,249"
+            fill="none" stroke="url(#totalGrad)" stroke-width="3" stroke-dasharray="8,4" stroke-linecap="round" stroke-linejoin="round"
+            clip-path="url(#plotClip)"/>
+
+    <!-- Data points: inference -->
+    <circle cx="100" cy="560" r="3.5" fill="#3b82f6" stroke="#fff" stroke-width="1.5"/>
+    <circle cx="240" cy="552" r="3.5" fill="#3b82f6" stroke="#fff" stroke-width="1.5"/>
+    <circle cx="380" cy="540" r="3.5" fill="#3b82f6" stroke="#fff" stroke-width="1.5"/>
+    <circle cx="520" cy="528" r="3.5" fill="#3b82f6" stroke="#fff" stroke-width="1.5"/>
+    <circle cx="660" cy="521" r="3.5" fill="#3b82f6" stroke="#fff" stroke-width="1.5"/>
+    <circle cx="800" cy="518" r="3.5" fill="#3b82f6" stroke="#fff" stroke-width="1.5"/>
+
+    <!-- Data points: storage -->
+    <circle cx="100" cy="625" r="3.5" fill="#ef4444" stroke="#fff" stroke-width="1.5"/>
+    <circle cx="240" cy="577" r="3.5" fill="#ef4444" stroke="#fff" stroke-width="1.5"/>
+    <circle cx="380" cy="474" r="3.5" fill="#ef4444" stroke="#fff" stroke-width="1.5"/>
+    <circle cx="520" cy="365" r="3.5" fill="#ef4444" stroke="#fff" stroke-width="1.5"/>
+    <circle cx="660" cy="280" r="3.5" fill="#ef4444" stroke="#fff" stroke-width="1.5"/>
+    <circle cx="800" cy="250" r="3.5" fill="#ef4444" stroke="#fff" stroke-width="1.5"/>
+
+    <!-- Crossover point -->
+    <circle cx="370" cy="478" r="8" fill="#f59e0b" stroke="#ffffff" stroke-width="3" filter="url(#sh)"/>
+    <circle cx="370" cy="478" r="4" fill="#d97706"/>
+
+    <!-- Pivot zone label -->
+    <line x1="370" y1="478" x2="370" y2="296" stroke="#d97706" stroke-width="1" stroke-dasharray="4,3" opacity="0.6"/>
+    <rect x="290" y="268" width="165" height="44" rx="6" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.5" filter="url(#sh)"/>
+    <text x="372" y="285" text-anchor="middle" font-size="11" font-weight="700" fill="#92400e">PIVOT ZONE</text>
+    <text x="372" y="303" text-anchor="middle" font-size="10" fill="#a16207">~50M–100M vectors</text>
+
+    <!-- Phase annotation: left -->
+    <rect x="110" y="570" width="170" height="40" rx="5" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1"/>
+    <text x="195" y="587" text-anchor="middle" font-size="10" font-weight="600" fill="#1e40af">Embedding quality</text>
+    <text x="195" y="602" text-anchor="middle" font-size="10" font-weight="600" fill="#1e40af">dominates cost</text>
+
+    <!-- Phase annotation: right -->
+    <rect x="560" y="330" width="185" height="40" rx="5" fill="#fef2f2" stroke="#fecaca" stroke-width="1"/>
+    <text x="652" y="347" text-anchor="middle" font-size="10" font-weight="600" fill="#991b1b">Database technology</text>
+    <text x="652" y="362" text-anchor="middle" font-size="10" font-weight="600" fill="#991b1b">dominates cost</text>
+
+    <!-- ═══════════ LEGEND ═══════════ -->
+    <rect x="110" y="692" width="680" height="38" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1" filter="url(#sh)"/>
+    <line x1="128" y1="712" x2="156" y2="712" stroke="#3b82f6" stroke-width="3" stroke-linecap="round"/>
+    <text x="163" y="716" font-size="11" fill="#475569">Inference Cost (query volume)</text>
+    <line x1="365" y1="712" x2="393" y2="712" stroke="#ef4444" stroke-width="3" stroke-linecap="round"/>
+    <text x="400" y="716" font-size="11" fill="#475569">Storage + Retrieval (corpus size)</text>
+    <line x1="618" y1="712" x2="646" y2="712" stroke="#8b5cf6" stroke-width="3" stroke-dasharray="8,4" stroke-linecap="round"/>
+    <text x="653" y="716" font-size="11" fill="#475569">Total Cost</text>
+</svg>
