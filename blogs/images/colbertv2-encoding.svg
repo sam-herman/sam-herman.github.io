@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" font-family="'Segoe UI', Arial, sans-serif">
+    <defs>
+        <linearGradient id="bgE" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#f8f9fb"/>
+            <stop offset="100%" stop-color="#eaecf0"/>
+        </linearGradient>
+        <filter id="shE" x="-1%" y="-2%" width="102%" height="108%">
+            <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#00000010"/>
+        </filter>
+        <marker id="arrowE" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6 Z" fill="#64748b"/>
+        </marker>
+        <marker id="arrowBlue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6 Z" fill="#3b82f6"/>
+        </marker>
+    </defs>
+
+    <rect width="900" height="560" rx="10" fill="url(#bgE)" stroke="#dee2e6" stroke-width="1"/>
+
+    <text x="450" y="28" text-anchor="middle" font-size="16" font-weight="700" fill="#1e293b">ColBERTv2 Residual Compression: Encoding Pipeline</text>
+    <text x="450" y="48" text-anchor="middle" font-size="11" fill="#94a3b8">How a 128-dimensional token embedding is compressed from 512 bytes to ~20 bytes</text>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- STEP 1: Original Token Embedding            -->
+    <!-- ═══════════════════════════════════════════ -->
+    <rect x="30" y="68" width="840" height="80" rx="8" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.5" filter="url(#shE)"/>
+    <rect x="30" y="68" width="6" height="80" rx="3" fill="#3b82f6"/>
+
+    <text x="54" y="88" font-size="13" font-weight="700" fill="#1e40af">Step 1: Original Token Embedding</text>
+    <text x="54" y="106" font-size="11" fill="#475569">Each token in a document is encoded by the ColBERT model into a 128-dimensional Float32 vector.</text>
+
+    <!-- Vector visualization -->
+    <text x="54" y="132" font-size="11" font-weight="600" fill="#475569">t = [</text>
+    <rect x="78" y="120" width="22" height="18" rx="2" fill="#3b82f6" opacity="0.15" stroke="#93c5fd" stroke-width="0.5"/>
+    <text x="89" y="133" text-anchor="middle" font-size="9" fill="#1e40af">0.42</text>
+    <rect x="103" y="120" width="22" height="18" rx="2" fill="#3b82f6" opacity="0.15" stroke="#93c5fd" stroke-width="0.5"/>
+    <text x="114" y="133" text-anchor="middle" font-size="9" fill="#1e40af">−0.18</text>
+    <rect x="128" y="120" width="22" height="18" rx="2" fill="#3b82f6" opacity="0.15" stroke="#93c5fd" stroke-width="0.5"/>
+    <text x="139" y="133" text-anchor="middle" font-size="9" fill="#1e40af">0.91</text>
+    <rect x="153" y="120" width="22" height="18" rx="2" fill="#3b82f6" opacity="0.15" stroke="#93c5fd" stroke-width="0.5"/>
+    <text x="164" y="133" text-anchor="middle" font-size="9" fill="#1e40af">0.03</text>
+    <text x="180" y="133" font-size="11" fill="#94a3b8">···</text>
+    <rect x="198" y="120" width="22" height="18" rx="2" fill="#3b82f6" opacity="0.15" stroke="#93c5fd" stroke-width="0.5"/>
+    <text x="209" y="133" text-anchor="middle" font-size="9" fill="#1e40af">−0.55</text>
+    <text x="225" y="132" font-size="11" font-weight="600" fill="#475569">]</text>
+    <text x="246" y="132" font-size="10" fill="#94a3b8">128 dims × 4 bytes = <tspan font-weight="700" fill="#dc2626">512 bytes</tspan></text>
+
+    <!-- Arrow down -->
+    <line x1="450" y1="148" x2="450" y2="168" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrowE)"/>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- STEP 2: Centroid Assignment                  -->
+    <!-- ═══════════════════════════════════════════ -->
+    <rect x="30" y="174" width="840" height="100" rx="8" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1.5" filter="url(#shE)"/>
+    <rect x="30" y="174" width="6" height="100" rx="3" fill="#16a34a"/>
+
+    <text x="54" y="194" font-size="13" font-weight="700" fill="#166534">Step 2: Find Nearest Centroid</text>
+    <text x="54" y="212" font-size="11" fill="#475569">A codebook of <tspan font-weight="600">C = 2¹⁶ = 65,536 centroids</tspan> is learned via k-means over all token embeddings in the corpus.</text>
+    <text x="54" y="228" font-size="11" fill="#475569">For each token embedding <tspan font-weight="600">t</tspan>, find the nearest centroid: <tspan font-weight="600" font-style="italic">c* = argmin‖t − cᵢ‖²</tspan></text>
+
+    <!-- Codebook visualization -->
+    <rect x="54" y="240" width="60" height="24" rx="4" fill="#dcfce7" stroke="#86efac" stroke-width="1"/>
+    <text x="84" y="256" text-anchor="middle" font-size="9" font-weight="600" fill="#166534">c₁₇₄₂₃</text>
+    <rect x="120" y="240" width="60" height="24" rx="4" fill="#dcfce7" stroke="#86efac" stroke-width="1"/>
+    <text x="150" y="256" text-anchor="middle" font-size="9" fill="#475569">c₁₇₄₂₄</text>
+    <rect x="186" y="240" width="60" height="24" rx="4" fill="#bbf7d0" stroke="#22c55e" stroke-width="2"/>
+    <text x="216" y="256" text-anchor="middle" font-size="9" font-weight="700" fill="#166534">c₁₇₄₂₅ ✓</text>
+    <rect x="252" y="240" width="60" height="24" rx="4" fill="#dcfce7" stroke="#86efac" stroke-width="1"/>
+    <text x="282" y="256" text-anchor="middle" font-size="9" fill="#475569">c₁₇₄₂₆</text>
+    <text x="325" y="256" font-size="11" fill="#94a3b8">···</text>
+
+    <text x="380" y="256" font-size="10" fill="#475569">Store centroid ID: <tspan font-weight="700" fill="#166534">17425</tspan> → 2 bytes (16-bit index)</text>
+
+    <!-- Arrow down -->
+    <line x1="450" y1="274" x2="450" y2="294" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrowE)"/>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- STEP 3: Compute Residual                     -->
+    <!-- ═══════════════════════════════════════════ -->
+    <rect x="30" y="300" width="840" height="85" rx="8" fill="#fefce8" stroke="#fde68a" stroke-width="1.5" filter="url(#shE)"/>
+    <rect x="30" y="300" width="6" height="85" rx="3" fill="#ca8a04"/>
+
+    <text x="54" y="320" font-size="13" font-weight="700" fill="#854d0e">Step 3: Compute Residual Vector</text>
+    <text x="54" y="338" font-size="11" fill="#475569">The residual is the difference between the original embedding and its assigned centroid:</text>
+    <text x="54" y="358" font-size="12" font-weight="600" fill="#854d0e">r = t − c₁₇₄₂₅</text>
+
+    <!-- Residual values (small) -->
+    <text x="200" y="358" font-size="11" fill="#475569">= [</text>
+    <text x="218" y="358" font-size="9" fill="#a16207">+0.02</text>
+    <text x="252" y="358" font-size="9" fill="#a16207">−0.04</text>
+    <text x="288" y="358" font-size="9" fill="#a16207">+0.07</text>
+    <text x="322" y="358" font-size="9" fill="#a16207">−0.01</text>
+    <text x="355" y="358" font-size="11" fill="#94a3b8">···</text>
+    <text x="375" y="358" font-size="9" fill="#a16207">+0.03</text>
+    <text x="405" y="358" font-size="11" fill="#475569">]</text>
+    <text x="425" y="358" font-size="10" fill="#94a3b8">← values are <tspan font-weight="600">small</tspan> if centroid is a good fit</text>
+
+    <text x="54" y="375" font-size="10" fill="#64748b">Key insight: because the centroid is already close to the original, the residual values cluster near zero—making them highly compressible.</text>
+
+    <!-- Arrow down -->
+    <line x1="450" y1="385" x2="450" y2="405" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrowE)"/>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- STEP 4: Quantize Residual                    -->
+    <!-- ═══════════════════════════════════════════ -->
+    <rect x="30" y="411" width="840" height="85" rx="8" fill="#faf5ff" stroke="#d8b4fe" stroke-width="1.5" filter="url(#shE)"/>
+    <rect x="30" y="411" width="6" height="85" rx="3" fill="#7c3aed"/>
+
+    <text x="54" y="431" font-size="13" font-weight="700" fill="#6b21a8">Step 4: Quantize Residual to 2 Bits Per Dimension</text>
+    <text x="54" y="449" font-size="11" fill="#475569">Each residual dimension is quantized to one of <tspan font-weight="600">4 buckets</tspan> (2 bits), determined per-centroid from training data.</text>
+    <text x="54" y="467" font-size="11" fill="#475569">128 dims × 2 bits = 256 bits = <tspan font-weight="700" fill="#6b21a8">32 bytes</tspan> per token (but packing overhead reduces effective to ~18 bytes with metadata).</text>
+
+    <!-- Bucket visualization -->
+    <rect x="54" y="475" width="45" height="16" rx="3" fill="#f3e8ff" stroke="#c4b5fd" stroke-width="1"/>
+    <text x="76" y="486" text-anchor="middle" font-size="8" font-weight="600" fill="#6b21a8">00 (−−)</text>
+    <rect x="103" y="475" width="45" height="16" rx="3" fill="#ede9fe" stroke="#c4b5fd" stroke-width="1"/>
+    <text x="125" y="486" text-anchor="middle" font-size="8" font-weight="600" fill="#6b21a8">01 (−)</text>
+    <rect x="152" y="475" width="45" height="16" rx="3" fill="#ddd6fe" stroke="#a78bfa" stroke-width="1"/>
+    <text x="174" y="486" text-anchor="middle" font-size="8" font-weight="600" fill="#6b21a8">10 (+)</text>
+    <rect x="201" y="475" width="45" height="16" rx="3" fill="#c4b5fd" stroke="#8b5cf6" stroke-width="1"/>
+    <text x="223" y="486" text-anchor="middle" font-size="8" font-weight="600" fill="#ffffff">11 (++)</text>
+
+    <text x="265" y="487" font-size="10" fill="#475569">Example: residual dim₁ = +0.02 → bucket <tspan font-weight="600" fill="#6b21a8">10</tspan>, dim₂ = −0.04 → bucket <tspan font-weight="600" fill="#6b21a8">01</tspan></text>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- FINAL: Storage Summary                       -->
+    <!-- ═══════════════════════════════════════════ -->
+    <rect x="30" y="506" width="840" height="44" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" filter="url(#shE)"/>
+
+    <text x="450" y="525" text-anchor="middle" font-size="11" fill="#475569">
+        <tspan font-weight="700" fill="#1e293b">Final per-token storage:</tspan>
+        <tspan fill="#166534" font-weight="700">2 bytes</tspan> (centroid ID) +
+        <tspan fill="#6b21a8" font-weight="700">~18 bytes</tspan> (quantized residual + metadata) =
+        <tspan fill="#dc2626" font-weight="700">~20 bytes</tspan> per token
+        — down from <tspan fill="#dc2626">512 bytes</tspan> (<tspan font-weight="700">25.6× compression</tspan>)
+    </text>
+</svg>

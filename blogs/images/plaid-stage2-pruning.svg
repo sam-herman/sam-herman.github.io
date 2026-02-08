@@ -1,0 +1,264 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620" font-family="'Segoe UI', Arial, sans-serif">
+    <defs>
+        <linearGradient id="bg2" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#f8f9fb"/>
+            <stop offset="100%" stop-color="#eaecf0"/>
+        </linearGradient>
+        <filter id="sh2" x="-1%" y="-2%" width="102%" height="108%">
+            <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#00000010"/>
+        </filter>
+        <marker id="a2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6 Z" fill="#64748b"/>
+        </marker>
+    </defs>
+
+    <rect width="900" height="620" rx="10" fill="url(#bg2)" stroke="#dee2e6" stroke-width="1"/>
+
+    <!-- Title -->
+    <text x="450" y="26" text-anchor="middle" font-size="16" font-weight="700" fill="#1e293b">PLAID Stage 2: Centroid Pruning</text>
+    <text x="450" y="46" text-anchor="middle" font-size="11" fill="#94a3b8">For each candidate document, remove centroids that can't contribute to the MaxSim score for any query token</text>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- INPUTS: Query tokens + Document centroids    -->
+    <!-- ═══════════════════════════════════════════ -->
+
+    <!-- Query tokens (left) -->
+    <rect x="20" y="62" width="250" height="155" rx="6" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5" filter="url(#sh2)"/>
+    <rect x="20" y="62" width="250" height="24" rx="6" fill="#3b82f6"/>
+    <rect x="20" y="80" width="250" height="6" fill="#3b82f6"/>
+    <text x="145" y="80" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">Query Tokens (q₁ … q₃₂)</text>
+
+    <text x="35" y="106" font-size="10" fill="#475569">Each query token is a 128-dim embedding.</text>
+    <text x="35" y="120" font-size="10" fill="#475569">We already know each token's nearest</text>
+    <text x="35" y="134" font-size="10" fill="#475569">centroids from Stage 1.</text>
+
+    <text x="35" y="158" font-size="10" font-weight="600" fill="#1e40af">Showing 4 representative query tokens:</text>
+    <rect x="35" y="166" width="90" height="18" rx="3" fill="#dbeafe" stroke="#93c5fd" stroke-width="0.5"/>
+    <text x="80" y="179" text-anchor="middle" font-size="9" fill="#1e40af">q₁ "amortize"</text>
+    <rect x="130" y="166" width="70" height="18" rx="3" fill="#dbeafe" stroke="#93c5fd" stroke-width="0.5"/>
+    <text x="165" y="179" text-anchor="middle" font-size="9" fill="#1e40af">q₂ "bond"</text>
+    <rect x="35" y="188" width="80" height="18" rx="3" fill="#dbeafe" stroke="#93c5fd" stroke-width="0.5"/>
+    <text x="75" y="201" text-anchor="middle" font-size="9" fill="#1e40af">q₃ "yield"</text>
+    <rect x="120" y="188" width="80" height="18" rx="3" fill="#dbeafe" stroke="#93c5fd" stroke-width="0.5"/>
+    <text x="160" y="201" text-anchor="middle" font-size="9" fill="#1e40af">q₄ "annual"</text>
+
+    <!-- Document centroids (right) -->
+    <rect x="290" y="62" width="590" height="155" rx="6" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5" filter="url(#sh2)"/>
+    <rect x="290" y="62" width="590" height="24" rx="6" fill="#16a34a"/>
+    <rect x="290" y="80" width="590" height="6" fill="#16a34a"/>
+    <text x="585" y="80" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">Candidate Document d₇: Token Centroids (Tier 1 only — 200 bytes)</text>
+
+    <text x="305" y="106" font-size="10" fill="#475569">d₇ has 100 tokens, assigned to various centroids. Showing 8 representative centroid assignments:</text>
+
+    <!-- 8 centroid boxes -->
+    <g font-size="9">
+        <rect x="305" y="118" width="62" height="32" rx="4" fill="#dcfce7" stroke="#86efac" stroke-width="1"/>
+        <text x="336" y="132" text-anchor="middle" font-weight="600" fill="#166534">c₁₇₄₂₅</text>
+        <text x="336" y="144" text-anchor="middle" fill="#64748b">tok₅</text>
+
+        <rect x="375" y="118" width="62" height="32" rx="4" fill="#dcfce7" stroke="#86efac" stroke-width="1"/>
+        <text x="406" y="132" text-anchor="middle" font-weight="600" fill="#166534">c₈₀₉₁</text>
+        <text x="406" y="144" text-anchor="middle" fill="#64748b">tok₁₇</text>
+
+        <rect x="445" y="118" width="62" height="32" rx="4" fill="#dcfce7" stroke="#86efac" stroke-width="1"/>
+        <text x="476" y="132" text-anchor="middle" font-weight="600" fill="#166534">c₄₁₂₀₆</text>
+        <text x="476" y="144" text-anchor="middle" fill="#64748b">tok₂₂</text>
+
+        <rect x="515" y="118" width="62" height="32" rx="4" fill="#dcfce7" stroke="#86efac" stroke-width="1"/>
+        <text x="546" y="132" text-anchor="middle" font-weight="600" fill="#166534">c₅₃₈₈₄</text>
+        <text x="546" y="144" text-anchor="middle" fill="#64748b">tok₃₁</text>
+
+        <rect x="305" y="160" width="62" height="32" rx="4" fill="#dcfce7" stroke="#86efac" stroke-width="1"/>
+        <text x="336" y="174" text-anchor="middle" font-weight="600" fill="#166534">c₂₂₁₀₃</text>
+        <text x="336" y="186" text-anchor="middle" fill="#64748b">tok₄₄</text>
+
+        <rect x="375" y="160" width="62" height="32" rx="4" fill="#dcfce7" stroke="#86efac" stroke-width="1"/>
+        <text x="406" y="174" text-anchor="middle" font-weight="600" fill="#166534">c₉₅₅₇</text>
+        <text x="406" y="186" text-anchor="middle" fill="#64748b">tok₅₁</text>
+
+        <rect x="445" y="160" width="62" height="32" rx="4" fill="#dcfce7" stroke="#86efac" stroke-width="1"/>
+        <text x="476" y="174" text-anchor="middle" font-weight="600" fill="#166534">c₆₃₀₁₂</text>
+        <text x="476" y="186" text-anchor="middle" fill="#64748b">tok₆₈</text>
+
+        <rect x="515" y="160" width="62" height="32" rx="4" fill="#dcfce7" stroke="#86efac" stroke-width="1"/>
+        <text x="546" y="174" text-anchor="middle" font-weight="600" fill="#166534">c₃₃₈₅₀</text>
+        <text x="546" y="186" text-anchor="middle" fill="#64748b">tok₈₅</text>
+    </g>
+
+    <text x="625" y="140" font-size="10" fill="#94a3b8">···</text>
+    <text x="625" y="178" font-size="10" fill="#64748b">(100 centroids</text>
+    <text x="625" y="192" font-size="10" fill="#64748b"> total)</text>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- PRUNING TABLE                                -->
+    <!-- ═══════════════════════════════════════════ -->
+
+    <line x1="450" y1="217" x2="450" y2="233" stroke="#64748b" stroke-width="1.5" marker-end="url(#a2)"/>
+
+    <rect x="20" y="238" width="860" height="220" rx="8" fill="#fefce8" stroke="#fbbf24" stroke-width="2" filter="url(#sh2)"/>
+    <rect x="20" y="238" width="860" height="28" rx="8" fill="#d97706"/>
+    <rect x="20" y="258" width="860" height="8" fill="#d97706"/>
+    <text x="450" y="257" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">Pruning Test: max similarity of each document centroid to ANY query token</text>
+
+    <text x="40" y="286" font-size="10" fill="#475569">For each document centroid, compute: <tspan font-weight="700" font-style="italic">max_sim(c) = max over all query tokens q of cos(q, c)</tspan></text>
+    <text x="40" y="302" font-size="10" fill="#475569">If max_sim(c) &lt; threshold τ → prune (this centroid can't be the best match for any query token)</text>
+
+    <!-- Table header -->
+    <g font-size="9" font-weight="700">
+        <rect x="40" y="314" width="100" height="22" rx="3" fill="#fef3c7"/>
+        <text x="90" y="329" text-anchor="middle" fill="#854d0e">Doc Centroid</text>
+
+        <rect x="148" y="314" width="72" height="22" rx="3" fill="#dbeafe"/>
+        <text x="184" y="329" text-anchor="middle" fill="#1e40af">cos(q₁, c)</text>
+
+        <rect x="228" y="314" width="72" height="22" rx="3" fill="#dbeafe"/>
+        <text x="264" y="329" text-anchor="middle" fill="#1e40af">cos(q₂, c)</text>
+
+        <rect x="308" y="314" width="72" height="22" rx="3" fill="#dbeafe"/>
+        <text x="344" y="329" text-anchor="middle" fill="#1e40af">cos(q₃, c)</text>
+
+        <rect x="388" y="314" width="72" height="22" rx="3" fill="#dbeafe"/>
+        <text x="424" y="329" text-anchor="middle" fill="#1e40af">cos(q₄, c)</text>
+
+        <rect x="468" y="314" width="52" height="22" rx="3" fill="#e2e8f0"/>
+        <text x="494" y="329" text-anchor="middle" fill="#475569">···</text>
+
+        <rect x="528" y="314" width="80" height="22" rx="3" fill="#fef3c7"/>
+        <text x="568" y="329" text-anchor="middle" fill="#854d0e">max_sim</text>
+
+        <rect x="618" y="314" width="56" height="22" rx="3" fill="#fef3c7"/>
+        <text x="646" y="329" text-anchor="middle" fill="#854d0e">≥ τ ?</text>
+
+        <rect x="682" y="314" width="80" height="22" rx="3" fill="#fef3c7"/>
+        <text x="722" y="329" text-anchor="middle" fill="#854d0e">Decision</text>
+    </g>
+
+    <!-- Row 1: c₁₇₄₂₅ — KEEP (high sim to q₁) -->
+    <g font-size="9">
+        <rect x="40" y="340" width="100" height="20" rx="2" fill="#dcfce7" stroke="#86efac" stroke-width="0.5"/>
+        <text x="90" y="354" text-anchor="middle" font-weight="600" fill="#166534">c₁₇₄₂₅</text>
+        <text x="184" y="354" text-anchor="middle" font-weight="700" fill="#166534">0.87</text>
+        <text x="264" y="354" text-anchor="middle" fill="#475569">0.31</text>
+        <text x="344" y="354" text-anchor="middle" fill="#475569">0.42</text>
+        <text x="424" y="354" text-anchor="middle" fill="#475569">0.65</text>
+        <text x="494" y="354" text-anchor="middle" fill="#94a3b8">···</text>
+        <text x="568" y="354" text-anchor="middle" font-weight="700" fill="#166534">0.87</text>
+        <text x="646" y="354" text-anchor="middle" font-weight="700" fill="#166534">✓</text>
+        <rect x="682" y="340" width="80" height="20" rx="2" fill="#dcfce7"/>
+        <text x="722" y="354" text-anchor="middle" font-weight="700" fill="#166534">KEEP</text>
+    </g>
+
+    <!-- Row 2: c₈₀₉₁ — KEEP (high sim to q₂) -->
+    <g font-size="9">
+        <rect x="40" y="364" width="100" height="20" rx="2" fill="#dcfce7" stroke="#86efac" stroke-width="0.5"/>
+        <text x="90" y="378" text-anchor="middle" font-weight="600" fill="#166534">c₈₀₉₁</text>
+        <text x="184" y="378" text-anchor="middle" fill="#475569">0.22</text>
+        <text x="264" y="378" text-anchor="middle" font-weight="700" fill="#166534">0.79</text>
+        <text x="344" y="378" text-anchor="middle" fill="#475569">0.55</text>
+        <text x="424" y="378" text-anchor="middle" fill="#475569">0.18</text>
+        <text x="494" y="378" text-anchor="middle" fill="#94a3b8">···</text>
+        <text x="568" y="378" text-anchor="middle" font-weight="700" fill="#166534">0.79</text>
+        <text x="646" y="378" text-anchor="middle" font-weight="700" fill="#166534">✓</text>
+        <rect x="682" y="364" width="80" height="20" rx="2" fill="#dcfce7"/>
+        <text x="722" y="378" text-anchor="middle" font-weight="700" fill="#166534">KEEP</text>
+    </g>
+
+    <!-- Row 3: c₄₁₂₀₆ — PRUNE -->
+    <g font-size="9" opacity="0.55">
+        <rect x="40" y="388" width="100" height="20" rx="2" fill="#fee2e2" stroke="#fca5a5" stroke-width="0.5"/>
+        <text x="90" y="402" text-anchor="middle" font-weight="600" fill="#991b1b">c₄₁₂₀₆</text>
+        <text x="184" y="402" text-anchor="middle" fill="#991b1b">0.08</text>
+        <text x="264" y="402" text-anchor="middle" fill="#991b1b">0.12</text>
+        <text x="344" y="402" text-anchor="middle" fill="#991b1b">0.15</text>
+        <text x="424" y="402" text-anchor="middle" fill="#991b1b">0.11</text>
+        <text x="494" y="402" text-anchor="middle" fill="#94a3b8">···</text>
+        <text x="568" y="402" text-anchor="middle" font-weight="700" fill="#991b1b">0.15</text>
+        <text x="646" y="402" text-anchor="middle" font-weight="700" fill="#991b1b">✗</text>
+    </g>
+    <rect x="682" y="388" width="80" height="20" rx="2" fill="#fee2e2" opacity="0.55"/>
+    <text x="722" y="402" text-anchor="middle" font-size="9" font-weight="700" fill="#991b1b" opacity="0.7">PRUNE</text>
+    <line x1="40" y1="398" x2="660" y2="398" stroke="#dc2626" stroke-width="1" opacity="0.3"/>
+
+    <!-- Row 4: c₅₃₈₈₄ — PRUNE -->
+    <g font-size="9" opacity="0.55">
+        <rect x="40" y="412" width="100" height="20" rx="2" fill="#fee2e2" stroke="#fca5a5" stroke-width="0.5"/>
+        <text x="90" y="426" text-anchor="middle" font-weight="600" fill="#991b1b">c₅₃₈₈₄</text>
+        <text x="184" y="426" text-anchor="middle" fill="#991b1b">0.05</text>
+        <text x="264" y="426" text-anchor="middle" fill="#991b1b">0.09</text>
+        <text x="344" y="426" text-anchor="middle" fill="#991b1b">0.07</text>
+        <text x="424" y="426" text-anchor="middle" fill="#991b1b">0.13</text>
+        <text x="494" y="426" text-anchor="middle" fill="#94a3b8">···</text>
+        <text x="568" y="426" text-anchor="middle" font-weight="700" fill="#991b1b">0.13</text>
+        <text x="646" y="426" text-anchor="middle" font-weight="700" fill="#991b1b">✗</text>
+    </g>
+    <rect x="682" y="412" width="80" height="20" rx="2" fill="#fee2e2" opacity="0.55"/>
+    <text x="722" y="426" text-anchor="middle" font-size="9" font-weight="700" fill="#991b1b" opacity="0.7">PRUNE</text>
+    <line x1="40" y1="422" x2="660" y2="422" stroke="#dc2626" stroke-width="1" opacity="0.3"/>
+
+    <!-- Row 5: c₂₂₁₀₃ — KEEP -->
+    <g font-size="9">
+        <rect x="40" y="436" width="100" height="20" rx="2" fill="#dcfce7" stroke="#86efac" stroke-width="0.5"/>
+        <text x="90" y="450" text-anchor="middle" font-weight="600" fill="#166534">c₂₂₁₀₃</text>
+        <text x="184" y="450" text-anchor="middle" fill="#475569">0.38</text>
+        <text x="264" y="450" text-anchor="middle" fill="#475569">0.44</text>
+        <text x="344" y="450" text-anchor="middle" font-weight="700" fill="#166534">0.82</text>
+        <text x="424" y="450" text-anchor="middle" fill="#475569">0.29</text>
+        <text x="494" y="450" text-anchor="middle" fill="#94a3b8">···</text>
+        <text x="568" y="450" text-anchor="middle" font-weight="700" fill="#166534">0.82</text>
+        <text x="646" y="450" text-anchor="middle" font-weight="700" fill="#166534">✓</text>
+        <rect x="682" y="436" width="80" height="20" rx="2" fill="#dcfce7"/>
+        <text x="722" y="450" text-anchor="middle" font-weight="700" fill="#166534">KEEP</text>
+    </g>
+
+    <!-- Threshold annotation -->
+    <rect x="770" y="370" width="100" height="44" rx="6" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.5"/>
+    <text x="820" y="387" text-anchor="middle" font-size="10" font-weight="700" fill="#92400e">τ = 0.50</text>
+    <text x="820" y="404" text-anchor="middle" font-size="9" fill="#a16207">pruning</text>
+    <text x="820" y="416" text-anchor="middle" font-size="9" fill="#a16207">threshold</text>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- RESULT: Before → After                       -->
+    <!-- ═══════════════════════════════════════════ -->
+
+    <line x1="450" y1="458" x2="450" y2="474" stroke="#64748b" stroke-width="1.5" marker-end="url(#a2)"/>
+
+    <rect x="20" y="480" width="860" height="130" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" filter="url(#sh2)"/>
+
+    <!-- Before -->
+    <text x="40" y="502" font-size="11" font-weight="700" fill="#475569">Before pruning:</text>
+    <g transform="translate(170, 488)">
+        <rect x="0" y="0" width="40" height="22" rx="3" fill="#dcfce7" stroke="#86efac" stroke-width="0.5"/>
+        <rect x="44" y="0" width="40" height="22" rx="3" fill="#dcfce7" stroke="#86efac" stroke-width="0.5"/>
+        <rect x="88" y="0" width="40" height="22" rx="3" fill="#dcfce7" stroke="#86efac" stroke-width="0.5"/>
+        <rect x="132" y="0" width="40" height="22" rx="3" fill="#dcfce7" stroke="#86efac" stroke-width="0.5"/>
+        <rect x="176" y="0" width="40" height="22" rx="3" fill="#dcfce7" stroke="#86efac" stroke-width="0.5"/>
+        <rect x="220" y="0" width="40" height="22" rx="3" fill="#dcfce7" stroke="#86efac" stroke-width="0.5"/>
+        <rect x="264" y="0" width="40" height="22" rx="3" fill="#dcfce7" stroke="#86efac" stroke-width="0.5"/>
+        <rect x="308" y="0" width="40" height="22" rx="3" fill="#dcfce7" stroke="#86efac" stroke-width="0.5"/>
+        <text x="362" y="14" font-size="10" fill="#94a3b8">··· (100 centroids)</text>
+    </g>
+    <text x="710" y="502" font-size="10" fill="#64748b">200 bytes/doc</text>
+
+    <!-- Arrow -->
+    <text x="450" y="528" text-anchor="middle" font-size="12" fill="#d97706">↓ prune centroids with max_sim &lt; τ</text>
+
+    <!-- After -->
+    <text x="40" y="556" font-size="11" font-weight="700" fill="#166534">After pruning:</text>
+    <g transform="translate(170, 542)">
+        <rect x="0" y="0" width="54" height="22" rx="3" fill="#bbf7d0" stroke="#22c55e" stroke-width="1.5"/>
+        <text x="27" y="15" text-anchor="middle" font-size="8" font-weight="700" fill="#166534">c₁₇₄₂₅</text>
+        <rect x="60" y="0" width="54" height="22" rx="3" fill="#bbf7d0" stroke="#22c55e" stroke-width="1.5"/>
+        <text x="87" y="15" text-anchor="middle" font-size="8" font-weight="700" fill="#166534">c₈₀₉₁</text>
+        <rect x="120" y="0" width="54" height="22" rx="3" fill="#bbf7d0" stroke="#22c55e" stroke-width="1.5"/>
+        <text x="147" y="15" text-anchor="middle" font-size="8" font-weight="700" fill="#166534">c₂₂₁₀₃</text>
+        <text x="195" y="14" font-size="10" fill="#94a3b8">··· (~25–30 surviving)</text>
+    </g>
+    <text x="710" y="556" font-size="10" font-weight="700" fill="#166534">~50 bytes/doc</text>
+
+    <!-- Key insight -->
+    <rect x="40" y="576" width="830" height="26" rx="5" fill="#fefce8" stroke="#fbbf24" stroke-width="1"/>
+    <text x="455" y="593" text-anchor="middle" font-size="10" fill="#854d0e">
+        <tspan font-weight="700">Key:</tspan> pruning reduces each document's effective representation by ~4× without touching disk.
+        All similarities were precomputed from the centroid codebook — <tspan font-weight="700">cost is O(1) per centroid.</tspan>
+    </text>
+</svg>

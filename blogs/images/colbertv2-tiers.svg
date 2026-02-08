@@ -1,0 +1,155 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" font-family="'Segoe UI', Arial, sans-serif">
+    <defs>
+        <linearGradient id="bgT" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#f8f9fb"/>
+            <stop offset="100%" stop-color="#eaecf0"/>
+        </linearGradient>
+        <filter id="shT" x="-1%" y="-2%" width="102%" height="108%">
+            <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#00000010"/>
+        </filter>
+        <marker id="arrowT" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6 Z" fill="#64748b"/>
+        </marker>
+        <marker id="arrowGr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6 Z" fill="#16a34a"/>
+        </marker>
+    </defs>
+
+    <rect width="900" height="480" rx="10" fill="url(#bgT)" stroke="#dee2e6" stroke-width="1"/>
+
+    <text x="450" y="28" text-anchor="middle" font-size="16" font-weight="700" fill="#1e293b">ColBERTv2 Representation Tiers: Cost vs. Fidelity</text>
+    <text x="450" y="48" text-anchor="middle" font-size="11" fill="#94a3b8">A single document with 100 tokens — three levels of representation at different costs</text>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- TIER 1: Centroid IDs Only                    -->
+    <!-- ═══════════════════════════════════════════ -->
+    <rect x="30" y="68" width="540" height="108" rx="8" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5" filter="url(#shT)"/>
+    <rect x="30" y="68" width="6" height="108" rx="3" fill="#16a34a"/>
+
+    <text x="54" y="88" font-size="14" font-weight="700" fill="#166534">Tier 1: Centroid IDs Only</text>
+    <text x="54" y="106" font-size="11" fill="#475569">100 tokens × 2 bytes = <tspan font-weight="700" fill="#166534">200 bytes per document</tspan></text>
+
+    <!-- Token boxes showing just IDs -->
+    <g transform="translate(54, 114)">
+        <rect x="0" y="0" width="44" height="28" rx="4" fill="#dcfce7" stroke="#86efac" stroke-width="1"/>
+        <text x="22" y="13" text-anchor="middle" font-size="8" font-weight="600" fill="#166534">17425</text>
+        <text x="22" y="24" text-anchor="middle" font-size="7" fill="#64748b">tok₁</text>
+
+        <rect x="50" y="0" width="44" height="28" rx="4" fill="#dcfce7" stroke="#86efac" stroke-width="1"/>
+        <text x="72" y="13" text-anchor="middle" font-size="8" font-weight="600" fill="#166534">8091</text>
+        <text x="72" y="24" text-anchor="middle" font-size="7" fill="#64748b">tok₂</text>
+
+        <rect x="100" y="0" width="44" height="28" rx="4" fill="#dcfce7" stroke="#86efac" stroke-width="1"/>
+        <text x="122" y="13" text-anchor="middle" font-size="8" font-weight="600" fill="#166534">41206</text>
+        <text x="122" y="24" text-anchor="middle" font-size="7" fill="#64748b">tok₃</text>
+
+        <rect x="150" y="0" width="44" height="28" rx="4" fill="#dcfce7" stroke="#86efac" stroke-width="1"/>
+        <text x="172" y="13" text-anchor="middle" font-size="8" font-weight="600" fill="#166534">17425</text>
+        <text x="172" y="24" text-anchor="middle" font-size="7" fill="#64748b">tok₄</text>
+
+        <text x="210" y="16" font-size="14" fill="#94a3b8">···</text>
+
+        <rect x="236" y="0" width="44" height="28" rx="4" fill="#dcfce7" stroke="#86efac" stroke-width="1"/>
+        <text x="258" y="13" text-anchor="middle" font-size="8" font-weight="600" fill="#166534">53884</text>
+        <text x="258" y="24" text-anchor="middle" font-size="7" fill="#64748b">tok₁₀₀</text>
+    </g>
+
+    <!-- PLAID callout -->
+    <rect x="600" y="68" width="270" height="108" rx="8" fill="#fffbeb" stroke="#fbbf24" stroke-width="2" filter="url(#shT)"/>
+    <text x="735" y="92" text-anchor="middle" font-size="12" font-weight="700" fill="#92400e">⚡ PLAID Stages 1–3</text>
+    <text x="735" y="112" text-anchor="middle" font-size="10" fill="#78350f">Use ONLY this tier for filtering</text>
+    <text x="735" y="132" text-anchor="middle" font-size="10" fill="#475569">Fits in RAM at billion scale:</text>
+    <text x="735" y="150" text-anchor="middle" font-size="11" font-weight="700" fill="#92400e">1B docs × 200 B = 200 GB</text>
+    <text x="735" y="166" text-anchor="middle" font-size="10" fill="#475569">Eliminates 99%+ of candidates</text>
+
+    <!-- Decode arrow -->
+    <line x1="300" y1="176" x2="300" y2="198" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrowT)"/>
+    <text x="316" y="192" font-size="9" font-weight="600" fill="#64748b">+ quantized residuals</text>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- TIER 2: Centroid ID + Quantized Residual     -->
+    <!-- ═══════════════════════════════════════════ -->
+    <rect x="30" y="204" width="540" height="108" rx="8" fill="#faf5ff" stroke="#c4b5fd" stroke-width="1.5" filter="url(#shT)"/>
+    <rect x="30" y="204" width="6" height="108" rx="3" fill="#7c3aed"/>
+
+    <text x="54" y="224" font-size="14" font-weight="700" fill="#6b21a8">Tier 2: Centroid ID + Quantized Residual</text>
+    <text x="54" y="242" font-size="11" fill="#475569">100 tokens × ~20 bytes = <tspan font-weight="700" fill="#6b21a8">~2,000 bytes per document</tspan> (stored on disk)</text>
+
+    <!-- Token boxes showing ID + residual bits -->
+    <g transform="translate(54, 250)">
+        <rect x="0" y="0" width="70" height="40" rx="4" fill="#f3e8ff" stroke="#c4b5fd" stroke-width="1"/>
+        <text x="35" y="13" text-anchor="middle" font-size="7" font-weight="600" fill="#166534">ID: 17425</text>
+        <rect x="4" y="18" width="62" height="16" rx="2" fill="#ede9fe"/>
+        <text x="35" y="29" text-anchor="middle" font-size="7" font-weight="600" fill="#6b21a8">10 01 11 00 ···</text>
+        <text x="35" y="52" text-anchor="middle" font-size="7" fill="#64748b">tok₁</text>
+
+        <rect x="78" y="0" width="70" height="40" rx="4" fill="#f3e8ff" stroke="#c4b5fd" stroke-width="1"/>
+        <text x="113" y="13" text-anchor="middle" font-size="7" font-weight="600" fill="#166534">ID: 8091</text>
+        <rect x="82" y="18" width="62" height="16" rx="2" fill="#ede9fe"/>
+        <text x="113" y="29" text-anchor="middle" font-size="7" font-weight="600" fill="#6b21a8">01 10 00 11 ···</text>
+        <text x="113" y="52" text-anchor="middle" font-size="7" fill="#64748b">tok₂</text>
+
+        <rect x="156" y="0" width="70" height="40" rx="4" fill="#f3e8ff" stroke="#c4b5fd" stroke-width="1"/>
+        <text x="191" y="13" text-anchor="middle" font-size="7" font-weight="600" fill="#166534">ID: 41206</text>
+        <rect x="160" y="18" width="62" height="16" rx="2" fill="#ede9fe"/>
+        <text x="191" y="29" text-anchor="middle" font-size="7" font-weight="600" fill="#6b21a8">11 00 10 01 ···</text>
+        <text x="191" y="52" text-anchor="middle" font-size="7" fill="#64748b">tok₃</text>
+
+        <text x="250" y="22" font-size="14" fill="#94a3b8">···</text>
+    </g>
+
+    <!-- Storage callout -->
+    <rect x="600" y="204" width="270" height="108" rx="8" fill="#faf5ff" stroke="#c4b5fd" stroke-width="1.5" filter="url(#shT)"/>
+    <text x="735" y="228" text-anchor="middle" font-size="12" font-weight="700" fill="#6b21a8">💾 On-Disk Storage</text>
+    <text x="735" y="248" text-anchor="middle" font-size="10" fill="#475569">ColBERTv2's compressed format</text>
+    <text x="735" y="268" text-anchor="middle" font-size="10" fill="#475569">1B docs × 2,000 B = <tspan font-weight="700">2 TB</tspan></text>
+    <text x="735" y="290" text-anchor="middle" font-size="10" fill="#475569">25.6× smaller than Float32</text>
+    <text x="735" y="305" text-anchor="middle" font-size="10" fill="#64748b">Only decompressed for final scoring</text>
+
+    <!-- Decode arrow -->
+    <line x1="300" y1="312" x2="300" y2="338" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrowT)"/>
+    <text x="316" y="330" font-size="9" font-weight="600" fill="#64748b">decompress: t̂ = c + dequantize(r)</text>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- TIER 3: Reconstructed Full Embedding         -->
+    <!-- ═══════════════════════════════════════════ -->
+    <rect x="30" y="344" width="540" height="88" rx="8" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5" filter="url(#shT)"/>
+    <rect x="30" y="344" width="6" height="88" rx="3" fill="#3b82f6"/>
+
+    <text x="54" y="364" font-size="14" font-weight="700" fill="#1e40af">Tier 3: Reconstructed Approximate Embedding</text>
+    <text x="54" y="382" font-size="11" fill="#475569">t̂ = centroid vector + dequantized residual ≈ original embedding <tspan font-weight="600">t</tspan></text>
+
+    <!-- Reconstructed vector -->
+    <text x="54" y="410" font-size="11" font-weight="600" fill="#475569">t̂ = [</text>
+    <rect x="78" y="398" width="22" height="18" rx="2" fill="#3b82f6" opacity="0.1" stroke="#93c5fd" stroke-width="0.5"/>
+    <text x="89" y="411" text-anchor="middle" font-size="9" fill="#1e40af">0.41</text>
+    <rect x="103" y="398" width="22" height="18" rx="2" fill="#3b82f6" opacity="0.1" stroke="#93c5fd" stroke-width="0.5"/>
+    <text x="114" y="411" text-anchor="middle" font-size="9" fill="#1e40af">−0.16</text>
+    <rect x="128" y="398" width="22" height="18" rx="2" fill="#3b82f6" opacity="0.1" stroke="#93c5fd" stroke-width="0.5"/>
+    <text x="139" y="411" text-anchor="middle" font-size="9" fill="#1e40af">0.89</text>
+    <rect x="153" y="398" width="22" height="18" rx="2" fill="#3b82f6" opacity="0.1" stroke="#93c5fd" stroke-width="0.5"/>
+    <text x="164" y="411" text-anchor="middle" font-size="9" fill="#1e40af">0.04</text>
+    <text x="180" y="411" font-size="11" fill="#94a3b8">···</text>
+    <rect x="198" y="398" width="22" height="18" rx="2" fill="#3b82f6" opacity="0.1" stroke="#93c5fd" stroke-width="0.5"/>
+    <text x="209" y="411" text-anchor="middle" font-size="9" fill="#1e40af">−0.54</text>
+    <text x="225" y="410" font-size="11" font-weight="600" fill="#475569">]</text>
+    <text x="246" y="410" font-size="10" fill="#94a3b8">≈ original <tspan font-weight="600">t</tspan> within quantization error</text>
+
+    <!-- Scoring callout -->
+    <rect x="600" y="344" width="270" height="88" rx="8" fill="#fef2f2" stroke="#fecaca" stroke-width="1.5" filter="url(#shT)"/>
+    <text x="735" y="368" text-anchor="middle" font-size="12" font-weight="700" fill="#991b1b">🎯 PLAID Stage 4 / Final Scoring</text>
+    <text x="735" y="388" text-anchor="middle" font-size="10" fill="#475569">Exact MaxSim on reconstructed t̂</text>
+    <text x="735" y="408" text-anchor="middle" font-size="10" fill="#475569">Only for ~1,000 surviving candidates</text>
+    <text x="735" y="422" text-anchor="middle" font-size="10" fill="#64748b">(out of 140M original)</text>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- Bottom summary                               -->
+    <!-- ═══════════════════════════════════════════ -->
+    <rect x="30" y="444" width="840" height="28" rx="6" fill="#ffffff" stroke="#e2e8f0" stroke-width="1" filter="url(#shT)"/>
+    <text x="450" y="462" text-anchor="middle" font-size="11" fill="#475569">
+        <tspan font-weight="700" fill="#166534">Tier 1</tspan> (200 B) enables cheap filtering →
+        <tspan font-weight="700" fill="#6b21a8">Tier 2</tspan> (2 KB) sits on disk →
+        <tspan font-weight="700" fill="#1e40af">Tier 3</tspan> (reconstructed) only for final scoring
+        — <tspan font-weight="700" fill="#1e293b">PLAID's key insight: use the cheapest tier for the widest search</tspan>
+    </text>
+</svg>

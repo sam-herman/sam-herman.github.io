@@ -254,23 +254,121 @@ This response was systematic. ColBERTv2 (2021) addressed the storage problem—i
 
 PLAID (2022) followed as the direct answer to the retrieval cost problem. It represents a fascinating example of how algorithmic advances in ANN indexing technology can fundamentally reshape what's economically viable. Where SPLADE asked "can we change the embedding to fit existing infrastructure?", PLAID asked "can we build new infrastructure that makes the best embeddings affordable?" As we'll see, the answer turned out to be a qualified but compelling *yes*—and in doing so, PLAID made late interaction vectors potentially economically viable for the first time.
 
+Before we can understand PLAID's innovation, we need to understand what ColBERTv2 gives us to work with—because PLAID's four-stage pipeline is built directly on top of ColBERTv2's internal representation structure.
+
+### ColBERTv2's Residual Compression: The Foundation
+
+The original ColBERT stored every token embedding as a full 128-dimensional Float32 vector—512 bytes per token. For a 100-token document, that's 51,200 bytes, and at billion scale, roughly 50 TB of storage. ColBERTv2's central contribution was recognizing that these token embeddings are highly redundant: tokens with similar semantic roles (e.g., all instances of "financial" across the corpus) cluster tightly in embedding space. If you can identify those clusters, you only need to store the *difference* from the cluster center—a much smaller quantity.
+
+The encoding algorithm works in four steps:
+
+**1. Learn a centroid codebook.** During offline indexing, ColBERTv2 runs k-means clustering over *all* token embeddings in the corpus to produce $C = 2^{16} = 65{,}536$ centroids. Each centroid is a 128-dimensional vector representing a cluster of semantically similar tokens. The number 65,536 is chosen so that each centroid can be addressed by a 16-bit (2-byte) integer.
+
+**2. Assign each token to its nearest centroid.** For every token embedding $t$ in every document, find the closest centroid:
+
+$$c^* = \underset{c_i \in \mathcal{C}}{\operatorname{argmin}} \| t - c_i \|^2$$
+
+This centroid ID is stored as a 2-byte integer.
+
+**3. Compute the residual.** The residual is the difference between the original embedding and its assigned centroid:
+
+$$r = t - c^*$$
+
+Because the centroid is already a good approximation of the token, the residual values are small—they cluster near zero. This is the key property that makes them highly compressible.
+
+**4. Quantize the residual to 2 bits per dimension.** ColBERTv2 learns per-centroid quantization boundaries from the training data. Each of the 128 residual dimensions is mapped to one of 4 buckets (encoded as 2 bits): large negative, small negative, small positive, large positive. This yields $128 \times 2 = 256$ bits $= 32$ bytes of quantized residual per token, plus a small amount of metadata.
+
+The following diagram traces a single token through this pipeline:
+
+![ColBERTv2 Encoding Pipeline](./images/colbertv2-encoding.svg)
+*Figure 4: ColBERTv2 compresses each token from 512 bytes (Float32) to ~20 bytes (centroid ID + quantized residual)—a 25.6× reduction. The key insight is that the residual values cluster near zero because the centroid is already close to the original embedding, making aggressive quantization feasible with minimal information loss.*
+
+#### Numerical Example: Encoding a Single Token
+
+Let's trace through concrete numbers. Suppose a token embedding for the word "amortization" in a financial document is:
+
+$$t = [0.42, -0.18, 0.91, 0.03, \ldots, -0.55] \quad \text{(128 dimensions, 512 bytes)}$$
+
+**Step 1–2:** K-means assigns this token to centroid $c_{17425}$, a cluster center representing financial terminology. The centroid vector is:
+
+$$c_{17425} = [0.40, -0.14, 0.84, 0.04, \ldots, -0.58] \quad \text{(stored in codebook, shared across all tokens)}$$
+
+**Step 3:** The residual is:
+
+$$r = t - c_{17425} = [+0.02, -0.04, +0.07, -0.01, \ldots, +0.03]$$
+
+Notice how much smaller these values are compared to the original embedding. The centroid captured the "financial terminology" signal; the residual captures the fine-grained distinction of "amortization" versus other financial terms.
+
+**Step 4:** Each residual dimension is quantized. For centroid 17425, suppose the learned bucket boundaries are $[-0.06, 0, +0.06]$. Then:
+
+| Dimension | Residual Value | Bucket | 2-bit Code |
+|-----------|---------------|--------|------------|
+| dim₁ | +0.02 | small positive | 10 |
+| dim₂ | −0.04 | small negative | 01 |
+| dim₃ | +0.07 | large positive | 11 |
+| dim₄ | −0.01 | small negative | 01 |
+| ··· | ··· | ··· | ··· |
+
+The final stored representation for this token: **centroid ID 17425** (2 bytes) + **256-bit quantized residual** (~18 bytes with packing and metadata) = **~20 bytes total**.
+
+For a 100-token document, this yields ~2,000 bytes—compared to 51,200 bytes for the original Float32 representation. Across 1 billion documents, this reduces storage from ~50 TB to ~2 TB.
+
+#### Decoding: Reconstructing Approximate Embeddings
+
+To compute exact MaxSim at scoring time, ColBERTv2 reconstructs an approximate embedding by reversing the process:
+
+$$\hat{t} = c^* + \text{dequantize}(r_q)$$
+
+where $r_q$ is the quantized residual and dequantize maps each 2-bit code back to its bucket's representative value. The reconstructed $\hat{t}$ is close to the original $t$—typically within a cosine similarity of 0.95–0.99 of the original. This small error is acceptable because the final MaxSim scoring only needs to rank the top few candidates correctly, not reproduce exact scores.
+
+### The Three Representation Tiers
+
+What makes ColBERTv2's design particularly elegant—and what PLAID exploits—is that it naturally creates three tiers of representation with very different cost profiles:
+
+![ColBERTv2 Representation Tiers](./images/colbertv2-tiers.svg)
+*Figure 5: ColBERTv2 stores each document at two tiers: centroid IDs (Tier 1, in RAM) and centroid ID + quantized residual (Tier 2, on disk). Tier 3 is reconstructed on-the-fly only when needed. PLAID's insight is that Tier 1 alone—just the centroid IDs—carries enough signal to eliminate 99%+ of the corpus before touching the more expensive tiers.*
+
+The cost implications of this tiered structure are dramatic:
+
+| Tier | Content | Size per Doc (100 tokens) | 1B Docs | Access Speed |
+|------|---------|--------------------------|---------|--------------|
+| **1** | Centroid IDs only | 200 bytes | 200 GB | In-memory, sub-μs |
+| **2** | Centroid ID + quantized residual | ~2,000 bytes | ~2 TB | Disk read, ~100 μs |
+| **3** | Reconstructed approximate embedding | 51,200 bytes (transient) | Never stored | Compute, ~1 ms |
+
+This is the foundation that PLAID builds on. The question PLAID answers is: *can we use Tier 1 (the cheapest representation) to do most of the work, only falling back to Tier 2 and Tier 3 for the small number of documents that survive initial filtering?*
+
 ### The Core Problem PLAID Solves
 
 Recall the fundamental challenge of ColBERT retrieval. You have a query with ~32 token embeddings and a corpus of billions of document token embeddings. For each query, you need to compute MaxSim—the sum of maximum cosine similarities between each query token and all document tokens:
 
 $$\text{score}(q, d) = \sum_{i=1}^{|q|} \max_{j=1}^{|d|} \cos(q_i, d_j)$$
 
-Vanilla ColBERTv2 handles this in two stages: first, it uses an inverted list of centroids to generate candidate documents, then it decompresses the full residual-encoded token embeddings for each candidate and computes exact MaxSim scores.
+Vanilla ColBERTv2 handles this in two stages: first, it uses an inverted list of centroids to generate candidate documents, then it decompresses the full residual-encoded token embeddings for each candidate and computes exact MaxSim scores. Let's unpack how this works.
 
-The problem is that the candidate generation stage is expensive and the decompression stage is slow. Even with ColBERTv2's residual compression, retrieving and scoring thousands of candidates requires touching enormous amounts of data.
+During indexing, ColBERTv2 builds an **inverted index from centroid IDs to documents**. For each of the 65,536 centroids in the codebook, the index stores a posting list: the set of (document, token position) pairs where a token was assigned to that centroid. This is conceptually identical to a traditional search engine's inverted index—except instead of mapping *words* to documents, it maps *embedding cluster IDs* to documents.
+
+At query time, each of the ~32 query token embeddings is compared against the codebook to find its nearest centroids. The inverted lists for those centroids are retrieved, and the union across all query tokens produces the initial candidate set—typically around 50,000 documents for a corpus of 140 million. This first stage is fast because it operates entirely on Tier 1 data in RAM: just centroid IDs and posting lists.
+
+The expensive part is what comes next. For every candidate document, vanilla ColBERTv2 reads the full compressed representation from disk (Tier 2), reconstructs approximate token embeddings (Tier 3), and computes exact MaxSim across all query-document token pairs. At 50,000 candidates, that's 100 MB of disk reads and 160 million dot product operations per query.
+
+![ColBERTv2 Inverted Index and Retrieval Flow](./images/colbertv2-inverted-index.svg)
+*Figure 6: The two-stage vanilla ColBERTv2 retrieval process. The centroid codebook and inverted lists (Tier 1) live in RAM for fast candidate generation. But all ~50,000 candidates must then be decompressed from disk and scored with exact MaxSim—the bottleneck that PLAID addresses by inserting additional centroid-only filtering stages before any disk access.*
+
+The problem is that the candidate generation stage is too coarse—it retrieves far more documents than necessary—and the decompression stage is too expensive to apply to all of them. Even with ColBERTv2's residual compression, retrieving and scoring thousands of candidates requires touching enormous amounts of data.
 
 ### PLAID's Insight: Bags of Centroids
 
-PLAID (Performance-optimized Late Interaction Driver) introduces a beautifully simple observation: **you don't need the full token embeddings to eliminate most of the corpus.**
+PLAID (Performance-optimized Late Interaction Driver) introduces a beautifully simple observation: **you don't need the full token embeddings to eliminate most of the corpus.** In terms of the tier framework above, PLAID recognizes that Tier 1 alone—just the centroid IDs, at 200 bytes per document—carries enough signal to prune the vast majority of non-relevant documents.
 
-During indexing, ColBERTv2 already quantizes each token embedding by assigning it to the nearest centroid from a learned codebook (typically 2^16 = 65,536 centroids) and storing a compressed residual. PLAID takes this further by observing that for the *initial filtering stage*, the centroids alone carry enough signal to prune the vast majority of non-relevant documents.
+Here's the key intuition. If a document's tokens are all assigned to centroids that are distant from all query token embeddings, that document is almost certainly irrelevant. We don't need to decompress a single residual to figure this out—we can make that determination using only the centroid assignments. PLAID builds an inverted index from centroid ID to document list, enabling sub-millisecond lookup of which documents contain tokens assigned to any given centroid.
 
-Here's the key intuition. If a document's tokens are all assigned to centroids that are distant from all query token embeddings, that document is almost certainly irrelevant. We don't need to decompress a single residual to figure this out—we can make that determination using only the centroid assignments.
+The following diagram puts this in contrast with vanilla ColBERTv2. Where ColBERTv2 jumps directly from candidate generation to full decompression of all ~50,000 candidates, PLAID inserts two additional filtering stages that operate entirely on Tier 1 data—eliminating 98% of candidates before touching disk:
+
+![PLAID's Progressive Filtering vs Vanilla ColBERTv2](./images/plaid-innovation.svg)
+*Figure 7: Side-by-side comparison. Vanilla ColBERTv2 (left) decompresses and scores all ~50,000 candidates at full cost—100 MB of disk reads and 160M dot products per query. PLAID (right) inserts two Tier-1-only stages (centroid pruning and centroid interaction scoring) that reduce the candidate set to ~1,000 before any disk access, cutting I/O by 50× and latency by 45× on CPU—with zero quality loss.*
+
+Let's now walk through each of PLAID's four stages in detail.
 
 ### The PLAID Pipeline
 
@@ -278,14 +376,7 @@ PLAID implements a four-stage scoring pipeline, each stage progressively refinin
 
 **Stage 1: Candidate Generation via Centroid Lookup**
 
-For each query token embedding, PLAID looks up the nearest centroids in the codebook. It then retrieves all documents that have *any* token assigned to those centroids. This produces a large initial candidate set—potentially tens of thousands of documents—but it's extremely fast because it's just an inverted index lookup on centroid IDs.
-
-| Storage per document | Value |
-|---------------------|-------|
-| Centroid IDs only | ~100 × 2 bytes = 200 bytes per document |
-| Full ColBERTv2 representation | ~100 × 20 bytes = 2,000 bytes per document |
-
-The centroid-only representation is **10× smaller** than the full compressed representation, and it fits comfortably in memory even for billion-scale corpora.
+For each query token embedding, PLAID looks up the nearest centroids in the codebook. It then retrieves all documents that have *any* token assigned to those centroids. This produces a large initial candidate set—potentially tens of thousands of documents—but it's extremely fast because it operates entirely on **Tier 1** data: an inverted index lookup on 2-byte centroid IDs, all resident in RAM.
 
 **Stage 2: Centroid Pruning**
 
@@ -293,20 +384,26 @@ Not all centroids in a document contribute meaningfully to the MaxSim score. PLA
 
 This is mathematically justified because the MaxSim operation takes the *maximum* similarity for each query token. If a document centroid isn't the best match for any query token, it cannot contribute to the final score, so we can safely ignore it.
 
+![PLAID Stage 2: Centroid Pruning](./images/plaid-stage2-pruning.svg)
+*Figure 8a: Centroid pruning applied to candidate document d₇. Each of d₇'s 100 centroids is tested against all query tokens; the maximum similarity to any query token determines whether it survives. Centroids like c₄₁₂₀₆ (max_sim = 0.15) fall below the threshold τ = 0.50 and are discarded. The result is a sparsified representation—only ~25–30 centroids survive from the original 100, reducing the per-document footprint from 200 bytes to ~50 bytes. All similarities come from the centroid codebook already in RAM; no disk access is needed.*
+
 **Stage 3: Centroid Interaction Scoring**
 
 Using only the surviving (non-pruned) centroids, PLAID computes an approximate MaxSim score. Since the centroids come from a fixed codebook, the query-to-centroid distances can be precomputed once and reused across all documents—the same memoization trick we discussed in the context of Product Quantization, applied here to centroid interactions.
 
 This stage dramatically reduces the candidate set. Documents that score poorly using centroid-only similarity are eliminated without ever touching their full representations.
 
+![PLAID Stage 3: Centroid Interaction Scoring](./images/plaid-stage3-scoring.svg)
+*Figure 8b: Centroid interaction scoring for the same query. Step A precomputes a 32 × 65,536 lookup table of query-token↔centroid similarities (~8 MB, computed once). Step B scores each candidate using only its surviving centroids—for d₇, the approximate MaxSim sums the best centroid match per query token (0.87 + 0.79 + 0.82 + …). Step C ranks all 50,000 candidates and keeps the top ~1,000. The 49,000 eliminated candidates never trigger a disk read. Total scoring time: ~6 ms.*
+
 **Stage 4: Full Residual Decompression and Exact Scoring**
 
-Only for the small number of surviving candidates (typically a few hundred out of the original millions) does PLAID decompress the full residual-encoded token embeddings and compute exact MaxSim. This is the expensive step, but it now applies to a tiny fraction of the corpus.
+Only for the small number of surviving candidates (typically a few hundred out of the original millions) does PLAID fall through to **Tier 2 and Tier 3**: reading the quantized residuals from disk, reconstructing approximate embeddings, and computing exact MaxSim. This is the expensive step, but it now applies to a tiny fraction of the corpus.
 
 The following diagram traces a concrete query through all four stages:
 
 ![PLAID Four-Stage Pipeline](./images/plaid-pipeline.svg)
-*Figure 4: A 32-token query against 140M passages. Each stage dramatically narrows the candidate set while using progressively more expensive scoring. The total data decompressed drops from 280 GB (brute force) to just 2 MB—a 140,000× reduction.*
+*Figure 9: A 32-token query against 140M passages. Each stage dramatically narrows the candidate set while using progressively more expensive scoring. The total data decompressed drops from 280 GB (brute force) to just 2 MB—a 140,000× reduction.*
 
 #### Worked Example: A Single Query Through PLAID
 
@@ -325,13 +422,11 @@ The critical insight is the data amplification ratio: Stage 1 operates on the **
 
 The key theoretical insight behind PLAID is that centroid-only retrieval exhibits **high recall** relative to full ColBERT scoring. The paper demonstrates that if you retrieve 10× *k* documents using only centroid similarity, those documents contain 99%+ of the true top-*k* results from the full pipeline.
 
-This works because of how the codebook is constructed. During training, k-means clustering groups similar token embeddings together. Tokens assigned to the same centroid are, by definition, close in embedding space. The centroid is a good proxy for any individual token in its cluster, and the residual (the difference between the token and its centroid) captures only a small correction.
-
-Formally, for a token embedding $t$ assigned to centroid $c$ with residual $r = t - c$:
+This follows directly from the residual decomposition we established above. Recall that for a token embedding $t$ assigned to centroid $c$ with residual $r = t - c$:
 
 $$\cos(q, t) = \cos(q, c + r) \approx \cos(q, c) + \text{small correction}$$
 
-When we're only trying to *rank* documents (not compute exact scores), the centroid similarity is usually sufficient to identify the right candidates.
+Because we designed the codebook to minimize residual magnitude ($\|r\|$ is small by construction), the centroid similarity $\cos(q, c)$ is a strong proxy for the true token similarity $\cos(q, t)$. When we're only trying to *rank* documents (not compute exact scores), the centroid similarity is usually sufficient to identify the right candidates—and we defer the residual correction to Stage 4 for exact scoring.
 
 ### PLAID Performance Results
 
@@ -348,7 +443,7 @@ PLAID achieves these speedups **without any degradation in retrieval quality**. 
 The side-by-side comparison makes the impact concrete:
 
 ![PLAID Before and After Comparison](./images/plaid-comparison.svg)
-*Figure 5: Vanilla ColBERTv2 vs. PLAID at 140M passages. PLAID reduces the in-memory working set by 10×, GPU latency by 7×, CPU latency by 45×, and per-query data decompression by 50×—all with zero quality loss.*
+*Figure 10: Vanilla ColBERTv2 vs. PLAID at 140M passages. PLAID reduces the in-memory working set by 10×, GPU latency by 7×, CPU latency by 45×, and per-query data decompression by 50×—all with zero quality loss.*
 
 > **What PLAID Saves:** PLAID primarily reduces **retrieval latency** and **storage I/O** by keeping the working set (centroid IDs) small enough to fit in memory while deferring expensive decompression to only the most promising candidates. It transforms ColBERT from a system that requires touching terabytes of data per query into one that touches megabytes.
 

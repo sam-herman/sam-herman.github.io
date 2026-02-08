@@ -1,0 +1,304 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 680" font-family="'Segoe UI', Arial, sans-serif">
+    <defs>
+        <linearGradient id="bgI" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#f8f9fb"/>
+            <stop offset="100%" stop-color="#eaecf0"/>
+        </linearGradient>
+        <filter id="shI" x="-1%" y="-2%" width="102%" height="108%">
+            <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#00000010"/>
+        </filter>
+        <marker id="aI" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6 Z" fill="#64748b"/>
+        </marker>
+        <marker id="aBlue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6 Z" fill="#3b82f6"/>
+        </marker>
+        <marker id="aGreen" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6 Z" fill="#16a34a"/>
+        </marker>
+        <marker id="aAmber" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6 Z" fill="#d97706"/>
+        </marker>
+        <marker id="aRed" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6 Z" fill="#dc2626"/>
+        </marker>
+    </defs>
+
+    <rect width="900" height="680" rx="10" fill="url(#bgI)" stroke="#dee2e6" stroke-width="1"/>
+
+    <!-- Title -->
+    <text x="450" y="26" text-anchor="middle" font-size="16" font-weight="700" fill="#1e293b">ColBERTv2 Retrieval: Inverted Centroid Index → Candidate Generation → Exact Scoring</text>
+    <text x="450" y="44" text-anchor="middle" font-size="11" fill="#94a3b8">How a query token uses the centroid inverted lists to find candidate documents before decompression</text>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- LEFT PANEL: INDEX STRUCTURE (built offline)         -->
+    <!-- ═══════════════════════════════════════════════════ -->
+
+    <text x="230" y="68" text-anchor="middle" font-size="13" font-weight="700" fill="#334155">Index Structure (built offline)</text>
+
+    <!-- Centroid codebook -->
+    <rect x="20" y="80" width="200" height="168" rx="6" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5" filter="url(#shI)"/>
+    <rect x="20" y="80" width="200" height="24" rx="6" fill="#16a34a"/>
+    <rect x="20" y="98" width="200" height="6" fill="#16a34a"/>
+    <text x="120" y="97" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">Centroid Codebook (65,536)</text>
+
+    <!-- Centroid entries -->
+    <g font-size="9">
+        <rect x="30" y="112" width="180" height="18" rx="3" fill="#dcfce7" stroke="#86efac" stroke-width="0.5"/>
+        <text x="40" y="124" font-weight="600" fill="#166534">c₈₀₉₁</text>
+        <text x="88" y="124" fill="#475569">[0.31, −0.22, 0.67, …]</text>
+
+        <rect x="30" y="134" width="180" height="18" rx="3" fill="#bbf7d0" stroke="#22c55e" stroke-width="1.5"/>
+        <text x="40" y="146" font-weight="700" fill="#166534">c₁₇₄₂₅</text>
+        <text x="88" y="146" fill="#475569">[0.40, −0.14, 0.84, …]</text>
+
+        <rect x="30" y="156" width="180" height="18" rx="3" fill="#dcfce7" stroke="#86efac" stroke-width="0.5"/>
+        <text x="40" y="168" font-weight="600" fill="#166534">c₄₁₂₀₆</text>
+        <text x="88" y="168" fill="#475569">[0.12, 0.58, −0.41, …]</text>
+
+        <rect x="30" y="178" width="180" height="18" rx="3" fill="#dcfce7" stroke="#86efac" stroke-width="0.5"/>
+        <text x="40" y="190" font-weight="600" fill="#166534">c₅₃₈₈₄</text>
+        <text x="88" y="190" fill="#475569">[−0.45, 0.33, 0.19, …]</text>
+
+        <text x="120" y="216" text-anchor="middle" fill="#94a3b8">··· (65,536 centroids total)</text>
+        <text x="120" y="238" text-anchor="middle" font-size="10" fill="#64748b">128-dim vectors, ~8 MB total</text>
+    </g>
+
+    <!-- Inverted Lists -->
+    <rect x="240" y="80" width="220" height="168" rx="6" fill="#faf5ff" stroke="#c4b5fd" stroke-width="1.5" filter="url(#shI)"/>
+    <rect x="240" y="80" width="220" height="24" rx="6" fill="#7c3aed"/>
+    <rect x="240" y="98" width="220" height="6" fill="#7c3aed"/>
+    <text x="350" y="97" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">Inverted Lists</text>
+
+    <!-- Posting lists -->
+    <g font-size="8.5">
+        <text x="252" y="122" font-weight="700" fill="#6b21a8" font-size="9">c₈₀₉₁ →</text>
+        <rect x="298" y="112" width="50" height="15" rx="2" fill="#ede9fe" stroke="#c4b5fd" stroke-width="0.5"/>
+        <text x="323" y="122" text-anchor="middle" fill="#475569">d₁₂, t₃</text>
+        <rect x="352" y="112" width="50" height="15" rx="2" fill="#ede9fe" stroke="#c4b5fd" stroke-width="0.5"/>
+        <text x="377" y="122" text-anchor="middle" fill="#475569">d₈₉, t₁₇</text>
+        <rect x="406" y="112" width="42" height="15" rx="2" fill="#ede9fe" stroke="#c4b5fd" stroke-width="0.5"/>
+        <text x="427" y="122" text-anchor="middle" fill="#94a3b8">···</text>
+
+        <text x="252" y="146" font-weight="700" fill="#166534" font-size="9">c₁₇₄₂₅ →</text>
+        <rect x="308" y="136" width="52" height="15" rx="2" fill="#dcfce7" stroke="#86efac" stroke-width="1"/>
+        <text x="334" y="146" text-anchor="middle" font-weight="600" fill="#166534">d₇, t₅</text>
+        <rect x="364" y="136" width="52" height="15" rx="2" fill="#dcfce7" stroke="#86efac" stroke-width="1"/>
+        <text x="390" y="146" text-anchor="middle" font-weight="600" fill="#166534">d₄₂, t₁</text>
+        <rect x="420" y="136" width="36" height="15" rx="2" fill="#dcfce7" stroke="#86efac" stroke-width="0.5"/>
+        <text x="438" y="146" text-anchor="middle" fill="#94a3b8">···</text>
+
+        <text x="252" y="170" font-weight="700" fill="#6b21a8" font-size="9">c₄₁₂₀₆ →</text>
+        <rect x="308" y="160" width="52" height="15" rx="2" fill="#ede9fe" stroke="#c4b5fd" stroke-width="0.5"/>
+        <text x="334" y="170" text-anchor="middle" fill="#475569">d₇, t₂₂</text>
+        <rect x="364" y="160" width="52" height="15" rx="2" fill="#ede9fe" stroke="#c4b5fd" stroke-width="0.5"/>
+        <text x="390" y="170" text-anchor="middle" fill="#475569">d₃₃₁, t₈</text>
+        <rect x="420" y="160" width="36" height="15" rx="2" fill="#ede9fe" stroke="#c4b5fd" stroke-width="0.5"/>
+        <text x="438" y="170" text-anchor="middle" fill="#94a3b8">···</text>
+
+        <text x="252" y="194" font-weight="700" fill="#6b21a8" font-size="9">c₅₃₈₈₄ →</text>
+        <rect x="308" y="184" width="52" height="15" rx="2" fill="#ede9fe" stroke="#c4b5fd" stroke-width="0.5"/>
+        <text x="334" y="194" text-anchor="middle" fill="#475569">d₅, t₁₁</text>
+        <rect x="364" y="184" width="52" height="15" rx="2" fill="#ede9fe" stroke="#c4b5fd" stroke-width="0.5"/>
+        <text x="390" y="194" text-anchor="middle" fill="#475569">d₄₂, t₉₃</text>
+        <rect x="420" y="184" width="36" height="15" rx="2" fill="#ede9fe" stroke="#c4b5fd" stroke-width="0.5"/>
+        <text x="438" y="194" text-anchor="middle" fill="#94a3b8">···</text>
+    </g>
+
+    <text x="350" y="216" text-anchor="middle" font-size="9" fill="#94a3b8">Each entry: (doc_id, token_position)</text>
+    <text x="350" y="232" text-anchor="middle" font-size="9" fill="#94a3b8">All centroids with ≥1 assigned token get a list</text>
+    <text x="350" y="244" text-anchor="middle" font-size="10" fill="#64748b">In RAM: Tier 1 data</text>
+
+    <!-- Connecting arrows codebook → inverted lists -->
+    <line x1="210" y1="122" x2="244" y2="122" stroke="#16a34a" stroke-width="1" stroke-dasharray="3,2"/>
+    <line x1="210" y1="144" x2="244" y2="144" stroke="#16a34a" stroke-width="1.5"/>
+    <line x1="210" y1="166" x2="244" y2="166" stroke="#16a34a" stroke-width="1" stroke-dasharray="3,2"/>
+    <line x1="210" y1="188" x2="244" y2="188" stroke="#16a34a" stroke-width="1" stroke-dasharray="3,2"/>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- RIGHT PANEL: COMPRESSED STORAGE (on disk)           -->
+    <!-- ═══════════════════════════════════════════════════ -->
+
+    <rect x="490" y="80" width="390" height="168" rx="6" fill="#fff7ed" stroke="#fed7aa" stroke-width="1.5" filter="url(#shI)"/>
+    <rect x="490" y="80" width="390" height="24" rx="6" fill="#ea580c"/>
+    <rect x="490" y="98" width="390" height="6" fill="#ea580c"/>
+    <text x="685" y="97" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">Compressed Document Storage (on disk) — Tier 2</text>
+
+    <g font-size="8.5">
+        <text x="505" y="120" font-weight="700" fill="#9a3412" font-size="9">d₇:</text>
+        <!-- Token blocks for d7 -->
+        <rect x="526" y="109" width="68" height="28" rx="3" fill="#ffedd5" stroke="#fdba74" stroke-width="0.5"/>
+        <text x="560" y="120" text-anchor="middle" font-size="7" fill="#166534">ID: 17425</text>
+        <text x="560" y="131" text-anchor="middle" font-size="6" fill="#6b21a8">10 01 11 00…</text>
+
+        <rect x="598" y="109" width="68" height="28" rx="3" fill="#ffedd5" stroke="#fdba74" stroke-width="0.5"/>
+        <text x="632" y="120" text-anchor="middle" font-size="7" fill="#166534">ID: 41206</text>
+        <text x="632" y="131" text-anchor="middle" font-size="6" fill="#6b21a8">01 10 00 11…</text>
+
+        <rect x="670" y="109" width="68" height="28" rx="3" fill="#ffedd5" stroke="#fdba74" stroke-width="0.5"/>
+        <text x="704" y="120" text-anchor="middle" font-size="7" fill="#166534">ID: 8091</text>
+        <text x="704" y="131" text-anchor="middle" font-size="6" fill="#6b21a8">11 00 10 01…</text>
+
+        <text x="750" y="125" font-size="10" fill="#94a3b8">···</text>
+        <text x="785" y="125" font-size="8" fill="#9a3412">(100 tokens × ~20B = 2 KB)</text>
+
+        <text x="505" y="158" font-weight="700" fill="#9a3412" font-size="9">d₄₂:</text>
+        <rect x="530" y="147" width="68" height="28" rx="3" fill="#ffedd5" stroke="#fdba74" stroke-width="0.5"/>
+        <text x="564" y="158" text-anchor="middle" font-size="7" fill="#166534">ID: 17425</text>
+        <text x="564" y="169" text-anchor="middle" font-size="6" fill="#6b21a8">00 11 01 10…</text>
+
+        <rect x="602" y="147" width="68" height="28" rx="3" fill="#ffedd5" stroke="#fdba74" stroke-width="0.5"/>
+        <text x="636" y="158" text-anchor="middle" font-size="7" fill="#166534">ID: 53884</text>
+        <text x="636" y="169" text-anchor="middle" font-size="6" fill="#6b21a8">10 10 01 00…</text>
+
+        <text x="690" y="162" font-size="10" fill="#94a3b8">···</text>
+    </g>
+
+    <text x="685" y="200" text-anchor="middle" font-size="9" fill="#64748b">Each document: centroid IDs + quantized residuals</text>
+    <text x="685" y="214" text-anchor="middle" font-size="9" fill="#64748b">Only read from disk for candidates that survive filtering</text>
+    <text x="685" y="232" text-anchor="middle" font-size="10" font-weight="600" fill="#9a3412">1B docs × 2 KB = ~2 TB on disk</text>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- QUERY-TIME FLOW                                         -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+
+    <rect x="20" y="264" width="860" height="4" rx="2" fill="#e2e8f0"/>
+    <text x="450" y="284" text-anchor="middle" font-size="13" font-weight="700" fill="#334155">Query-Time Retrieval (two-stage vanilla ColBERTv2)</text>
+
+    <!-- STEP A: Query token -->
+    <rect x="20" y="298" width="186" height="76" rx="8" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5" filter="url(#shI)"/>
+    <rect x="20" y="298" width="5" height="76" rx="2" fill="#3b82f6"/>
+    <text x="40" y="316" font-size="11" font-weight="700" fill="#1e40af">Query token q₁</text>
+    <text x="40" y="332" font-size="9" fill="#475569">"amortization"</text>
+    <text x="40" y="348" font-size="8" fill="#64748b">[0.42, −0.18, 0.91, …]</text>
+    <text x="40" y="362" font-size="8" fill="#64748b">128 dimensions</text>
+
+    <!-- Arrow A → B -->
+    <line x1="206" y1="336" x2="228" y2="336" stroke="#3b82f6" stroke-width="2" marker-end="url(#aBlue)"/>
+
+    <!-- STEP B: Find nearest centroids -->
+    <rect x="234" y="298" width="196" height="76" rx="8" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5" filter="url(#shI)"/>
+    <rect x="234" y="298" width="5" height="76" rx="2" fill="#16a34a"/>
+    <text x="254" y="316" font-size="11" font-weight="700" fill="#166534">Nearest Centroids</text>
+    <text x="254" y="334" font-size="9" fill="#475569">Find top-<tspan font-weight="600">n</tspan> closest in codebook:</text>
+    <rect x="254" y="341" width="62" height="16" rx="3" fill="#bbf7d0" stroke="#22c55e" stroke-width="1.5"/>
+    <text x="285" y="353" text-anchor="middle" font-size="8" font-weight="700" fill="#166534">c₁₇₄₂₅</text>
+    <rect x="322" y="341" width="52" height="16" rx="3" fill="#dcfce7" stroke="#86efac" stroke-width="1"/>
+    <text x="348" y="353" text-anchor="middle" font-size="8" fill="#166534">c₈₀₉₁</text>
+    <rect x="380" y="341" width="38" height="16" rx="3" fill="#dcfce7" stroke="#86efac" stroke-width="0.5"/>
+    <text x="399" y="353" text-anchor="middle" font-size="8" fill="#94a3b8">···</text>
+
+    <!-- Arrow B → C -->
+    <line x1="430" y1="336" x2="452" y2="336" stroke="#16a34a" stroke-width="2" marker-end="url(#aGreen)"/>
+
+    <!-- STEP C: Look up inverted lists -->
+    <rect x="458" y="298" width="196" height="76" rx="8" fill="#faf5ff" stroke="#c4b5fd" stroke-width="1.5" filter="url(#shI)"/>
+    <rect x="458" y="298" width="5" height="76" rx="2" fill="#7c3aed"/>
+    <text x="478" y="316" font-size="11" font-weight="700" fill="#6b21a8">Inverted List Lookup</text>
+    <text x="478" y="334" font-size="8" fill="#475569">c₁₇₄₂₅ → {d₇, d₄₂, d₁₅₅, d₉₈₃, …}</text>
+    <text x="478" y="350" font-size="8" fill="#475569">c₈₀₉₁  → {d₁₂, d₈₉, d₄₂, d₇₀₁, …}</text>
+    <text x="478" y="366" font-size="8" fill="#94a3b8">Union across all query tokens</text>
+
+    <!-- Arrow C → D -->
+    <line x1="654" y1="336" x2="676" y2="336" stroke="#7c3aed" stroke-width="2" marker-end="url(#aI)"/>
+
+    <!-- STEP D: Candidate set -->
+    <rect x="682" y="298" width="196" height="76" rx="8" fill="#fefce8" stroke="#fde68a" stroke-width="1.5" filter="url(#shI)"/>
+    <rect x="682" y="298" width="5" height="76" rx="2" fill="#ca8a04"/>
+    <text x="702" y="316" font-size="11" font-weight="700" fill="#854d0e">Candidate Set</text>
+    <text x="702" y="334" font-size="9" fill="#475569">~50,000 documents</text>
+    <text x="702" y="350" font-size="8" fill="#475569">{d₇, d₁₂, d₄₂, d₈₉, d₁₅₅, …}</text>
+    <text x="702" y="366" font-size="8" fill="#64748b">From all 32 query tokens combined</text>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- STAGE 2: Decompression + Exact Scoring       -->
+    <!-- ═══════════════════════════════════════════ -->
+
+    <!-- Arrow down from candidate set -->
+    <line x1="780" y1="374" x2="780" y2="396" stroke="#64748b" stroke-width="1.5" marker-end="url(#aI)"/>
+    <text x="792" y="390" font-size="9" font-weight="600" fill="#dc2626">EXPENSIVE</text>
+
+    <!-- Stage 2 box -->
+    <rect x="20" y="400" width="860" height="140" rx="8" fill="#fef2f2" stroke="#fecaca" stroke-width="1.5" filter="url(#shI)"/>
+    <rect x="20" y="400" width="860" height="28" rx="8" fill="#dc2626"/>
+    <rect x="20" y="420" width="860" height="8" fill="#dc2626"/>
+    <text x="450" y="419" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">Stage 2 (vanilla ColBERTv2): Decompress ALL Candidates → Exact MaxSim</text>
+
+    <!-- For each candidate -->
+    <text x="40" y="448" font-size="10" font-weight="600" fill="#991b1b">For each of ~50,000 candidates:</text>
+
+    <!-- Decompress illustration -->
+    <g transform="translate(40, 458)">
+        <!-- Compressed -->
+        <rect x="0" y="0" width="120" height="38" rx="4" fill="#ffedd5" stroke="#fdba74" stroke-width="1"/>
+        <text x="60" y="14" text-anchor="middle" font-size="8" font-weight="600" fill="#9a3412">d₇ compressed</text>
+        <text x="60" y="28" text-anchor="middle" font-size="7" fill="#475569">100 tokens × 20 B = 2 KB</text>
+
+        <!-- Arrow -->
+        <line x1="124" y1="19" x2="146" y2="19" stroke="#dc2626" stroke-width="1.5" marker-end="url(#aRed)"/>
+        <text x="135" y="12" font-size="7" fill="#dc2626">disk</text>
+        <text x="135" y="34" font-size="7" fill="#dc2626">read</text>
+
+        <!-- Decompressed -->
+        <rect x="152" y="0" width="160" height="38" rx="4" fill="#eff6ff" stroke="#93c5fd" stroke-width="1"/>
+        <text x="232" y="14" text-anchor="middle" font-size="8" font-weight="600" fill="#1e40af">d₇ reconstructed embeddings</text>
+        <text x="232" y="28" text-anchor="middle" font-size="7" fill="#475569">100 tokens × 128 dims (Float32)</text>
+
+        <!-- Arrow -->
+        <line x1="316" y1="19" x2="338" y2="19" stroke="#dc2626" stroke-width="1.5" marker-end="url(#aRed)"/>
+
+        <!-- MaxSim -->
+        <rect x="344" y="0" width="140" height="38" rx="4" fill="#fef2f2" stroke="#fca5a5" stroke-width="1"/>
+        <text x="414" y="14" text-anchor="middle" font-size="8" font-weight="600" fill="#991b1b">MaxSim(q, d₇)</text>
+        <text x="414" y="28" text-anchor="middle" font-size="7" fill="#475569">32 × 100 = 3,200 dot products</text>
+    </g>
+
+    <text x="560" y="460" font-size="9" fill="#991b1b" font-weight="600">× 50,000 candidates</text>
+
+    <!-- Cost summary -->
+    <rect x="40" y="506" width="380" height="24" rx="4" fill="#ffffff" stroke="#fecaca" stroke-width="1"/>
+    <text x="230" y="522" text-anchor="middle" font-size="10" fill="#991b1b">
+        <tspan font-weight="700">Total disk reads:</tspan> 50,000 × 2 KB = <tspan font-weight="700">100 MB per query</tspan>
+    </text>
+
+    <rect x="440" y="506" width="420" height="24" rx="4" fill="#ffffff" stroke="#fecaca" stroke-width="1"/>
+    <text x="650" y="522" text-anchor="middle" font-size="10" fill="#991b1b">
+        <tspan font-weight="700">Total dot products:</tspan> 50,000 × 3,200 = <tspan font-weight="700">160M operations per query</tspan>
+    </text>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- Bottom: The Problem Statement                -->
+    <!-- ═══════════════════════════════════════════ -->
+
+    <rect x="20" y="548" width="860" height="54" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" filter="url(#shI)"/>
+
+    <text x="450" y="568" text-anchor="middle" font-size="11" fill="#475569">
+        <tspan font-weight="700" fill="#1e293b">The bottleneck:</tspan> vanilla ColBERTv2 decompresses and scores
+        <tspan font-weight="700" fill="#dc2626">all 50,000 candidates</tspan> at full cost.
+    </text>
+    <text x="450" y="588" text-anchor="middle" font-size="11" fill="#475569">
+        <tspan font-weight="700" fill="#166534">PLAID's insight:</tspan> use Tier 1 centroid IDs to eliminate 98%+ of candidates
+        <tspan font-weight="700" fill="#166534">before touching disk</tspan> — reducing to ~1,000 decompressions.
+    </text>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- Annotation labels                            -->
+    <!-- ═══════════════════════════════════════════ -->
+
+    <!-- Label: "fast" on query side -->
+    <rect x="88" y="278" width="56" height="16" rx="8" fill="#dbeafe" stroke="#93c5fd" stroke-width="1"/>
+    <text x="116" y="290" text-anchor="middle" font-size="8" font-weight="700" fill="#1e40af">IN RAM</text>
+
+    <rect x="538" y="278" width="56" height="16" rx="8" fill="#dbeafe" stroke="#93c5fd" stroke-width="1"/>
+    <text x="566" y="290" text-anchor="middle" font-size="8" font-weight="700" fill="#1e40af">IN RAM</text>
+
+    <!-- Repeat labels -->
+    <text x="450" y="630" text-anchor="middle" font-size="10" font-style="italic" fill="#94a3b8">Stage 1 (centroid lookup) is fast because it's all in-memory. Stage 2 (decompression + scoring) is the bottleneck PLAID addresses.</text>
+
+    <!-- Dashed connector: inverted list to query-time -->
+    <line x1="350" y1="248" x2="350" y2="295" stroke="#7c3aed" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
+    <line x1="120" y1="248" x2="120" y2="295" stroke="#16a34a" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
+
+    <!-- Label on disk storage connection -->
+    <path d="M685,248 L685,260 Q685,268 693,268 L760,268 Q768,268 768,276 L768,295" fill="none" stroke="#ea580c" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+</svg>
