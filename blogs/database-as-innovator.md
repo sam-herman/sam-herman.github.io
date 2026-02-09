@@ -14,7 +14,7 @@ In my [previous post on domain-adapted neural search](https://sam-herman.github.
 
 That remains true. But now I want to complete the picture—because **both halves matter**, and the question of *which half matters more* depends entirely on scale.
 
-![The Two Phases of Vector Search Investment](./images/hero-pivot-point.svg)
+![The Two Phases of Vector Search Investment](./images/hero-pivot-point.png)
 *At small corpus sizes, embedding quality dominates the cost-quality equation. As the corpus grows, storage and retrieval costs climb linearly while inference stays nearly flat—crossing over around 50–100 million vectors. We'll derive these curves in detail below.*
 
 Once you've invested in getting your embeddings right, the *database technology* becomes absolutely critical. And not in the way most people think.
