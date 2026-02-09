@@ -602,6 +602,11 @@ The cost gap has shrunk from 25–100× to **3–5×**. For applications where t
 
 And for multi-modal applications (ColPali, ColQwen) where there is no sparse embedding alternative, PLAID and MUVERA don't just improve the economics—they make multi-vector retrieval **possible** at scale for the first time.
 
+The following chart puts all five approaches on the same log-scale axis, making the shift visible at a glance:
+
+![The Economics Revisited](./images/decision-tradeoffs.svg)
+*Figure 11: Monthly infrastructure cost at 1B documents for all five retrieval approaches. The cost gap between late interaction and dense baselines has shrunk from 25–100× (a hard "no") to 3–5× (a viable trade-off). SPLADE remains the text-only champion, but for multi-modal retrieval, PLAID and MUVERA are the only path to production scale. All costs derived from the pricing framework established earlier: $2.28/GB-RAM/month (r6g on-demand) and $0.08/GB-storage/month (EBS gp3).*
+
 > **The Verdict:** What was once a hard "no" to late interaction at production scale has become a soft "yes"—or at minimum, a much softer "no." For text-only retrieval where SPLADE is viable, sparse embeddings remain the cost-performance champion. But for multi-modal retrieval, and for text applications where that extra 5–15% quality matters, PLAID and MUVERA have changed the math.
 
 ---
