@@ -650,7 +650,7 @@ The next frontiers I'm watching closely:
 - **End-to-end learned quantization for late interaction:** Rather than applying PQ post-hoc, training the embedding model to produce quantization-friendly representations could improve the compression-quality trade-off.
 - **Hybrid sparse + late interaction systems:** Using SPLADE for initial retrieval and ColBERT for re-ranking combines the efficiency of sparse search with the quality of late interaction.
 
-As we continue building and integrating with OpenSearch, these technologies represent the cutting edge of what's possible in production vector search. The goal, as always, is finding the optimal balance between scale, speed, quality, and cost.
+As we continue building developing the new more powerful generation of models such as ColPali, these technologies make it possible and therefore represent the cutting edge of what's possible in production vector search. The goal, as always, is finding the optimal balance between scale, speed, quality, and cost.
 
 The database was never "just" the database. At scale, it's the enabler that determines whether your AI can actually serve users—or remains a promising benchmark result gathering dust on a researcher's laptop.
 
