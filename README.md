@@ -20,6 +20,9 @@ I've led teams of 75+ engineers at AWS, Oracle Cloud Infrastructure, and DataSta
 
 ## Recent Publications & Talks
 
+### **Multivector and Dataset Geometry**
+[Multivector and Dataset Geometry](./blogs/multivector-and-dataset-geometry.md)
+
 ### **Database as Innovator: The Economics of Late Interaction**
 [Database as Innovator: The Economics of Late Interaction](./blogs/database-as-innovator.md)
 

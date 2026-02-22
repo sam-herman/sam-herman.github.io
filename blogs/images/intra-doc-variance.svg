@@ -1,0 +1,260 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" width="900" height="480" font-family="Georgia, 'Times New Roman', serif">
+    <defs>
+        <!-- Background gradient -->
+        <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#0f1117"/>
+            <stop offset="100%" stop-color="#161b27"/>
+        </linearGradient>
+
+        <!-- Panel backgrounds -->
+        <linearGradient id="panelLeft" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#1a2236"/>
+            <stop offset="100%" stop-color="#131929"/>
+        </linearGradient>
+        <linearGradient id="panelRight" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#1e1a2e"/>
+            <stop offset="100%" stop-color="#16121f"/>
+        </linearGradient>
+
+        <!-- Radial glow for low variance centroid -->
+        <radialGradient id="glowBlue" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.25"/>
+            <stop offset="100%" stop-color="#3b82f6" stop-opacity="0"/>
+        </radialGradient>
+
+        <!-- Radial glow for high variance centroids -->
+        <radialGradient id="glowTeal" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#2dd4bf" stop-opacity="0.2"/>
+            <stop offset="100%" stop-color="#2dd4bf" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="glowPurple" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#a78bfa" stop-opacity="0.2"/>
+            <stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="glowAmber" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.18"/>
+            <stop offset="100%" stop-color="#fbbf24" stop-opacity="0"/>
+        </radialGradient>
+
+        <!-- Dot filter for tokens -->
+        <filter id="softBlur" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="1.5"/>
+        </filter>
+
+        <!-- Subtle outer glow for centroids -->
+        <filter id="centroidGlow">
+            <feGaussianBlur stdDeviation="4" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+
+        <!-- Clip paths for panels -->
+        <clipPath id="leftClip">
+            <rect x="30" y="70" width="390" height="370" rx="10"/>
+        </clipPath>
+        <clipPath id="rightClip">
+            <rect x="480" y="70" width="390" height="370" rx="10"/>
+        </clipPath>
+    </defs>
+
+    <!-- Background -->
+    <rect width="900" height="480" fill="url(#bg)"/>
+
+    <!-- Title -->
+    <text x="450" y="38" text-anchor="middle" font-size="17" font-weight="bold" fill="#e2e8f0" letter-spacing="0.5">Intra-Document Variance in Token Embedding Space</text>
+    <text x="450" y="58" text-anchor="middle" font-size="11.5" fill="#64748b" font-style="italic">Each point represents a single token embedding from one document</text>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!--                   LEFT PANEL — LOW VARIANCE           -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <rect x="30" y="70" width="390" height="370" rx="10" fill="url(#panelLeft)" stroke="#2a3555" stroke-width="1"/>
+
+    <!-- Low-variance panel label -->
+    <rect x="30" y="70" width="390" height="38" rx="10" fill="#1e2d4a" opacity="0.9"/>
+    <rect x="30" y="95" width="390" height="13" fill="#1e2d4a" opacity="0.9"/>
+    <text x="225" y="94" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#93c5fd" letter-spacing="0.3">Low Intra-Document Variance</text>
+    <text x="225" y="120" text-anchor="middle" font-size="11" fill="#60a5fa" font-style="italic">σ²_intra ≈ 0.04 · Homogeneous text passage</text>
+
+    <!-- Glow halo for low-variance cluster -->
+    <ellipse cx="225" cy="265" rx="105" ry="98" fill="url(#glowBlue)" clip-path="url(#leftClip)"/>
+
+    <!-- Variance radius ring (dashed) -->
+    <circle cx="225" cy="265" r="62" fill="none" stroke="#3b82f6" stroke-width="1" stroke-dasharray="5 4" opacity="0.35"/>
+    <!-- Variance annotation -->
+    <line x1="225" y1="265" x2="278" y2="238" stroke="#3b82f6" stroke-width="1" stroke-dasharray="3 3" opacity="0.5"/>
+    <text x="285" y="235" font-size="10" fill="#60a5fa" font-style="italic">σ_intra</text>
+
+    <!-- Token cloud — tightly clustered around centroid at (225, 265) -->
+    <!-- Tokens are blue-tinted dots with slight variation -->
+    <g opacity="0.82">
+        <!-- Inner ring, very tight -->
+        <circle cx="219" cy="258" r="4.5" fill="#60a5fa" opacity="0.85" filter="url(#softBlur)"/>
+        <circle cx="235" cy="252" r="4.5" fill="#60a5fa" opacity="0.80"/>
+        <circle cx="241" cy="271" r="4.5" fill="#7cb3fb" opacity="0.82"/>
+        <circle cx="229" cy="280" r="4.5" fill="#60a5fa" opacity="0.78"/>
+        <circle cx="210" cy="274" r="4.5" fill="#5da8f8" opacity="0.85"/>
+        <circle cx="213" cy="248" r="4.5" fill="#7cb3fb" opacity="0.80"/>
+        <circle cx="240" cy="257" r="4.5" fill="#60a5fa" opacity="0.75"/>
+        <!-- Middle ring -->
+        <circle cx="253" cy="245" r="4" fill="#5da8f8" opacity="0.70"/>
+        <circle cx="261" cy="263" r="4" fill="#60a5fa" opacity="0.72"/>
+        <circle cx="256" cy="284" r="4" fill="#7cb3fb" opacity="0.68"/>
+        <circle cx="243" cy="295" r="4" fill="#5da8f8" opacity="0.65"/>
+        <circle cx="224" cy="299" r="4" fill="#60a5fa" opacity="0.70"/>
+        <circle cx="206" cy="291" r="4" fill="#7cb3fb" opacity="0.67"/>
+        <circle cx="195" cy="275" r="4" fill="#60a5fa" opacity="0.72"/>
+        <circle cx="193" cy="256" r="4" fill="#5da8f8" opacity="0.70"/>
+        <circle cx="202" cy="241" r="4" fill="#7cb3fb" opacity="0.68"/>
+        <circle cx="218" cy="236" r="4" fill="#60a5fa" opacity="0.65"/>
+        <circle cx="236" cy="237" r="4" fill="#5da8f8" opacity="0.68"/>
+        <!-- Outer ring — still within tight cluster -->
+        <circle cx="270" cy="250" r="3.5" fill="#4a96f0" opacity="0.55"/>
+        <circle cx="274" cy="271" r="3.5" fill="#60a5fa" opacity="0.52"/>
+        <circle cx="268" cy="292" r="3.5" fill="#4a96f0" opacity="0.50"/>
+        <circle cx="251" cy="306" r="3.5" fill="#60a5fa" opacity="0.52"/>
+        <circle cx="230" cy="312" r="3.5" fill="#4a96f0" opacity="0.48"/>
+        <circle cx="207" cy="307" r="3.5" fill="#60a5fa" opacity="0.52"/>
+        <circle cx="187" cy="291" r="3.5" fill="#4a96f0" opacity="0.50"/>
+        <circle cx="181" cy="268" r="3.5" fill="#60a5fa" opacity="0.52"/>
+        <circle cx="184" cy="244" r="3.5" fill="#4a96f0" opacity="0.48"/>
+        <circle cx="198" cy="225" r="3.5" fill="#60a5fa" opacity="0.52"/>
+        <circle cx="217" cy="218" r="3.5" fill="#4a96f0" opacity="0.50"/>
+        <circle cx="239" cy="220" r="3.5" fill="#60a5fa" opacity="0.50"/>
+        <circle cx="257" cy="231" r="3.5" fill="#4a96f0" opacity="0.48"/>
+    </g>
+
+    <!-- Single centroid for low-variance -->
+    <circle cx="225" cy="265" r="9" fill="#1e3a6e" stroke="#3b82f6" stroke-width="2.5" filter="url(#centroidGlow)"/>
+    <circle cx="225" cy="265" r="4" fill="#93c5fd"/>
+
+    <!-- Centroid label -->
+    <text x="225" y="196" text-anchor="middle" font-size="10.5" fill="#93c5fd" font-weight="bold">document centroid c̄_d</text>
+    <line x1="225" y1="200" x2="225" y2="255" stroke="#3b82f6" stroke-width="1" stroke-dasharray="3 3" opacity="0.4"/>
+
+    <!-- Summary stats box -->
+    <rect x="50" y="390" width="350" height="38" rx="6" fill="#0f1930" stroke="#1e3a6e" stroke-width="1"/>
+    <text x="225" y="406" text-anchor="middle" font-size="10" fill="#64748b">Document type: short homogeneous passage</text>
+    <text x="225" y="421" text-anchor="middle" font-size="10.5" fill="#93c5fd">Few active centroids · PLAID selectivity: <tspan font-weight="bold" fill="#4ade80">HIGH ✓</tspan></text>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!--                  RIGHT PANEL — HIGH VARIANCE          -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <rect x="480" y="70" width="390" height="370" rx="10" fill="url(#panelRight)" stroke="#38264a" stroke-width="1"/>
+
+    <!-- High-variance panel label -->
+    <rect x="480" y="70" width="390" height="38" rx="10" fill="#2a1e40" opacity="0.9"/>
+    <rect x="480" y="95" width="390" height="13" fill="#2a1e40" opacity="0.9"/>
+    <text x="675" y="94" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#c4b5fd" letter-spacing="0.3">High Intra-Document Variance</text>
+    <text x="675" y="120" text-anchor="middle" font-size="11" fill="#a78bfa" font-style="italic">σ²_intra ≈ 0.41 · Complex multi-topic page</text>
+
+    <!-- Glow halos for three semantic kernels -->
+    <!-- Kernel 1: top-left (teal — financial terms) -->
+    <ellipse cx="572" cy="200" rx="72" ry="62" fill="url(#glowTeal)" clip-path="url(#rightClip)"/>
+    <!-- Kernel 2: top-right (amber — function words) -->
+    <ellipse cx="778" cy="205" rx="60" ry="58" fill="url(#glowAmber)" clip-path="url(#rightClip)"/>
+    <!-- Kernel 3: bottom-center (purple — visual elements) -->
+    <ellipse cx="675" cy="330" rx="75" ry="60" fill="url(#glowPurple)" clip-path="url(#rightClip)"/>
+
+    <!-- Kernel boundary guides (very subtle) -->
+    <ellipse cx="572" cy="200" rx="56" ry="48" fill="none" stroke="#2dd4bf" stroke-width="0.8" stroke-dasharray="4 4" opacity="0.25"/>
+    <ellipse cx="778" cy="205" rx="46" ry="44" fill="none" stroke="#fbbf24" stroke-width="0.8" stroke-dasharray="4 4" opacity="0.22"/>
+    <ellipse cx="675" cy="330" rx="60" ry="48" fill="none" stroke="#a78bfa" stroke-width="0.8" stroke-dasharray="4 4" opacity="0.25"/>
+
+    <!-- Kernel 1 tokens — teal (financial / domain-specific terms) -->
+    <g opacity="0.82">
+        <circle cx="556" cy="188" r="4.5" fill="#2dd4bf" opacity="0.85"/>
+        <circle cx="574" cy="182" r="4.5" fill="#34d9c3" opacity="0.80"/>
+        <circle cx="591" cy="193" r="4.5" fill="#2dd4bf" opacity="0.78"/>
+        <circle cx="590" cy="210" r="4.5" fill="#2ccfc0" opacity="0.82"/>
+        <circle cx="578" cy="221" r="4.5" fill="#2dd4bf" opacity="0.75"/>
+        <circle cx="560" cy="217" r="4.5" fill="#34d9c3" opacity="0.80"/>
+        <circle cx="547" cy="207" r="4.5" fill="#2dd4bf" opacity="0.77"/>
+        <circle cx="550" cy="194" r="4" fill="#2ccfc0" opacity="0.70"/>
+        <circle cx="565" cy="174" r="4" fill="#2dd4bf" opacity="0.68"/>
+        <circle cx="584" cy="170" r="4" fill="#34d9c3" opacity="0.65"/>
+        <circle cx="601" cy="180" r="3.5" fill="#2dd4bf" opacity="0.58"/>
+        <circle cx="606" cy="200" r="3.5" fill="#2ccfc0" opacity="0.55"/>
+        <circle cx="598" cy="218" r="3.5" fill="#2dd4bf" opacity="0.55"/>
+        <circle cx="538" cy="200" r="3.5" fill="#34d9c3" opacity="0.52"/>
+        <circle cx="540" cy="184" r="3.5" fill="#2dd4bf" opacity="0.50"/>
+    </g>
+
+    <!-- Kernel 2 tokens — amber (function words) -->
+    <g opacity="0.80">
+        <circle cx="764" cy="193" r="4.5" fill="#fbbf24" opacity="0.82"/>
+        <circle cx="780" cy="187" r="4.5" fill="#f9b422" opacity="0.78"/>
+        <circle cx="795" cy="198" r="4.5" fill="#fbbf24" opacity="0.80"/>
+        <circle cx="793" cy="215" r="4.5" fill="#f9b422" opacity="0.75"/>
+        <circle cx="780" cy="224" r="4.5" fill="#fbbf24" opacity="0.78"/>
+        <circle cx="763" cy="218" r="4.5" fill="#f9b422" opacity="0.73"/>
+        <circle cx="752" cy="206" r="4.5" fill="#fbbf24" opacity="0.75"/>
+        <circle cx="757" cy="191" r="4" fill="#f9b422" opacity="0.65"/>
+        <circle cx="770" cy="179" r="4" fill="#fbbf24" opacity="0.62"/>
+        <circle cx="787" cy="176" r="4" fill="#f9b422" opacity="0.60"/>
+        <circle cx="803" cy="186" r="3.5" fill="#fbbf24" opacity="0.55"/>
+        <circle cx="807" cy="207" r="3.5" fill="#f9b422" opacity="0.52"/>
+        <circle cx="745" cy="196" r="3.5" fill="#fbbf24" opacity="0.50"/>
+    </g>
+
+    <!-- Kernel 3 tokens — purple (visual / layout elements) -->
+    <g opacity="0.80">
+        <circle cx="658" cy="320" r="4.5" fill="#a78bfa" opacity="0.85"/>
+        <circle cx="676" cy="314" r="4.5" fill="#b197fb" opacity="0.80"/>
+        <circle cx="693" cy="323" r="4.5" fill="#a78bfa" opacity="0.82"/>
+        <circle cx="693" cy="342" r="4.5" fill="#b197fb" opacity="0.77"/>
+        <circle cx="678" cy="353" r="4.5" fill="#a78bfa" opacity="0.78"/>
+        <circle cx="660" cy="346" r="4.5" fill="#b197fb" opacity="0.75"/>
+        <circle cx="648" cy="333" r="4.5" fill="#a78bfa" opacity="0.80"/>
+        <circle cx="650" cy="316" r="4" fill="#b197fb" opacity="0.68"/>
+        <circle cx="663" cy="305" r="4" fill="#a78bfa" opacity="0.65"/>
+        <circle cx="681" cy="301" r="4" fill="#b197fb" opacity="0.63"/>
+        <circle cx="700" cy="309" r="4" fill="#a78bfa" opacity="0.60"/>
+        <circle cx="708" cy="328" r="3.5" fill="#b197fb" opacity="0.55"/>
+        <circle cx="706" cy="349" r="3.5" fill="#a78bfa" opacity="0.52"/>
+        <circle cx="692" cy="363" r="3.5" fill="#b197fb" opacity="0.50"/>
+        <circle cx="671" cy="367" r="3.5" fill="#a78bfa" opacity="0.50"/>
+        <circle cx="650" cy="357" r="3.5" fill="#b197fb" opacity="0.50"/>
+        <circle cx="636" cy="340" r="3.5" fill="#a78bfa" opacity="0.48"/>
+        <circle cx="636" cy="318" r="3.5" fill="#b197fb" opacity="0.48"/>
+    </g>
+
+    <!-- Centroids for each kernel -->
+    <!-- Kernel 1 centroid (teal) -->
+    <circle cx="572" cy="200" r="9" fill="#0f2a28" stroke="#2dd4bf" stroke-width="2.5" filter="url(#centroidGlow)"/>
+    <circle cx="572" cy="200" r="4" fill="#5eead4"/>
+    <!-- Kernel 2 centroid (amber) -->
+    <circle cx="778" cy="205" r="9" fill="#2a1f0a" stroke="#fbbf24" stroke-width="2.5" filter="url(#centroidGlow)"/>
+    <circle cx="778" cy="205" r="4" fill="#fde68a"/>
+    <!-- Kernel 3 centroid (purple) -->
+    <circle cx="675" cy="333" r="9" fill="#1e1430" stroke="#a78bfa" stroke-width="2.5" filter="url(#centroidGlow)"/>
+    <circle cx="675" cy="333" r="4" fill="#c4b5fd"/>
+
+    <!-- Document centroid (center of mass — muted gray/white) -->
+    <circle cx="675" cy="245" r="8" fill="#1e1e2e" stroke="#94a3b8" stroke-width="1.8" stroke-dasharray="3 2"/>
+    <circle cx="675" cy="245" r="3" fill="#94a3b8" opacity="0.7"/>
+
+    <!-- Variance arrow (from doc centroid to outer kernel) -->
+    <line x1="675" y1="253" x2="675" y2="324" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 3" opacity="0.4"/>
+    <text x="684" y="295" font-size="9.5" fill="#94a3b8" font-style="italic">σ_intra</text>
+
+    <!-- Kernel labels -->
+    <text x="507" y="175" font-size="9.5" fill="#2dd4bf" font-weight="bold" opacity="0.9">financial</text>
+    <text x="507" y="187" font-size="9.5" fill="#2dd4bf" opacity="0.9">terms</text>
+    <text x="812" y="183" font-size="9.5" fill="#fbbf24" font-weight="bold" opacity="0.9">function</text>
+    <text x="812" y="195" font-size="9.5" fill="#fbbf24" opacity="0.9">words</text>
+    <text x="720" y="386" font-size="9.5" fill="#a78bfa" font-weight="bold" opacity="0.9">visual / layout</text>
+    <text x="720" y="398" font-size="9.5" fill="#a78bfa" opacity="0.9">elements</text>
+
+    <!-- Doc centroid label -->
+    <text x="690" y="242" font-size="9.5" fill="#94a3b8" font-style="italic">c̄_d (doc centroid)</text>
+
+    <!-- Summary stats box -->
+    <rect x="500" y="390" width="350" height="38" rx="6" fill="#130f1e" stroke="#2a1e40" stroke-width="1"/>
+    <text x="675" y="406" text-anchor="middle" font-size="10" fill="#64748b">Document type: complex multi-topic page (e.g. ColPali)</text>
+    <text x="675" y="421" text-anchor="middle" font-size="10.5" fill="#c4b5fd">Many active centroids · PLAID selectivity: <tspan font-weight="bold" fill="#f87171">LOW ✗</tspan></text>
+
+    <!-- Vertical divider -->
+    <line x1="450" y1="80" x2="450" y2="460" stroke="#2a3555" stroke-width="1" stroke-dasharray="6 4" opacity="0.5"/>
+
+    <!-- Bottom caption -->
+    <text x="450" y="464" text-anchor="middle" font-size="10" fill="#475569" font-style="italic">σ²_intra(d) = (1/|P_d|) Σ ‖p − p̄_d‖²   where p̄_d is the document's mean embedding</text>
+</svg>

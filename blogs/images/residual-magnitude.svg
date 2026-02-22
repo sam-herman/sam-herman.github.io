@@ -1,0 +1,328 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" width="960" height="520" font-family="Georgia, 'Times New Roman', serif">
+    <defs>
+        <!-- Dark background -->
+        <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#0c1018"/>
+            <stop offset="100%" stop-color="#111620"/>
+        </linearGradient>
+
+        <!-- Panel fills -->
+        <linearGradient id="panelA" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#12213a"/>
+            <stop offset="100%" stop-color="#0d1928"/>
+        </linearGradient>
+        <linearGradient id="panelB" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#1e1228"/>
+            <stop offset="100%" stop-color="#160d20"/>
+        </linearGradient>
+        <linearGradient id="panelC" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#0e1e18"/>
+            <stop offset="100%" stop-color="#0a1812"/>
+        </linearGradient>
+
+        <!-- Glow radials -->
+        <radialGradient id="blueGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.30"/>
+            <stop offset="100%" stop-color="#3b82f6" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="purpleGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#a855f7" stop-opacity="0.30"/>
+            <stop offset="100%" stop-color="#a855f7" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="greenGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/>
+            <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
+        </radialGradient>
+
+        <!-- Arrowhead markers -->
+        <!-- Blue arrow (MIPS baseline) -->
+        <marker id="arrowBlue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#60a5fa"/>
+        </marker>
+        <!-- Red arrow (residual vector) -->
+        <marker id="arrowRed" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#f87171"/>
+        </marker>
+        <!-- Purple arrow (large residual) -->
+        <marker id="arrowPurple" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#c084fc"/>
+        </marker>
+        <!-- Green arrow -->
+        <marker id="arrowGreen" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#4ade80"/>
+        </marker>
+        <!-- Gray arrow (approx recon) -->
+        <marker id="arrowGray" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8"/>
+        </marker>
+
+        <!-- Centroid glow filter -->
+        <filter id="cGlow">
+            <feGaussianBlur stdDeviation="3.5" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="tokenGlow">
+            <feGaussianBlur stdDeviation="2.5" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+
+        <!-- Clip panels -->
+        <clipPath id="clipA"><rect x="20" y="68" width="285" height="330" rx="9"/></clipPath>
+        <clipPath id="clipB"><rect x="335" y="68" width="285" height="330" rx="9"/></clipPath>
+        <clipPath id="clipC"><rect x="650" y="68" width="290" height="330" rx="9"/></clipPath>
+    </defs>
+
+    <!-- Background -->
+    <rect width="960" height="520" fill="url(#bgGrad)"/>
+
+    <!-- ── TITLE ── -->
+    <text x="480" y="37" text-anchor="middle" font-size="17" font-weight="bold" fill="#e2e8f0" letter-spacing="0.4">Residual Magnitude: Token Embeddings and Their Assigned Centroids</text>
+    <text x="480" y="56" text-anchor="middle" font-size="11.5" fill="#64748b" font-style="italic">r = p − c*  where c* = argmin_c ‖p − c‖  (nearest centroid)</text>
+
+    <!-- ════════════════════════════════════════════════════════ -->
+    <!--   PANEL A — CODEBOOK OVERVIEW                         -->
+    <!-- ════════════════════════════════════════════════════════ -->
+    <rect x="20" y="68" width="285" height="330" rx="9" fill="url(#panelA)" stroke="#1e3a5a" stroke-width="1"/>
+    <!-- Header -->
+    <rect x="20" y="68" width="285" height="36" rx="9" fill="#152a42" opacity="0.95"/>
+    <rect x="20" y="90" width="285" height="14" fill="#152a42" opacity="0.95"/>
+    <text x="162" y="91" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#7dd3fc" letter-spacing="0.3">The Codebook: K Centroids</text>
+    <text x="162" y="109" text-anchor="middle" font-size="10" fill="#38bdf8" font-style="italic">K = 65,536 in ColBERTv2</text>
+
+    <!-- 7 centroid stars spread across the panel, to suggest a codebook -->
+    <!-- Centroid 1 — teal -->
+    <ellipse cx="100" cy="185" rx="36" ry="32" fill="url(#blueGlow)" clip-path="url(#clipA)" opacity="0.6"/>
+    <circle cx="100" cy="185" r="8" fill="#0f2233" stroke="#38bdf8" stroke-width="2" filter="url(#cGlow)"/>
+    <circle cx="100" cy="185" r="3.5" fill="#7dd3fc"/>
+    <text x="100" y="205" text-anchor="middle" font-size="9" fill="#38bdf8">c₁</text>
+
+    <!-- Centroid 2 -->
+    <ellipse cx="220" cy="175" rx="30" ry="28" fill="url(#blueGlow)" clip-path="url(#clipA)" opacity="0.5"/>
+    <circle cx="220" cy="175" r="8" fill="#0f2233" stroke="#38bdf8" stroke-width="2" filter="url(#cGlow)"/>
+    <circle cx="220" cy="175" r="3.5" fill="#7dd3fc"/>
+    <text x="220" y="195" text-anchor="middle" font-size="9" fill="#38bdf8">c₂</text>
+
+    <!-- Centroid 3 -->
+    <ellipse cx="155" cy="255" rx="32" ry="28" fill="url(#blueGlow)" clip-path="url(#clipA)" opacity="0.5"/>
+    <circle cx="155" cy="255" r="8" fill="#0f2233" stroke="#38bdf8" stroke-width="2" filter="url(#cGlow)"/>
+    <circle cx="155" cy="255" r="3.5" fill="#7dd3fc"/>
+    <text x="155" y="275" text-anchor="middle" font-size="9" fill="#38bdf8">c₃</text>
+
+    <!-- Centroid 4 (partial, edge) -->
+    <circle cx="60" cy="305" r="8" fill="#0f2233" stroke="#38bdf8" stroke-width="2" filter="url(#cGlow)"/>
+    <circle cx="60" cy="305" r="3.5" fill="#7dd3fc"/>
+    <text x="60" y="324" text-anchor="middle" font-size="9" fill="#38bdf8">c₄</text>
+
+    <!-- Centroid 5 -->
+    <circle cx="250" cy="310" r="8" fill="#0f2233" stroke="#38bdf8" stroke-width="2" filter="url(#cGlow)"/>
+    <circle cx="250" cy="310" r="3.5" fill="#7dd3fc"/>
+    <text x="250" y="329" text-anchor="middle" font-size="9" fill="#38bdf8">c₅</text>
+
+    <!-- Some ambient token dots scattered to show the concept -->
+    <g opacity="0.45">
+        <circle cx="92" cy="172" r="3" fill="#7dd3fc"/>
+        <circle cx="110" cy="178" r="3" fill="#7dd3fc"/>
+        <circle cx="98" cy="196" r="3" fill="#7dd3fc"/>
+        <circle cx="87" cy="190" r="3" fill="#7dd3fc"/>
+        <circle cx="213" cy="163" r="3" fill="#7dd3fc"/>
+        <circle cx="228" cy="170" r="3" fill="#7dd3fc"/>
+        <circle cx="222" cy="184" r="3" fill="#7dd3fc"/>
+        <circle cx="148" cy="245" r="3" fill="#7dd3fc"/>
+        <circle cx="163" cy="248" r="3" fill="#7dd3fc"/>
+        <circle cx="160" cy="262" r="3" fill="#7dd3fc"/>
+        <circle cx="147" cy="265" r="3" fill="#7dd3fc"/>
+    </g>
+
+    <!-- Voronoi-ish boundary lines between centroids (very faint) -->
+    <line x1="162" y1="130" x2="162" y2="230" stroke="#1e4060" stroke-width="0.8" stroke-dasharray="4 5" opacity="0.4"/>
+    <line x1="80" y1="235" x2="270" y2="235" stroke="#1e4060" stroke-width="0.8" stroke-dasharray="4 5" opacity="0.4"/>
+
+    <!-- Footer stat -->
+    <rect x="35" y="358" width="255" height="30" rx="6" fill="#0a1724" stroke="#1e3a5a" stroke-width="1"/>
+    <text x="162" y="370" text-anchor="middle" font-size="9.5" fill="#64748b">Each token is assigned to its nearest centroid</text>
+    <text x="162" y="382" text-anchor="middle" font-size="9.5" fill="#60a5fa">c* = argmin_c ‖p − c‖²</text>
+
+
+    <!-- ════════════════════════════════════════════════════════ -->
+    <!--   PANEL B — SMALL RESIDUAL (good fit)                 -->
+    <!-- ════════════════════════════════════════════════════════ -->
+    <rect x="335" y="68" width="285" height="330" rx="9" fill="url(#panelC)" stroke="#144028" stroke-width="1"/>
+    <!-- Header -->
+    <rect x="335" y="68" width="285" height="36" rx="9" fill="#0d2a1c" opacity="0.95"/>
+    <rect x="335" y="90" width="285" height="14" fill="#0d2a1c" opacity="0.95"/>
+    <text x="477" y="91" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#86efac" letter-spacing="0.3">Small Residual  ‖r‖ ≈ 0.05</text>
+    <text x="477" y="109" text-anchor="middle" font-size="10" fill="#4ade80" font-style="italic">Centroid is a good approximation of p</text>
+
+    <!-- Glow halo for cluster -->
+    <ellipse cx="477" cy="230" rx="90" ry="82" fill="url(#greenGlow)" clip-path="url(#clipB)"/>
+
+    <!-- Dense token cloud around centroid -->
+    <g opacity="0.80">
+        <circle cx="468" cy="218" r="4.5" fill="#4ade80" opacity="0.80"/>
+        <circle cx="484" cy="213" r="4.5" fill="#22c55e" opacity="0.78"/>
+        <circle cx="497" cy="222" r="4.5" fill="#4ade80" opacity="0.75"/>
+        <circle cx="497" cy="238" r="4.5" fill="#22c55e" opacity="0.78"/>
+        <circle cx="485" cy="248" r="4.5" fill="#4ade80" opacity="0.75"/>
+        <circle cx="468" cy="246" r="4.5" fill="#22c55e" opacity="0.78"/>
+        <circle cx="457" cy="235" r="4.5" fill="#4ade80" opacity="0.75"/>
+        <circle cx="460" cy="220" r="4" fill="#22c55e" opacity="0.68"/>
+        <circle cx="474" cy="207" r="4" fill="#4ade80" opacity="0.65"/>
+        <circle cx="491" cy="208" r="4" fill="#22c55e" opacity="0.62"/>
+        <circle cx="505" cy="218" r="4" fill="#4ade80" opacity="0.60"/>
+        <circle cx="508" cy="235" r="4" fill="#22c55e" opacity="0.58"/>
+        <circle cx="503" cy="251" r="4" fill="#4ade80" opacity="0.58"/>
+        <circle cx="491" cy="261" r="4" fill="#22c55e" opacity="0.55"/>
+        <circle cx="474" cy="262" r="4" fill="#4ade80" opacity="0.55"/>
+        <circle cx="458" cy="255" r="4" fill="#22c55e" opacity="0.55"/>
+        <circle cx="448" cy="242" r="3.5" fill="#4ade80" opacity="0.50"/>
+        <circle cx="447" cy="224" r="3.5" fill="#22c55e" opacity="0.50"/>
+    </g>
+
+    <!-- THE TOKEN p — highlighted in bright green -->
+    <circle cx="502" cy="213" r="7" fill="#052a14" stroke="#4ade80" stroke-width="2.2" filter="url(#tokenGlow)"/>
+    <circle cx="502" cy="213" r="3.5" fill="#86efac"/>
+
+    <!-- CENTROID c* -->
+    <circle cx="477" cy="230" r="9" fill="#062218" stroke="#22c55e" stroke-width="2.5" filter="url(#cGlow)"/>
+    <circle cx="477" cy="230" r="4" fill="#4ade80"/>
+
+    <!-- Vector p (from origin region — just show c* → p for clarity) -->
+    <!-- Arrow c* → p (shows the residual) -->
+    <line x1="481" y1="222" x2="499" y2="216" stroke="#f87171" stroke-width="2.2" marker-end="url(#arrowRed)"/>
+
+    <!-- Residual brace / measurement -->
+    <line x1="478" y1="208" x2="503" y2="208" stroke="#f87171" stroke-width="1" stroke-dasharray="2 2" opacity="0.7"/>
+    <line x1="477" y1="208" x2="477" y2="212" stroke="#f87171" stroke-width="1" opacity="0.7"/>
+    <line x1="502" y1="208" x2="502" y2="212" stroke="#f87171" stroke-width="1" opacity="0.7"/>
+    <text x="490" y="204" text-anchor="middle" font-size="9.5" fill="#fca5a5" font-weight="bold">‖r‖ small</text>
+
+    <!-- Labels -->
+    <text x="513" y="212" font-size="10" fill="#86efac" font-weight="bold">p</text>
+    <text x="490" y="248" text-anchor="middle" font-size="10" fill="#4ade80" font-weight="bold">c*</text>
+
+    <!-- Residual vector label -->
+    <text x="516" y="222" font-size="9.5" fill="#f87171" font-style="italic">r = p − c*</text>
+
+    <!-- Annotation: reconstruction quality -->
+    <rect x="345" y="160" width="124" height="28" rx="5" fill="#04140a" stroke="#14532d" stroke-width="0.8" opacity="0.9"/>
+    <text x="407" y="173" text-anchor="middle" font-size="9" fill="#86efac">p̂ = c* + deQ(r_q)</text>
+    <text x="407" y="184" text-anchor="middle" font-size="9" fill="#4ade80">≈ p  (high fidelity)</text>
+
+    <!-- Footer stat -->
+    <rect x="350" y="358" width="255" height="30" rx="6" fill="#041008" stroke="#144028" stroke-width="1"/>
+    <text x="477" y="370" text-anchor="middle" font-size="9.5" fill="#64748b">Centroid captures semantic role well</text>
+    <text x="477" y="382" text-anchor="middle" font-size="10" fill="#4ade80" font-weight="bold">2-bit quantization: low error ✓</text>
+
+
+    <!-- ════════════════════════════════════════════════════════ -->
+    <!--   PANEL C — LARGE RESIDUAL (poor fit)                 -->
+    <!-- ════════════════════════════════════════════════════════ -->
+    <rect x="650" y="68" width="290" height="330" rx="9" fill="url(#panelB)" stroke="#3b1a5a" stroke-width="1"/>
+    <!-- Header -->
+    <rect x="650" y="68" width="290" height="36" rx="9" fill="#27133e" opacity="0.95"/>
+    <rect x="650" y="90" width="290" height="14" fill="#27133e" opacity="0.95"/>
+    <text x="795" y="91" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#e879f9" letter-spacing="0.3">Large Residual  ‖r‖ ≈ 0.52</text>
+    <text x="795" y="109" text-anchor="middle" font-size="10" fill="#c084fc" font-style="italic">Centroid is a poor approximation of p</text>
+
+    <!-- Glow around centroid -->
+    <ellipse cx="730" cy="258" rx="65" ry="60" fill="url(#purpleGlow)" clip-path="url(#clipC)" opacity="0.7"/>
+
+    <!-- Token cloud around centroid — spread out / looser cluster -->
+    <g opacity="0.65">
+        <circle cx="718" cy="244" r="4" fill="#c084fc" opacity="0.75"/>
+        <circle cx="735" cy="238" r="4" fill="#a855f7" opacity="0.70"/>
+        <circle cx="748" cy="248" r="4" fill="#c084fc" opacity="0.68"/>
+        <circle cx="746" cy="265" r="4" fill="#a855f7" opacity="0.70"/>
+        <circle cx="733" cy="274" r="4" fill="#c084fc" opacity="0.68"/>
+        <circle cx="717" cy="270" r="4" fill="#a855f7" opacity="0.70"/>
+        <circle cx="707" cy="258" r="4" fill="#c084fc" opacity="0.68"/>
+        <circle cx="710" cy="242" r="3.5" fill="#a855f7" opacity="0.60"/>
+        <circle cx="723" cy="233" r="3.5" fill="#c084fc" opacity="0.58"/>
+        <circle cx="740" cy="232" r="3.5" fill="#a855f7" opacity="0.55"/>
+        <circle cx="757" cy="254" r="3.5" fill="#c084fc" opacity="0.52"/>
+        <circle cx="755" cy="272" r="3.5" fill="#a855f7" opacity="0.52"/>
+        <circle cx="700" cy="270" r="3.5" fill="#c084fc" opacity="0.50"/>
+        <circle cx="697" cy="250" r="3.5" fill="#a855f7" opacity="0.50"/>
+    </g>
+
+    <!-- CENTROID c* (far from token) -->
+    <circle cx="730" cy="258" r="9" fill="#1c0a2a" stroke="#a855f7" stroke-width="2.5" filter="url(#cGlow)"/>
+    <circle cx="730" cy="258" r="4" fill="#c084fc"/>
+
+    <!-- THE TOKEN p — far from centroid -->
+    <circle cx="815" cy="178" r="7" fill="#1e0a2a" stroke="#e879f9" stroke-width="2.2" filter="url(#tokenGlow)"/>
+    <circle cx="815" cy="178" r="3.5" fill="#f0abfc"/>
+
+    <!-- Arrow c* → p (shows the large residual vector) -->
+    <line x1="737" y1="251" x2="808" y2="183" stroke="#e879f9" stroke-width="2.5" marker-end="url(#arrowPurple)"/>
+
+    <!-- Reconstructed approximation p̂ (closer than c* but not at p) -->
+    <!-- p̂ sits partway along the residual due to 2-bit quantization loss -->
+    <circle cx="780" cy="208" r="5.5" fill="#1a0a28" stroke="#94a3b8" stroke-width="1.8" stroke-dasharray="3 2"/>
+    <circle cx="780" cy="208" r="2.5" fill="#94a3b8" opacity="0.7"/>
+
+    <!-- Arrow from c* to p̂ (reconstructed) -->
+    <line x1="737" y1="252" x2="775" y2="212" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrowGray)"/>
+
+    <!-- Reconstruction error bracket p̂ → p -->
+    <line x1="780" y1="208" x2="815" y2="178" stroke="#fb923c" stroke-width="1.5" stroke-dasharray="3 3" opacity="0.8"/>
+    <text x="808" y="199" font-size="9" fill="#fb923c" font-style="italic">ε_recon</text>
+
+    <!-- Residual magnitude brace -->
+    <!-- perpendicular bisector tick marks along c*→p line -->
+    <text x="766" y="238" font-size="10" fill="#e879f9" font-weight="bold" transform="rotate(-41, 766, 238)">‖r‖ large</text>
+
+    <!-- Labels -->
+    <text x="825" y="177" font-size="10" fill="#f0abfc" font-weight="bold">p</text>
+    <text x="720" y="280" text-anchor="middle" font-size="10" fill="#c084fc" font-weight="bold">c*</text>
+    <text x="790" y="222" font-size="9.5" fill="#94a3b8" font-style="italic">p̂ (approx.)</text>
+
+    <!-- Annotation: "nearest centroid from wrong kernel" -->
+    <rect x="656" y="308" width="170" height="32" rx="5" fill="#12052a" stroke="#3b1a5a" stroke-width="0.8" opacity="0.95"/>
+    <text x="741" y="320" text-anchor="middle" font-size="9" fill="#c084fc">Out-of-domain token: no</text>
+    <text x="741" y="331" text-anchor="middle" font-size="9" fill="#c084fc">nearby centroid exists</text>
+
+    <!-- r = p − c* label on the arrow -->
+    <text x="755" y="250" font-size="9.5" fill="#e879f9" font-style="italic">r = p − c*</text>
+
+    <!-- Footer stat -->
+    <rect x="662" y="358" width="265" height="30" rx="6" fill="#0f031a" stroke="#3b1a5a" stroke-width="1"/>
+    <text x="795" y="370" text-anchor="middle" font-size="9.5" fill="#64748b">Codebook misses this semantic region</text>
+    <text x="795" y="382" text-anchor="middle" font-size="10" fill="#e879f9" font-weight="bold">2-bit quantization: high error ✗</text>
+
+    <!-- ── COLUMN DIVIDERS ── -->
+    <line x1="323" y1="78" x2="323" y2="410" stroke="#1e3040" stroke-width="1" stroke-dasharray="5 4" opacity="0.6"/>
+    <line x1="638" y1="78" x2="638" y2="410" stroke="#1e3040" stroke-width="1" stroke-dasharray="5 4" opacity="0.6"/>
+
+    <!-- ── LEGEND / BOTTOM BAND ── -->
+    <rect x="20" y="415" width="920" height="88" rx="8" fill="#0d1220" stroke="#1e2a40" stroke-width="1"/>
+
+    <text x="480" y="436" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#94a3b8" letter-spacing="0.4">How Residual Magnitude Affects PLAID Scoring Quality</text>
+
+    <!-- Legend items -->
+    <!-- Token -->
+    <circle cx="60" cy="462" r="6" fill="#1e0a2a" stroke="#e879f9" stroke-width="2"/>
+    <circle cx="60" cy="462" r="2.5" fill="#f0abfc"/>
+    <text x="73" y="466" font-size="10.5" fill="#cbd5e1">Token embedding  p</text>
+
+    <!-- Centroid -->
+    <circle cx="230" cy="462" r="7" fill="#0f2233" stroke="#38bdf8" stroke-width="2"/>
+    <circle cx="230" cy="462" r="3" fill="#7dd3fc"/>
+    <text x="244" y="466" font-size="10.5" fill="#cbd5e1">Nearest centroid  c*</text>
+
+    <!-- Residual arrow -->
+    <line x1="400" y1="462" x2="430" y2="462" stroke="#e879f9" stroke-width="2.5" marker-end="url(#arrowPurple)"/>
+    <text x="438" y="466" font-size="10.5" fill="#cbd5e1">Residual vector  r = p − c*</text>
+
+    <!-- Approx recon -->
+    <circle cx="630" cy="462" r="5" fill="#1a0a28" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 2"/>
+    <circle cx="630" cy="462" r="2" fill="#94a3b8" opacity="0.7"/>
+    <text x="643" y="466" font-size="10.5" fill="#cbd5e1">Reconstructed approx.  p̂ = c* + deQ(r_q)</text>
+
+    <!-- Recon error -->
+    <line x1="60" y1="490" x2="85" y2="490" stroke="#fb923c" stroke-width="1.5" stroke-dasharray="3 3" opacity="0.8"/>
+    <text x="93" y="494" font-size="10.5" fill="#cbd5e1">Reconstruction error  ε = ‖p̂ − p‖  (grows with ‖r‖)</text>
+
+    <!-- Key insight -->
+    <text x="480" y="494" text-anchor="middle" font-size="10.5" fill="#64748b" font-style="italic">Large residuals degrade PLAID Stage 3 approximate scores → more false positives survive → higher Stage 4 cost</text>
+</svg>

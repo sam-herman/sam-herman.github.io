@@ -1,0 +1,439 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 560" width="1020" height="560" font-family="Georgia, 'Times New Roman', serif">
+    <defs>
+        <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#0b0f17"/><stop offset="100%" stop-color="#0f1520"/>
+        </linearGradient>
+        <!-- Section backgrounds -->
+        <linearGradient id="offlineBar" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#141c2a"/><stop offset="100%" stop-color="#0e1622"/>
+        </linearGradient>
+        <linearGradient id="onlineBar" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#14120a"/><stop offset="100%" stop-color="#0e0d08"/>
+        </linearGradient>
+        <!-- Phase colors -->
+        <linearGradient id="p0fill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#1a2238"/><stop offset="100%" stop-color="#111828"/>
+        </linearGradient>
+        <linearGradient id="p1fill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#1e1a2a"/><stop offset="100%" stop-color="#140f1e"/>
+        </linearGradient>
+        <linearGradient id="p2fill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#0f2018"/><stop offset="100%" stop-color="#091510"/>
+        </linearGradient>
+        <!-- HNSW gradient -->
+        <linearGradient id="hnswGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#1e3a5a"/><stop offset="100%" stop-color="#0c2040"/>
+        </linearGradient>
+        <linearGradient id="hnswTop" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#0ea5e9"/>
+        </linearGradient>
+        <!-- Arrow markers -->
+        <marker id="aW" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8"/>
+        </marker>
+        <marker id="aB" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#38bdf8"/>
+        </marker>
+        <marker id="aG" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#4ade80"/>
+        </marker>
+        <marker id="aY" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#facc15"/>
+        </marker>
+        <marker id="aO" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#fb923c"/>
+        </marker>
+        <marker id="aP" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#c084fc"/>
+        </marker>
+        <!-- Glows -->
+        <filter id="fg">
+            <feGaussianBlur stdDeviation="3" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="fg2">
+            <feGaussianBlur stdDeviation="2" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <radialGradient id="patchGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.3"/>
+            <stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
+        </radialGradient>
+    </defs>
+
+    <rect width="1020" height="560" fill="url(#bg)"/>
+
+    <!-- ══════════════════ TITLE ══════════════════ -->
+    <text x="510" y="30" text-anchor="middle" font-size="17" font-weight="bold" fill="#e2e8f0" letter-spacing="0.4">ColPali Retrieval: Per-Token Multi-HNSW Workflow</text>
+    <text x="510" y="49" text-anchor="middle" font-size="11.5" fill="#64748b" font-style="italic">Fixed 1030 patches/page enables per-query-token HNSW lookups — impossible with variable-length ColBERT text</text>
+
+    <!-- ══════════════════════════════════════════════════════════════════ -->
+    <!--   OFFLINE LANE                                                    -->
+    <!-- ══════════════════════════════════════════════════════════════════ -->
+    <rect x="14" y="58" width="992" height="178" rx="9" fill="url(#offlineBar)" stroke="#1e3050" stroke-width="1"/>
+    <!-- Label -->
+    <rect x="14" y="58" width="92" height="178" rx="9" fill="#101e34" stroke="#1e3050" stroke-width="1"/>
+    <rect x="72" y="58" width="34" height="178" fill="#101e34"/>
+    <text x="60" y="165" text-anchor="middle" font-size="12" font-weight="bold" fill="#38bdf8" transform="rotate(-90 60 155)">OFFLINE</text>
+    <text x="60" y="145" text-anchor="middle" font-size="9.5" fill="#1e4060" transform="rotate(-90 60 135)" font-style="italic">index build</text>
+
+    <!-- Step: Page image -->
+    <rect x="110" y="70" width="112" height="152" rx="7" fill="#0d1a2a" stroke="#1e3a5a" stroke-width="1"/>
+    <text x="166" y="90" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#7dd3fc">PDF Page</text>
+    <!-- Mini page image mockup -->
+    <rect x="126" y="98" width="80" height="100" rx="3" fill="#071428" stroke="#1e3a5a" stroke-width="1"/>
+    <!-- Page content lines -->
+    <line x1="134" y1="110" x2="198" y2="110" stroke="#1e3a5a" stroke-width="1.5"/>
+    <line x1="134" y1="120" x2="193" y2="120" stroke="#1e3a5a" stroke-width="1.5"/>
+    <line x1="134" y1="130" x2="195" y2="130" stroke="#1e3a5a" stroke-width="1.2"/>
+    <!-- Mini chart mockup -->
+    <rect x="134" y="138" width="60" height="40" rx="2" fill="#0a1a30" stroke="#1e3a5a" stroke-width="0.8"/>
+    <rect x="137" y="163" width="8" height="12" fill="#1e4060"/>
+    <rect x="148" y="155" width="8" height="20" fill="#1e4060"/>
+    <rect x="159" y="150" width="8" height="25" fill="#1e4060"/>
+    <rect x="170" y="158" width="8" height="17" fill="#1e4060"/>
+    <!-- Page text label -->
+    <text x="166" y="210" text-anchor="middle" font-size="9" fill="#38bdf8">image input</text>
+
+    <!-- Arrow: page → encoder -->
+    <line x1="222" y1="146" x2="248" y2="146" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#aB)"/>
+
+    <!-- Step: ColPali Encoder -->
+    <rect x="250" y="70" width="120" height="152" rx="7" fill="#0d1428" stroke="#2a1a48" stroke-width="1"/>
+    <text x="310" y="90" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#c084fc">ColPali</text>
+    <text x="310" y="104" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#c084fc">Encoder</text>
+    <!-- Neural net icon -->
+    <g opacity="0.75">
+        <!-- Layer 1 -->
+        <circle cx="274" cy="130" r="5" fill="#4a1472" stroke="#c084fc" stroke-width="1.2"/>
+        <circle cx="274" cy="148" r="5" fill="#4a1472" stroke="#c084fc" stroke-width="1.2"/>
+        <circle cx="274" cy="166" r="5" fill="#4a1472" stroke="#c084fc" stroke-width="1.2"/>
+        <!-- Layer 2 -->
+        <circle cx="310" cy="122" r="5" fill="#4a1472" stroke="#c084fc" stroke-width="1.2"/>
+        <circle cx="310" cy="138" r="5" fill="#4a1472" stroke="#c084fc" stroke-width="1.2"/>
+        <circle cx="310" cy="154" r="5" fill="#4a1472" stroke="#c084fc" stroke-width="1.2"/>
+        <circle cx="310" cy="170" r="5" fill="#4a1472" stroke="#c084fc" stroke-width="1.2"/>
+        <!-- Layer 3 -->
+        <circle cx="346" cy="130" r="5" fill="#4a1472" stroke="#c084fc" stroke-width="1.2"/>
+        <circle cx="346" cy="148" r="5" fill="#4a1472" stroke="#c084fc" stroke-width="1.2"/>
+        <circle cx="346" cy="166" r="5" fill="#4a1472" stroke="#c084fc" stroke-width="1.2"/>
+        <!-- Connections -->
+        <g stroke="#6d28d9" stroke-width="0.5" opacity="0.5">
+            <line x1="279" y1="130" x2="305" y2="122"/>
+            <line x1="279" y1="130" x2="305" y2="138"/>
+            <line x1="279" y1="148" x2="305" y2="138"/>
+            <line x1="279" y1="148" x2="305" y2="154"/>
+            <line x1="279" y1="166" x2="305" y2="154"/>
+            <line x1="279" y1="166" x2="305" y2="170"/>
+            <line x1="315" y1="122" x2="341" y2="130"/>
+            <line x1="315" y1="138" x2="341" y2="130"/>
+            <line x1="315" y1="138" x2="341" y2="148"/>
+            <line x1="315" y1="154" x2="341" y2="148"/>
+            <line x1="315" y1="154" x2="341" y2="166"/>
+            <line x1="315" y1="170" x2="341" y2="166"/>
+        </g>
+    </g>
+    <text x="310" y="210" text-anchor="middle" font-size="9" fill="#c084fc">PaliGemma-3B</text>
+
+    <!-- Arrow: encoder → patch embeddings -->
+    <line x1="370" y1="146" x2="396" y2="146" stroke="#c084fc" stroke-width="1.8" marker-end="url(#aP)"/>
+
+    <!-- Step: Patch embeddings -->
+    <rect x="398" y="70" width="148" height="152" rx="7" fill="#0a1622" stroke="#1e3a5a" stroke-width="1"/>
+    <text x="472" y="90" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#38bdf8">1030 Patch</text>
+    <text x="472" y="104" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#38bdf8">Embeddings</text>
+    <!-- Grid of patches (32×32 represented as 6×6 mini-grid) -->
+    <g opacity="0.85">
+        <g fill="#0d2a40" stroke="#1e4060" stroke-width="0.5">
+            <!-- 5×5 patch grid -->
+            <rect x="412" y="113" width="14" height="14" rx="1"/>
+            <rect x="428" y="113" width="14" height="14" rx="1"/>
+            <rect x="444" y="113" width="14" height="14" rx="1"/>
+            <rect x="460" y="113" width="14" height="14" rx="1"/>
+            <rect x="476" y="113" width="14" height="14" rx="1"/>
+            <rect x="412" y="129" width="14" height="14" rx="1"/>
+            <rect x="428" y="129" width="14" height="14" rx="1"/>
+            <rect x="444" y="129" width="14" height="14" rx="1"/>
+            <rect x="460" y="129" width="14" height="14" rx="1"/>
+            <rect x="476" y="129" width="14" height="14" rx="1"/>
+            <rect x="412" y="145" width="14" height="14" rx="1"/>
+            <rect x="428" y="145" width="14" height="14" rx="1"/>
+            <rect x="444" y="145" width="14" height="14" rx="1" fill="#1a3a54"/>
+            <rect x="460" y="145" width="14" height="14" rx="1"/>
+            <rect x="476" y="145" width="14" height="14" rx="1"/>
+            <rect x="412" y="161" width="14" height="14" rx="1"/>
+            <rect x="428" y="161" width="14" height="14" rx="1"/>
+            <rect x="444" y="161" width="14" height="14" rx="1"/>
+            <rect x="460" y="161" width="14" height="14" rx="1" fill="#1a3a54"/>
+            <rect x="476" y="161" width="14" height="14" rx="1"/>
+        </g>
+        <!-- Dots to represent continuation -->
+        <text x="497" y="148" font-size="14" fill="#38bdf8" opacity="0.6">…</text>
+    </g>
+    <text x="472" y="193" text-anchor="middle" font-size="9.5" fill="#38bdf8">32×32 patches + 6 tokens</text>
+    <text x="472" y="207" text-anchor="middle" font-size="9" fill="#64748b">128-dim each</text>
+
+    <!-- Arrow: patches → binarize -->
+    <line x1="546" y1="146" x2="572" y2="146" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#aB)"/>
+
+    <!-- Step: Binarize -->
+    <rect x="574" y="70" width="118" height="152" rx="7" fill="#0a1210" stroke="#14421a" stroke-width="1"/>
+    <text x="633" y="90" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#4ade80">Binarize</text>
+    <text x="633" y="104" text-anchor="middle" font-size="10" fill="#22c55e">128-bit / patch</text>
+    <!-- Compression illustration -->
+    <rect x="592" y="115" width="80" height="22" rx="3" fill="#0d2a14" stroke="#1a5a28" stroke-width="1"/>
+    <text x="632" y="130" text-anchor="middle" font-size="8.5" fill="#86efac">float32: 526 KB/page</text>
+    <!-- Compression arrow -->
+    <line x1="632" y1="137" x2="632" y2="152" stroke="#4ade80" stroke-width="1.5" marker-end="url(#aG)" stroke-dasharray="2 2"/>
+    <rect x="592" y="153" width="80" height="22" rx="3" fill="#04200a" stroke="#16a34a" stroke-width="1.5"/>
+    <text x="632" y="168" text-anchor="middle" font-size="8.5" fill="#4ade80">binary: 16.5 KB/page</text>
+    <text x="632" y="183" text-anchor="middle" font-size="9" fill="#fbbf24" font-weight="bold">32× smaller</text>
+    <text x="633" y="207" text-anchor="middle" font-size="9" fill="#64748b">128 bits = 16 bytes</text>
+
+    <!-- Arrow: binarize → index -->
+    <line x1="692" y1="146" x2="718" y2="146" stroke="#4ade80" stroke-width="1.8" marker-end="url(#aG)"/>
+
+    <!-- Step: Shared HNSW Index (the centerpiece) -->
+    <rect x="720" y="68" width="268" height="158" rx="7" fill="#0a1830" stroke="#1e3a5a" stroke-width="1.5"/>
+    <text x="854" y="90" text-anchor="middle" font-size="11" font-weight="bold" fill="#7dd3fc" letter-spacing="0.2">Shared HNSW Index</text>
+    <text x="854" y="105" text-anchor="middle" font-size="9.5" fill="#38bdf8" font-style="italic">all patch embeddings from all pages · Hamming distance</text>
+
+    <!-- HNSW layers (simplified) -->
+    <!-- Layer L2 (top / coarse) -->
+    <text x="732" y="124" font-size="9" fill="#1e4060">L2</text>
+    <circle cx="800" cy="120" r="6" fill="#0d2840" stroke="#38bdf8" stroke-width="1.5"/>
+    <circle cx="855" cy="120" r="6" fill="#0d2840" stroke="#38bdf8" stroke-width="1.5"/>
+    <circle cx="910" cy="120" r="6" fill="#0d2840" stroke="#38bdf8" stroke-width="1.5"/>
+    <line x1="806" y1="120" x2="849" y2="120" stroke="#1e4060" stroke-width="1"/>
+    <line x1="861" y1="120" x2="904" y2="120" stroke="#1e4060" stroke-width="1"/>
+
+    <!-- Layer L1 (middle) -->
+    <text x="732" y="152" font-size="9" fill="#1e4060">L1</text>
+    <circle cx="775" cy="148" r="5" fill="#0d2840" stroke="#0ea5e9" stroke-width="1.2"/>
+    <circle cx="810" cy="148" r="5" fill="#0d2840" stroke="#0ea5e9" stroke-width="1.2"/>
+    <circle cx="845" cy="148" r="5" fill="#0d2840" stroke="#0ea5e9" stroke-width="1.2"/>
+    <circle cx="880" cy="148" r="5" fill="#0d2840" stroke="#0ea5e9" stroke-width="1.2"/>
+    <circle cx="915" cy="148" r="5" fill="#0d2840" stroke="#0ea5e9" stroke-width="1.2"/>
+    <line x1="780" y1="148" x2="805" y2="148" stroke="#1e4060" stroke-width="0.8"/>
+    <line x1="815" y1="148" x2="840" y2="148" stroke="#1e4060" stroke-width="0.8"/>
+    <line x1="850" y1="148" x2="875" y2="148" stroke="#1e4060" stroke-width="0.8"/>
+    <line x1="885" y1="148" x2="910" y2="148" stroke="#1e4060" stroke-width="0.8"/>
+
+    <!-- Layer L0 (dense base) -->
+    <text x="732" y="182" font-size="9" fill="#1e4060">L0</text>
+    <g fill="#0a2238" stroke="#0369a1" stroke-width="0.8">
+        <circle cx="755" cy="178" r="4"/>
+        <circle cx="773" cy="178" r="4"/>
+        <circle cx="791" cy="178" r="4"/>
+        <circle cx="809" cy="178" r="4"/>
+        <circle cx="827" cy="178" r="4"/>
+        <circle cx="845" cy="178" r="4"/>
+        <circle cx="863" cy="178" r="4"/>
+        <circle cx="881" cy="178" r="4"/>
+        <circle cx="899" cy="178" r="4"/>
+        <circle cx="917" cy="178" r="4"/>
+        <circle cx="935" cy="178" r="4"/>
+    </g>
+    <!-- Connecting edges at L0 -->
+    <g stroke="#0c2840" stroke-width="0.6" opacity="0.7">
+        <line x1="759" y1="178" x2="769" y2="178"/>
+        <line x1="777" y1="178" x2="787" y2="178"/>
+        <line x1="795" y1="178" x2="805" y2="178"/>
+        <line x1="813" y1="178" x2="823" y2="178"/>
+        <line x1="831" y1="178" x2="841" y2="178"/>
+        <line x1="849" y1="178" x2="859" y2="178"/>
+        <line x1="867" y1="178" x2="877" y2="178"/>
+        <line x1="885" y1="178" x2="895" y2="178"/>
+        <line x1="903" y1="178" x2="913" y2="178"/>
+        <line x1="921" y1="178" x2="931" y2="178"/>
+    </g>
+
+    <!-- vertical connects -->
+    <line x1="800" y1="126" x2="800" y2="143" stroke="#1e4060" stroke-width="0.8" stroke-dasharray="2 2"/>
+    <line x1="855" y1="126" x2="855" y2="143" stroke="#1e4060" stroke-width="0.8" stroke-dasharray="2 2"/>
+    <line x1="775" y1="153" x2="773" y2="174" stroke="#1e4060" stroke-width="0.8" stroke-dasharray="2 2"/>
+    <line x1="845" y1="153" x2="845" y2="174" stroke="#1e4060" stroke-width="0.8" stroke-dasharray="2 2"/>
+
+    <!-- Index label -->
+    <text x="854" y="206" text-anchor="middle" font-size="9.5" fill="#64748b">N × 1030 patch embeddings · doc_id stored per node</text>
+
+    <!-- ══════════════════════════════════════════════════════════════════ -->
+    <!--   ONLINE LANE                                                     -->
+    <!-- ══════════════════════════════════════════════════════════════════ -->
+    <rect x="14" y="248" width="992" height="280" rx="9" fill="url(#onlineBar)" stroke="#2a2000" stroke-width="1"/>
+    <!-- Label -->
+    <rect x="14" y="248" width="92" height="280" rx="9" fill="#14110a" stroke="#2a2000" stroke-width="1"/>
+    <rect x="72" y="248" width="34" height="280" fill="#14110a"/>
+    <text x="60" y="385" text-anchor="middle" font-size="12" font-weight="bold" fill="#facc15" transform="rotate(-90 60 390)">ONLINE</text>
+    <text x="60" y="365" text-anchor="middle" font-size="9.5" fill="#3a2f00" transform="rotate(-90 60 355)" font-style="italic">query time</text>
+
+    <!-- Query input -->
+    <rect x="110" y="260" width="116" height="100" rx="7" fill="#0f1120" stroke="#1e2a3a" stroke-width="1"/>
+    <text x="168" y="280" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#e2e8f0">Query Text</text>
+    <!-- query tokens -->
+    <circle cx="135" cy="302" r="7" fill="#1a0a28" stroke="#c084fc" stroke-width="1.5"/>
+    <text x="135" y="306" text-anchor="middle" font-size="8" fill="#c084fc">t₁</text>
+    <circle cx="155" cy="302" r="7" fill="#1a0a28" stroke="#c084fc" stroke-width="1.5"/>
+    <text x="155" y="306" text-anchor="middle" font-size="8" fill="#c084fc">t₂</text>
+    <circle cx="175" cy="302" r="7" fill="#1a0a28" stroke="#c084fc" stroke-width="1.5"/>
+    <text x="175" y="306" text-anchor="middle" font-size="8" fill="#c084fc">t₃</text>
+    <circle cx="195" cy="302" r="7" fill="#1a0a28" stroke="#c084fc" stroke-width="1.5"/>
+    <text x="195" y="306" text-anchor="middle" font-size="8" fill="#c084fc">tₘ</text>
+    <text x="168" y="347" text-anchor="middle" font-size="9" fill="#94a3b8">~20 tokens</text>
+
+    <!-- Arrow: query → encoder -->
+    <line x1="226" y1="310" x2="252" y2="310" stroke="#c084fc" stroke-width="1.8" marker-end="url(#aP)"/>
+
+    <!-- Encoder (same as offline) -->
+    <rect x="254" y="260" width="100" height="100" rx="7" fill="#0d1428" stroke="#2a1a48" stroke-width="1"/>
+    <text x="304" y="282" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#c084fc">ColPali</text>
+    <text x="304" y="296" text-anchor="middle" font-size="10" fill="#a78bfa">Encoder</text>
+    <text x="304" y="347" text-anchor="middle" font-size="9" fill="#64748b">same model</text>
+
+    <!-- Arrow → query token vectors -->
+    <line x1="354" y1="310" x2="382" y2="310" stroke="#c084fc" stroke-width="1.8" marker-end="url(#aP)"/>
+
+    <!-- Query token embeddings -->
+    <rect x="384" y="258" width="108" height="104" rx="7" fill="#120e20" stroke="#3b1a5a" stroke-width="1"/>
+    <text x="438" y="278" text-anchor="middle" font-size="10" font-weight="bold" fill="#c084fc">Token</text>
+    <text x="438" y="292" text-anchor="middle" font-size="10" font-weight="bold" fill="#c084fc">Vectors</text>
+    <circle cx="413" cy="314" r="6" fill="#1a0a28" stroke="#e879f9" stroke-width="1.5" filter="url(#fg2)"/>
+    <circle cx="430" cy="314" r="6" fill="#1a0a28" stroke="#e879f9" stroke-width="1.5" filter="url(#fg2)"/>
+    <circle cx="447" cy="314" r="6" fill="#1a0a28" stroke="#e879f9" stroke-width="1.5" filter="url(#fg2)"/>
+    <circle cx="464" cy="314" r="6" fill="#1a0a28" stroke="#e879f9" stroke-width="1.5" filter="url(#fg2)"/>
+    <text x="438" y="350" text-anchor="middle" font-size="9" fill="#94a3b8">|Q| ≈ 20 vectors</text>
+
+    <!-- ═══ PHASE 0 BLOCK ═══ -->
+    <rect x="504" y="248" width="172" height="270" rx="8" fill="url(#p0fill)" stroke="#1e3a5a" stroke-width="1.5"/>
+    <rect x="504" y="248" width="172" height="30" rx="8" fill="#111e30" opacity="0.95"/>
+    <rect x="504" y="264" width="172" height="14" fill="#111e30" opacity="0.95"/>
+    <text x="590" y="265" text-anchor="middle" font-size="11" font-weight="bold" fill="#38bdf8" letter-spacing="0.2">Phase 0</text>
+    <text x="590" y="279" text-anchor="middle" font-size="9.5" fill="#0ea5e9" font-style="italic">Hamming NN · binarized</text>
+
+    <!-- Per-token arrows into HNSW (the key visual insight) -->
+    <!-- Arrow from q tokens to Phase 0 -->
+    <line x1="492" y1="310" x2="502" y2="310" stroke="#38bdf8" stroke-width="2" marker-end="url(#aB)"/>
+
+    <!-- 4 query token arrows diverging into HNSW lookups -->
+    <text x="590" y="304" text-anchor="middle" font-size="9.5" fill="#7dd3fc">per-token HNSW lookup</text>
+    <line x1="522" y1="308" x2="540" y2="290" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="3 2" opacity="0.7"/>
+    <line x1="530" y1="312" x2="540" y2="305" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="3 2" opacity="0.7"/>
+    <line x1="538" y1="315" x2="540" y2="320" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="3 2" opacity="0.7"/>
+    <line x1="542" y1="316" x2="540" y2="333" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="3 2" opacity="0.7"/>
+
+    <!-- Mini-HNSW representation -->
+    <rect x="542" y="284" width="120" height="64" rx="5" fill="#071424" stroke="#0e3050" stroke-width="1"/>
+    <circle cx="562" cy="297" r="4" fill="#0d2840" stroke="#38bdf8" stroke-width="1"/>
+    <circle cx="585" cy="297" r="4" fill="#0d2840" stroke="#38bdf8" stroke-width="1"/>
+    <circle cx="608" cy="297" r="4" fill="#0d2840" stroke="#38bdf8" stroke-width="1"/>
+    <circle cx="558" cy="313" r="3.5" fill="#0d2840" stroke="#0ea5e9" stroke-width="1"/>
+    <circle cx="572" cy="313" r="3.5" fill="#0d2840" stroke="#0ea5e9" stroke-width="1"/>
+    <circle cx="587" cy="313" r="3.5" fill="#0d2840" stroke="#0ea5e9" stroke-width="1"/>
+    <circle cx="602" cy="313" r="3.5" fill="#0d2840" stroke="#0ea5e9" stroke-width="1"/>
+    <circle cx="617" cy="313" r="3.5" fill="#0d2840" stroke="#0ea5e9" stroke-width="1"/>
+    <circle cx="552" cy="328" r="3" fill="#0d2840" stroke="#0369a1" stroke-width="0.8"/>
+    <circle cx="563" cy="328" r="3" fill="#0d2840" stroke="#0369a1" stroke-width="0.8"/>
+    <circle cx="574" cy="328" r="3" fill="#0d2840" stroke="#0369a1" stroke-width="0.8"/>
+    <circle cx="585" cy="328" r="3" fill="#0d2840" stroke="#0369a1" stroke-width="0.8"/>
+    <circle cx="597" cy="328" r="3" fill="#0d2840" stroke="#0369a1" stroke-width="0.8"/>
+    <circle cx="608" cy="328" r="3" fill="#0d2840" stroke="#0369a1" stroke-width="0.8"/>
+    <circle cx="620" cy="328" r="3" fill="#0d2840" stroke="#0369a1" stroke-width="0.8"/>
+    <text x="602" y="342" text-anchor="middle" font-size="8.5" fill="#1e4060">shared HNSW index</text>
+
+    <!-- Result: k pages per query token -->
+    <text x="590" y="366" text-anchor="middle" font-size="9.5" fill="#7dd3fc">top k₀ pages per token</text>
+    <!-- Union operation -->
+    <rect x="520" y="372" width="140" height="28" rx="5" fill="#071424" stroke="#1e3a5a" stroke-width="1"/>
+    <text x="590" y="384" text-anchor="middle" font-size="9.5" fill="#38bdf8">Union across all tokens</text>
+    <text x="590" y="396" text-anchor="middle" font-size="9" fill="#64748b">~|Q|·k₀ candidate pages</text>
+
+    <!-- Phase 0 footer -->
+    <rect x="512" y="406" width="156" height="26" rx="4" fill="#04101e" stroke="#1e3a5a" stroke-width="1"/>
+    <text x="590" y="418" text-anchor="middle" font-size="9" fill="#38bdf8">Cost: |Q| × O(log N)</text>
+    <text x="590" y="430" text-anchor="middle" font-size="9" fill="#64748b">Hamming dist. (fast!)</text>
+
+    <!-- Funnel arrow Phase 0 → 1 -->
+    <line x1="676" y1="360" x2="704" y2="360" stroke="#facc15" stroke-width="2" marker-end="url(#aY)"/>
+    <text x="690" y="352" text-anchor="middle" font-size="9" fill="#fbbf24">filter</text>
+
+    <!-- ═══ PHASE 1 BLOCK ═══ -->
+    <rect x="706" y="248" width="148" height="270" rx="8" fill="url(#p1fill)" stroke="#3b1a5a" stroke-width="1.5"/>
+    <rect x="706" y="248" width="148" height="30" rx="8" fill="#1c1028" opacity="0.95"/>
+    <rect x="706" y="264" width="148" height="14" fill="#1c1028" opacity="0.95"/>
+    <text x="780" y="265" text-anchor="middle" font-size="11" font-weight="bold" fill="#c084fc" letter-spacing="0.2">Phase 1</text>
+    <text x="780" y="279" text-anchor="middle" font-size="9.5" fill="#a78bfa" font-style="italic">Approx MaxSim · Hamming</text>
+
+    <!-- Candidate pages with scores -->
+    <text x="780" y="305" text-anchor="middle" font-size="9.5" fill="#c084fc">Score candidates via</text>
+    <text x="780" y="318" text-anchor="middle" font-size="9.5" fill="#c084fc">inverted Hamming MaxSim</text>
+
+    <!-- Score bars representing ranked pages -->
+    <g opacity="0.85">
+        <text x="716" y="342" font-size="8.5" fill="#94a3b8">page 42</text>
+        <rect x="758" y="332" width="86" height="10" rx="2" fill="#0d1622"/>
+        <rect x="758" y="332" width="80" height="10" rx="2" fill="#a855f7" opacity="0.85"/>
+        <text x="716" y="356" font-size="8.5" fill="#94a3b8">page 17</text>
+        <rect x="758" y="346" width="86" height="10" rx="2" fill="#0d1622"/>
+        <rect x="758" y="346" width="65" height="10" rx="2" fill="#a855f7" opacity="0.75"/>
+        <text x="716" y="370" font-size="8.5" fill="#94a3b8">page 88</text>
+        <rect x="758" y="360" width="86" height="10" rx="2" fill="#0d1622"/>
+        <rect x="758" y="360" width="52" height="10" rx="2" fill="#a855f7" opacity="0.65"/>
+        <text x="716" y="384" font-size="8.5" fill="#94a3b8">page 03</text>
+        <rect x="758" y="374" width="86" height="10" rx="2" fill="#0d1622"/>
+        <rect x="758" y="374" width="44" height="10" rx="2" fill="#7e22ce" opacity="0.55"/>
+        <text x="758" y="400" font-size="8.5" fill="#4a1472" opacity="0.7">…more candidates…</text>
+    </g>
+
+    <!-- Keep top k1 -->
+    <rect x="714" y="406" width="132" height="26" rx="4" fill="#0f0518" stroke="#3b1a5a" stroke-width="1"/>
+    <text x="780" y="418" text-anchor="middle" font-size="9" fill="#c084fc">Keep top k₁ pages</text>
+    <text x="780" y="430" text-anchor="middle" font-size="9" fill="#64748b">binary repr. only</text>
+
+    <!-- Funnel arrow Phase 1 → 2 -->
+    <line x1="854" y1="360" x2="876" y2="360" stroke="#4ade80" stroke-width="2" marker-end="url(#aG)"/>
+    <text x="865" y="352" text-anchor="middle" font-size="9" fill="#22c55e">rerank</text>
+
+    <!-- ═══ PHASE 2 BLOCK ═══ -->
+    <rect x="878" y="248" width="128" height="270" rx="8" fill="url(#p2fill)" stroke="#144028" stroke-width="1.5"/>
+    <rect x="878" y="248" width="128" height="30" rx="8" fill="#092218" opacity="0.95"/>
+    <rect x="878" y="264" width="128" height="14" fill="#092218" opacity="0.95"/>
+    <text x="942" y="265" text-anchor="middle" font-size="11" font-weight="bold" fill="#4ade80" letter-spacing="0.2">Phase 2</text>
+    <text x="942" y="279" text-anchor="middle" font-size="9.5" fill="#22c55e" font-style="italic">Exact float MaxSim</text>
+
+    <!-- Exact MaxSim computation -->
+    <text x="942" y="305" text-anchor="middle" font-size="9.5" fill="#86efac">Load float patch</text>
+    <text x="942" y="318" text-anchor="middle" font-size="9.5" fill="#86efac">embeddings from disk</text>
+    <text x="942" y="334" text-anchor="middle" font-size="9.5" fill="#4ade80">Compute exact MaxSim</text>
+    <text x="942" y="347" text-anchor="middle" font-size="9.5" fill="#4ade80">(|Q| × 1030 dot products</text>
+    <text x="942" y="360" text-anchor="middle" font-size="9.5" fill="#4ade80"> per candidate page)</text>
+
+    <!-- Final ranked result -->
+    <rect x="886" y="374" width="112" height="66" rx="5" fill="#042010" stroke="#166534" stroke-width="1.2"/>
+    <text x="942" y="390" text-anchor="middle" font-size="10" fill="#86efac" font-weight="bold">Final Results</text>
+    <!-- Top 3 medals -->
+    <text x="900" y="408" font-size="9.5" fill="#facc15">🥇 page 42</text>
+    <text x="900" y="421" font-size="9.5" fill="#94a3b8">🥈 page 17</text>
+    <text x="900" y="434" font-size="9.5" fill="#b45309">🥉 page 88</text>
+
+    <rect x="886" y="446" width="112" height="24" rx="4" fill="#020e06" stroke="#144028" stroke-width="1"/>
+    <text x="942" y="457" text-anchor="middle" font-size="8.5" fill="#4ade80">Top-k ranked pages</text>
+    <text x="942" y="467" text-anchor="middle" font-size="8.5" fill="#64748b">full precision ✓</text>
+
+    <!-- ═══ CANDIDATE COUNT FUNNEL LABELS ═══ -->
+    <text x="590" y="504" text-anchor="middle" font-size="10" fill="#38bdf8" font-weight="bold">~|Q|·k₀ pages</text>
+    <text x="590" y="517" text-anchor="middle" font-size="9" fill="#64748b">union of all lookups</text>
+    <text x="780" y="504" text-anchor="middle" font-size="10" fill="#c084fc" font-weight="bold">top k₁ pages</text>
+    <text x="780" y="517" text-anchor="middle" font-size="9" fill="#64748b">approx. filtered</text>
+    <text x="942" y="504" text-anchor="middle" font-size="10" fill="#4ade80" font-weight="bold">top k pages</text>
+    <text x="942" y="517" text-anchor="middle" font-size="9" fill="#64748b">exact reranked</text>
+
+    <!-- Phase count funnel triangle visual -->
+    <polygon points="510,495 670,495 590,475" fill="#38bdf8" opacity="0.08"/>
+    <polygon points="710,495 850,495 780,475" fill="#c084fc" opacity="0.08"/>
+    <polygon points="882,495 1000,495 942,475" fill="#4ade80" opacity="0.08"/>
+
+    <!-- Offline/Online divider label -->
+    <line x1="110" y1="242" x2="992" y2="242" stroke="#2a2a1a" stroke-width="1" stroke-dasharray="4 4" opacity="0.6"/>
+    <rect x="446" y="235" width="128" height="16" rx="4" fill="#0b0f17"/>
+    <text x="510" y="247" text-anchor="middle" font-size="9.5" fill="#3a3510" font-weight="bold">▲ OFFLINE · ONLINE ▼</text>
+</svg>

@@ -1,0 +1,243 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 480" width="920" height="480" font-family="Georgia, 'Times New Roman', serif">
+    <defs>
+        <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#0c1018"/><stop offset="100%" stop-color="#111620"/>
+        </linearGradient>
+        <linearGradient id="panelL" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#0d2218"/><stop offset="100%" stop-color="#091a12"/>
+        </linearGradient>
+        <linearGradient id="panelR" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#1e1228"/><stop offset="100%" stop-color="#160d20"/>
+        </linearGradient>
+        <!-- Bucket fills -->
+        <linearGradient id="bucketGreenFill" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#052a14" stop-opacity="0.6"/>
+            <stop offset="100%" stop-color="#052a14" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="bucketBlueFill" x1="1" y1="0" x2="0" y2="0">
+            <stop offset="0%" stop-color="#05142a" stop-opacity="0.6"/>
+            <stop offset="100%" stop-color="#05142a" stop-opacity="0"/>
+        </linearGradient>
+        <!-- Right panel bucket fills -->
+        <linearGradient id="bucketPurple1" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#1a0a2e" stop-opacity="0.7"/>
+            <stop offset="100%" stop-color="#1a0a2e" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="bucketOrange1" x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0%" stop-color="#2a1400" stop-opacity="0.7"/>
+            <stop offset="100%" stop-color="#2a1400" stop-opacity="0"/>
+        </linearGradient>
+        <!-- Glows -->
+        <radialGradient id="glowGreen" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#22c55e" stop-opacity="0.22"/>
+            <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="glowPurple" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#a855f7" stop-opacity="0.22"/>
+            <stop offset="100%" stop-color="#a855f7" stop-opacity="0"/>
+        </radialGradient>
+        <!-- Arrowheads -->
+        <marker id="arrCyan" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L7,3 z" fill="#22d3ee"/>
+        </marker>
+        <marker id="arrOrange" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L7,3 z" fill="#fb923c"/>
+        </marker>
+        <marker id="arrWhite" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L7,3 z" fill="#94a3b8"/>
+        </marker>
+        <!-- Glow filter -->
+        <filter id="fGlow">
+            <feGaussianBlur stdDeviation="3" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <!-- Clip -->
+        <clipPath id="clipL"><rect x="30" y="68" width="390" height="360" rx="10"/></clipPath>
+        <clipPath id="clipR"><rect x="500" y="68" width="390" height="360" rx="10"/></clipPath>
+    </defs>
+
+    <rect width="920" height="480" fill="url(#bg)"/>
+
+    <!-- Title -->
+    <text x="460" y="36" text-anchor="middle" font-size="17" font-weight="bold" fill="#e2e8f0" letter-spacing="0.4">SimHash and the Anisotropy Problem in MUVERA</text>
+    <text x="460" y="56" text-anchor="middle" font-size="11.5" fill="#64748b" font-style="italic">Random hyperplanes partition correctly for isotropic data — but split nearest neighbors in elongated clusters</text>
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <!--         LEFT PANEL — ISOTROPIC (works well)       -->
+    <!-- ══════════════════════════════════════════════════ -->
+    <rect x="30" y="68" width="390" height="360" rx="10" fill="url(#panelL)" stroke="#144028" stroke-width="1"/>
+    <!-- header -->
+    <rect x="30" y="68" width="390" height="38" rx="10" fill="#0a2218" opacity="0.95"/>
+    <rect x="30" y="92" width="390" height="14" fill="#0a2218" opacity="0.95"/>
+    <text x="225" y="91" text-anchor="middle" font-size="13" font-weight="bold" fill="#86efac" letter-spacing="0.3">Isotropic Cluster</text>
+    <text x="225" y="108" text-anchor="middle" font-size="10.5" fill="#4ade80" font-style="italic">σ_∥ ≈ σ_⊥ · Σ = σ²I (spherical)</text>
+
+    <!-- Bucket shading — hyperplane is near-vertical line at x≈225 -->
+    <!-- Left bucket (green tint) -->
+    <rect x="30" y="68" width="195" height="360" fill="url(#bucketGreenFill)" clip-path="url(#clipL)"/>
+    <!-- Right bucket (blue tint) -->
+    <rect x="225" y="68" width="195" height="360" fill="url(#bucketBlueFill)" clip-path="url(#clipL)"/>
+
+    <!-- SimHash hyperplane — nearly vertical, slight tilt -->
+    <line x1="218" y1="68" x2="232" y2="428" stroke="#22d3ee" stroke-width="1.8" stroke-dasharray="7 4" opacity="0.75" clip-path="url(#clipL)"/>
+    <!-- Normal vector h -->
+    <line x1="225" y1="230" x2="275" y2="205" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#arrCyan)"/>
+    <text x="282" y="202" font-size="10" fill="#22d3ee" font-style="italic">h</text>
+
+    <!-- Isotropic cluster blob — circular, centroid at (225, 270) -->
+    <ellipse cx="225" cy="270" rx="78" ry="76" fill="url(#glowGreen)" clip-path="url(#clipL)"/>
+    <!-- Token cloud — circular distribution -->
+    <g opacity="0.78">
+        <!-- Both p1 and p2 land on same side of hyperplane -->
+        <circle cx="160" cy="262" r="4.5" fill="#4ade80" opacity="0.82"/>
+        <circle cx="175" cy="248" r="4.5" fill="#22c55e" opacity="0.78"/>
+        <circle cx="174" cy="280" r="4.5" fill="#4ade80" opacity="0.80"/>
+        <circle cx="157" cy="290" r="4" fill="#22c55e" opacity="0.70"/>
+        <circle cx="192" cy="242" r="4" fill="#4ade80" opacity="0.72"/>
+        <circle cx="192" cy="298" r="4" fill="#22c55e" opacity="0.68"/>
+        <circle cx="150" cy="272" r="3.5" fill="#4ade80" opacity="0.62"/>
+        <!-- Tokens on right of line (blue bucket) -->
+        <circle cx="257" cy="258" r="4.5" fill="#60a5fa" opacity="0.72"/>
+        <circle cx="274" cy="270" r="4.5" fill="#3b82f6" opacity="0.70"/>
+        <circle cx="260" cy="284" r="4.5" fill="#60a5fa" opacity="0.72"/>
+        <circle cx="245" cy="295" r="4" fill="#3b82f6" opacity="0.65"/>
+        <circle cx="288" cy="260" r="4" fill="#60a5fa" opacity="0.62"/>
+        <circle cx="247" cy="250" r="3.5" fill="#3b82f6" opacity="0.60"/>
+        <!-- Center tokens near line — both still in green bucket -->
+        <circle cx="207" cy="265" r="4.5" fill="#4ade80" opacity="0.80"/>
+        <circle cx="210" cy="280" r="4.5" fill="#22c55e" opacity="0.75"/>
+        <circle cx="203" cy="254" r="4" fill="#4ade80" opacity="0.68"/>
+        <circle cx="200" cy="290" r="4" fill="#22c55e" opacity="0.65"/>
+    </g>
+
+    <!-- p1 and p2 — both on the LEFT side of the hyperplane (same bucket) -->
+    <!-- p1 -->
+    <circle cx="178" cy="262" r="8.5" fill="#052a14" stroke="#4ade80" stroke-width="2.2" filter="url(#fGlow)"/>
+    <circle cx="178" cy="262" r="3.5" fill="#86efac"/>
+    <text x="162" y="253" font-size="11" fill="#86efac" font-weight="bold">q</text>
+
+    <!-- p2 (nearest neighbor, also left of line) -->
+    <circle cx="165" cy="282" r="8.5" fill="#052a14" stroke="#86efac" stroke-width="2.2" filter="url(#fGlow)"/>
+    <circle cx="165" cy="282" r="3.5" fill="#d1fae5"/>
+    <text x="148" y="294" font-size="11" fill="#d1fae5" font-weight="bold">p*</text>
+
+    <!-- Distance line between q and p* -->
+    <line x1="178" y1="262" x2="165" y2="282" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="3 2" opacity="0.8"/>
+    <text x="159" y="270" font-size="9.5" fill="#fbbf24" font-style="italic">θ_small</text>
+
+    <!-- Theta arc -->
+    <path d="M 185 268 A 14 14 0 0 1 174 276" fill="none" stroke="#fbbf24" stroke-width="1.2" opacity="0.7"/>
+
+    <!-- Same-bucket label -->
+    <rect x="55" y="348" width="150" height="28" rx="6" fill="#041a0a" stroke="#15532a" stroke-width="1"/>
+    <text x="130" y="360" text-anchor="middle" font-size="10" fill="#4ade80">Bucket A</text>
+    <text x="130" y="371" text-anchor="middle" font-size="10" fill="#86efac" font-weight="bold">q and p* → same bucket ✓</text>
+
+    <!-- Right bucket label -->
+    <rect x="235" y="348" width="120" height="28" rx="6" fill="#040f1e" stroke="#1e3a5a" stroke-width="1"/>
+    <text x="295" y="360" text-anchor="middle" font-size="10" fill="#60a5fa">Bucket B</text>
+    <text x="295" y="371" text-anchor="middle" font-size="10" fill="#60a5fa">other tokens</text>
+
+    <!-- Success badge -->
+    <rect x="55" y="392" width="350" height="28" rx="6" fill="#04130a" stroke="#144028" stroke-width="1"/>
+    <text x="230" y="404" text-anchor="middle" font-size="10" fill="#64748b">Nearest neighbors land in same bucket</text>
+    <text x="230" y="415" text-anchor="middle" font-size="10.5" fill="#4ade80" font-weight="bold">FDE captures correct MaxSim match ✓</text>
+
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <!--      RIGHT PANEL — ANISOTROPIC (failure)          -->
+    <!-- ══════════════════════════════════════════════════ -->
+    <rect x="500" y="68" width="390" height="360" rx="10" fill="url(#panelR)" stroke="#3b1a5a" stroke-width="1"/>
+    <!-- header -->
+    <rect x="500" y="68" width="390" height="38" rx="10" fill="#21103a" opacity="0.95"/>
+    <rect x="500" y="92" width="390" height="14" fill="#21103a" opacity="0.95"/>
+    <text x="695" y="91" text-anchor="middle" font-size="13" font-weight="bold" fill="#e879f9" letter-spacing="0.3">Anisotropic Cluster</text>
+    <text x="695" y="108" text-anchor="middle" font-size="10.5" fill="#c084fc" font-style="italic">σ_∥ ≫ σ_⊥ · Σ elongated (hard negatives trained)</text>
+
+    <!-- Hyperplane — HORIZONTAL, perpendicular to cluster's major axis (which is near-horizontal) -->
+    <!-- Cluster elongated horizontally → hyperplane is near-horizontal, splits it -->
+    <line x1="500" y1="268" x2="890" y2="258" stroke="#fb923c" stroke-width="2" stroke-dasharray="7 4" opacity="0.85" clip-path="url(#clipR)"/>
+    <!-- Normal vector h (pointing downward, perpendicular to major axis) -->
+    <line x1="695" y1="263" x2="695" y2="313" stroke="#fb923c" stroke-width="1.5" marker-end="url(#arrOrange)"/>
+    <text x="703" y="320" font-size="10" fill="#fb923c" font-style="italic">h ⊥ major axis</text>
+
+    <!-- Bucket shading for anisotropic — top=purple, bottom=orange -->
+    <rect x="500" y="68" width="390" height="200" fill="url(#bucketPurple1)" clip-path="url(#clipR)"/>
+    <rect x="500" y="268" width="390" height="160" fill="url(#bucketOrange1)" clip-path="url(#clipR)"/>
+
+    <!-- Anisotropic elongated cluster blob — wide and flat, centered at (695, 248) -->
+    <ellipse cx="695" cy="240" rx="155" ry="48" fill="url(#glowPurple)" clip-path="url(#clipR)"/>
+    <!-- Token cloud — spread horizontally, squashed vertically -->
+    <g opacity="0.75">
+        <!-- Tokens in UPPER half (purple bucket) -->
+        <circle cx="570" cy="222" r="4.5" fill="#c084fc" opacity="0.78"/>
+        <circle cx="590" cy="215" r="4.5" fill="#a855f7" opacity="0.72"/>
+        <circle cx="612" cy="225" r="4.5" fill="#c084fc" opacity="0.78"/>
+        <circle cx="634" cy="218" r="4.5" fill="#a855f7" opacity="0.72"/>
+        <circle cx="655" cy="225" r="4" fill="#c084fc" opacity="0.70"/>
+        <circle cx="675" cy="214" r="4" fill="#a855f7" opacity="0.68"/>
+        <circle cx="695" cy="222" r="4" fill="#c084fc" opacity="0.70"/>
+        <circle cx="715" cy="215" r="4" fill="#a855f7" opacity="0.68"/>
+        <circle cx="738" cy="225" r="4.5" fill="#c084fc" opacity="0.72"/>
+        <circle cx="756" cy="218" r="4.5" fill="#a855f7" opacity="0.72"/>
+        <circle cx="775" cy="228" r="4" fill="#c084fc" opacity="0.68"/>
+        <circle cx="795" cy="220" r="4" fill="#a855f7" opacity="0.65"/>
+        <circle cx="815" cy="228" r="3.5" fill="#c084fc" opacity="0.60"/>
+        <circle cx="833" cy="218" r="3.5" fill="#a855f7" opacity="0.58"/>
+        <!-- Tokens in LOWER half (orange bucket) — same cluster, split! -->
+        <circle cx="565" cy="278" r="4.5" fill="#fb923c" opacity="0.75"/>
+        <circle cx="588" cy="285" r="4.5" fill="#f97316" opacity="0.72"/>
+        <circle cx="610" cy="275" r="4.5" fill="#fb923c" opacity="0.78"/>
+        <circle cx="632" cy="282" r="4.5" fill="#f97316" opacity="0.72"/>
+        <circle cx="655" cy="272" r="4" fill="#fb923c" opacity="0.70"/>
+        <circle cx="678" cy="280" r="4" fill="#f97316" opacity="0.68"/>
+        <circle cx="700" cy="273" r="4" fill="#fb923c" opacity="0.70"/>
+        <circle cx="722" cy="282" r="4" fill="#f97316" opacity="0.68"/>
+        <circle cx="744" cy="274" r="4.5" fill="#fb923c" opacity="0.72"/>
+        <circle cx="765" cy="283" r="4.5" fill="#f97316" opacity="0.70"/>
+        <circle cx="787" cy="275" r="4" fill="#fb923c" opacity="0.65"/>
+        <circle cx="808" cy="282" r="4" fill="#f97316" opacity="0.63"/>
+        <circle cx="828" cy="272" r="3.5" fill="#fb923c" opacity="0.58"/>
+    </g>
+
+    <!-- Major axis of elongation — horizontal arrow -->
+    <line x1="530" y1="248" x2="860" y2="248" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3" opacity="0.4"/>
+    <text x="875" y="252" font-size="9" fill="#64748b" font-style="italic">major</text>
+    <text x="875" y="262" font-size="9" fill="#64748b" font-style="italic">axis u</text>
+
+    <!-- q and p* — close in L2 distance but straddling the hyperplane -->
+    <!-- q is just ABOVE the line -->
+    <circle cx="660" cy="237" r="8.5" fill="#1a0a2a" stroke="#e879f9" stroke-width="2.2" filter="url(#fGlow)"/>
+    <circle cx="660" cy="237" r="3.5" fill="#f0abfc"/>
+    <text x="644" y="226" font-size="11" fill="#f0abfc" font-weight="bold">q</text>
+
+    <!-- p* is just BELOW the line (nearest neighbor!) -->
+    <circle cx="675" cy="278" r="8.5" fill="#1a0a2a" stroke="#fb923c" stroke-width="2.2" filter="url(#fGlow)"/>
+    <circle cx="675" cy="278" r="3.5" fill="#fde68a"/>
+    <text x="685" y="292" font-size="11" fill="#fde68a" font-weight="bold">p*</text>
+
+    <!-- Distance line between q and p* — they are CLOSE -->
+    <line x1="660" y1="245" x2="675" y2="270" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="3 2" opacity="0.85"/>
+    <text x="680" y="255" font-size="9.5" fill="#fbbf24" font-style="italic">θ_small</text>
+    <text x="682" y="267" font-size="9" fill="#fbbf24" font-style="italic">(ℓ₂ nearby!)</text>
+
+    <!-- Split indicator arrows -->
+    <line x1="660" y1="228" x2="660" y2="180" stroke="#e879f9" stroke-width="1.2" stroke-dasharray="2 3" opacity="0.5" marker-end="url(#arrWhite)"/>
+    <text x="613" y="172" font-size="9.5" fill="#c084fc">Bucket A</text>
+    <text x="613" y="183" font-size="9.5" fill="#c084fc">(purple)</text>
+
+    <line x1="675" y1="287" x2="675" y2="338" stroke="#fb923c" stroke-width="1.2" stroke-dasharray="2 3" opacity="0.5" marker-end="url(#arrWhite)"/>
+    <text x="683" y="348" font-size="9.5" fill="#fb923c">Bucket B</text>
+    <text x="683" y="359" font-size="9.5" fill="#fb923c">(orange)</text>
+
+    <!-- Failure badge -->
+    <rect x="515" y="392" width="360" height="28" rx="6" fill="#130520" stroke="#3b1a5a" stroke-width="1"/>
+    <text x="695" y="404" text-anchor="middle" font-size="10" fill="#64748b">Nearest neighbors separated by hyperplane ⊥ major axis</text>
+    <text x="695" y="415" text-anchor="middle" font-size="10.5" fill="#f87171" font-weight="bold">FDE misses correct MaxSim match — recall degrades ✗</text>
+
+    <!-- Divider -->
+    <line x1="460" y1="80" x2="460" y2="440" stroke="#1e2a40" stroke-width="1" stroke-dasharray="6 4" opacity="0.5"/>
+
+    <!-- Bottom caption -->
+    <text x="460" y="465" text-anchor="middle" font-size="10.5" fill="#475569" font-style="italic">P(same partition) = (1 − θ_uv/π)^b — but in anisotropic clusters, θ_eff &gt; θ_L2, so collision probability is systematically too low</text>
+</svg>
