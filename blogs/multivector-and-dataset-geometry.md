@@ -160,7 +160,7 @@ PLAID's document selectivity—the fraction of documents eliminated by centroid 
 
 $$P(\text{document } d \text{ survives}) \approx 1 - \left(1 - \frac{n_d}{C}\right)^{n_{\text{query}}}$$
 
-where $C$ is the total codebook size (e.g., $C = 2^{16} = 65{,}536$ for ColBERTv2) and $n_{\text{query}}$ is the number of distinct centroids activated by the query (roughly equal to the number of query tokens, $|Q|$).
+where $C$ is the total codebook size (e.g., $C = 2^{16} = 65{,}536$ for ColBERTv2) and $n_{\text{query}}$ is the number of distinct centroids activated by the query (roughly equal to the number of query tokens, $\|Q\|$).
 
 For the ColBERTv2 MS MARCO case, the centroid math works strongly in PLAID's favor. MS MARCO passages average roughly 55–80 tokens (with `doc_maxlen=180` as a ceiling); the default codebook size is $C = 2^{16} = 65{,}536$. Semantically similar tokens are assigned to the same centroid by design, so the number of distinct centroids activated per passage $n_d$ is substantially smaller than the token count—many function words, common phrases, and topically related terms cluster together. The PLAID paper (Santhanam et al., 2022) empirically validates this indirectly: centroid-only retrieval achieves >99% recall for top-$k$ passages within just $10k$ candidates across 8.8M passages on MS MARCO, which is only possible because the average passage activates a very small fraction of the 65,536-centroid codebook. If passages activated many hundreds of distinct centroids, the centroid-only stage would produce far more candidates to reach the same recall threshold.
 
@@ -268,7 +268,7 @@ Now for the part I find genuinely exciting—two cases where the "hard" multi-ve
 
 ### Hack #1: SumSim Is Just Mean-Pooled MIPS
 
-At first glance, SumSim seems to require multi-vector infrastructure: you have sets $Q$ and $P$, and you need to sum over all $|Q| \times |P|$ pairwise dot products. Surely this requires something like PLAID or MUVERA?
+At first glance, SumSim seems to require multi-vector infrastructure: you have sets $Q$ and $P$, and you need to sum over all $\|Q\| \times \|P\|$ pairwise dot products. Surely this requires something like PLAID or MUVERA?
 
 Let's do the algebra:
 
